@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="user_manager1" defaultIdMethod="native">
+<database name="user_manager1" defaultIdMethod="native"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
 	<table name="groups" phpName="cTableGroups">
-		<column name="id" type="varchar" size="36" required="true" primaryKey="true" autoIncrement="false"/>
+		<column name="id" type="varchar" size="36" required="true"
+			primaryKey="true" autoIncrement="false" />
 		<column name="name" type="varchar" size="50" required="true" />
-		<column name="comment" type="BLOB" required="false"/>
+		<column name="comment" type="BLOB" required="false" />
 	</table>
- 
 </database>
