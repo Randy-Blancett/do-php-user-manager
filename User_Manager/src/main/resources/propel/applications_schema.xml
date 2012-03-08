@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="user_manager1" defaultIdMethod="native">
+	<table name="applications" phpName="cTableApplications">
+		<column name="id" type="varchar" size="36" required="true" primaryKey="true" autoIncrement="false"/>
+		<column name="name" type="varchar" size="50" required="true" />
+		<column name="comment" type="BLOB" required="false"/>
+	</table>
+</database>

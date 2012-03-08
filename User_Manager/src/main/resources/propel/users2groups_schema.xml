@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="user_manager1" defaultIdMethod="native">
+	<table name="users2groups" phpName="cTableUsers2Groups">
+		<column name="id" type="varchar" size="36" required="true" primaryKey="true" autoIncrement="false"/>
+		<column name="user_id" type="varchar" size="36" required="true" phpName='userId' />
+		<column name="group_id" type="varchar" size="36" required="true" phpName='groupId' />
+		<column name="comment" type="BLOB" required="false"/>
+	</table>
+</database>
