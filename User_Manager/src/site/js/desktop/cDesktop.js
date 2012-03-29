@@ -1,0 +1,478 @@
+Ext
+		.define(
+				'darkowl.desktop.cDesktop',
+				{
+					extend : 'Ext.panel.Panel',
+					
+					alias : 'widget.desktop',
+					requires :
+					[
+					// 'DarkOwl.User_Manager.Desktop.cTaskbar',
+					// 'DarkOwl.User_Manager.Desktop.cWallPaper'
+					],
+					uses :
+					[
+					// 'DarkOwl.User_Manager.Layouts.cFitAll',
+					// 'Ext.util.MixedCollection',
+					'Ext.menu.Menu'
+					// 'Ext.view.View', // dataview
+					// 'Ext.window.Window'
+					],
+					
+					m_obj_WindowMenu : null,
+					m_obj_Windows : null,
+					
+					activeWindowCls : 'ux-desktop-active-win',
+					inactiveWindowCls : 'ux-desktop-inactive-win',
+					lastActiveWindow : null,
+					
+					border : false,
+					html : '&#160;',
+					layout : 'fitall',
+					
+					xTickSize : 20,
+					yTickSize : 20,
+					
+					app : null,
+					
+					/**
+					 * @cfg {Array|Store} shortcuts The items to add to the
+					 *      DataView. This can be a {@link Ext.data.Store Store}
+					 *      or a simple array. Items should minimally provide
+					 *      the fields in the
+					 *      {@link Ext.ux.desktop.ShorcutModel ShortcutModel}.
+					 */
+					shortcuts : null,
+					
+					/**
+					 * @cfg {String} shortcutItemSelector This property is
+					 *      passed to the DataView for the desktop to select
+					 *      shortcut items. If the {@link #shortcutTpl} is
+					 *      modified, this will probably need to be modified as
+					 *      well.
+					 */
+					shortcutItemSelector : 'div.ux-desktop-shortcut',
+					
+					/**
+					 * @cfg {String} shortcutTpl This XTemplate is used to
+					 *      render items in the DataView. If this is changed,
+					 *      the {@link shortcutItemSelect} will probably also
+					 *      need to changed.
+					 */
+					shortcutTpl :
+					[
+							'<tpl for=".">',
+							'<div class="ux-desktop-shortcut" id="{name}-shortcut">',
+							'<div class="ux-desktop-shortcut-icon {iconCls}">',
+							'<img src="',
+							Ext.BLANK_IMAGE_URL,
+							'" title="{name}">',
+							'</div>',
+							'<span class="ux-desktop-shortcut-text">{name}</span>',
+							'</div>', '</tpl>', '<div class="x-clear"></div>' ],
+					
+					initComponent : function()
+					{
+						var obj_This = this;
+						
+						this.m_obj_WindowMenu = Ext.create("Ext.menu.Menu",
+								obj_This.createWindowMenu());
+						//
+						// obj_This.bbar = obj_This.m_obj_Taskbar =
+						// Ext.create("DarkOwl.User_Manager.Desktop.cTaskbar");
+						//        
+						// obj_This.m_obj_Taskbar.m_obj_WindowMenu =
+						// obj_This.m_obj_WindowMenu;
+						//
+						// //obj_This.windows =
+						// Ext.create("Ext.util.MixedCollection");
+						//
+						// obj_This.contextMenu =
+						// Ext.create("Ext.menu.Menu",obj_This.createDesktopMenu());
+						//
+						// obj_This.items =
+						// [
+						// Ext.create("DarkOwl.User_Manager.Desktop.cWallPaper",{id:obj_This.id+'_wallpaper'}),
+						// obj_This.createDataView()
+						// ];
+						//
+						// obj_This.callParent();
+						//
+						// obj_This.shortcutsView = obj_This.items.getAt(1);
+						// obj_This.shortcutsView.on('itemclick',
+						// obj_This.onShortcutItemClick, obj_This);
+						//
+						// var wallpaper = obj_This.wallpaper;
+						// obj_This.wallpaper = obj_This.items.getAt(0);
+						// if (wallpaper)
+						// {
+						// obj_This.setWallpaper(wallpaper,
+						// obj_This.wallpaperStretch);
+						// }
+					},
+					
+					afterRender : function()
+					{
+						var obj_This = this;
+						this.callParent();
+						this.el.on('contextmenu', obj_This.onDesktopMenu,
+								obj_This);
+					},
+					
+					// ------------------------------------------------------
+					// Overrideable configuration creation methods
+					createDataView : function()
+					{
+						var obj_This = this;
+						var obj_Return =
+						{
+							xtype : 'dataview',
+							overItemCls : 'x-view-over',
+							trackOver : true,
+							itemSelector : obj_This.shortcutItemSelector,
+							store : obj_This.shortcuts,
+							tpl : new Ext.XTemplate(obj_This.shortcutTpl)
+						};
+						return obj_Return;
+					},
+					
+					createDesktopMenu : function()
+					{
+						var obj_This = this, ret =
+						{
+							items : obj_This.contextMenuItems ||
+							[]
+						};
+						
+						if (ret.items.length)
+						{
+							ret.items.push('-');
+						}
+						
+						ret.items.push(
+						{
+							text : 'Tile',
+							handler : obj_This.tileWindows,
+							scope : obj_This,
+							minWindows : 1
+						},
+						{
+							text : 'Cascade',
+							handler : obj_This.cascadeWindows,
+							scope : obj_This,
+							minWindows : 1
+						});
+						
+						return ret;
+					},
+					
+					createWindowMenu : function()
+					{
+						var obj_This = this;
+						var obj_Return =
+						{
+							defaultAlign : 'br-tr',
+							"items" :
+							[
+							{
+								text : 'Restore',
+								handler : obj_This.onWindowMenuRestore,
+								scope : obj_This
+							},
+							{
+								text : 'Minimize',
+								handler : obj_This.onWindowMenuMinimize,
+								scope : obj_This
+							},
+							{
+								text : 'Maximize',
+								handler : obj_This.onWindowMenuMaximize,
+								scope : obj_This
+							}, '-',
+							{
+								text : 'Close',
+								handler : obj_This.onWindowMenuClose,
+								scope : obj_This
+							} ],
+							listeners :
+							{
+								beforeshow : obj_This.onWindowMenuBeforeShow,
+								hide : obj_This.onWindowMenuHide,
+								scope : obj_This
+							}
+						};
+						return obj_Return;
+						
+					},
+					
+					// ------------------------------------------------------
+					// Event handler methods
+					
+					onDesktopMenu : function(e)
+					{
+						var obj_This = this, menu = obj_This.contextMenu;
+						e.stopEvent();
+						if (!menu.rendered)
+						{
+							menu.on('beforeshow',
+									obj_This.onDesktopMenuBeforeShow, obj_This);
+						}
+						menu.showAt(e.getXY());
+						menu.doConstrain();
+					},
+					
+					onDesktopMenuBeforeShow : function(menu)
+					{
+						var obj_This = this, count = obj_This.m_obj_Windows
+								.getCount();
+						
+						menu.items.each(function(item)
+						{
+							var min = item.minWindows || 0;
+							item.setDisabled(count < min);
+						});
+					},
+					
+					onShortcutItemClick : function(dataView, record)
+					{
+						var obj_This = this, module = obj_This.app
+								.getModule(record.data.module), win = module
+								&& module.createWindow();
+						
+						if (win)
+						{
+							obj_This.restoreWindow(win);
+						}
+					},
+					/*
+					 * onWindowClose: function(win) { var obj_This = this;
+					 * obj_This.m_obj_Windows.remove(win);
+					 * obj_This.m_obj_Taskbar.removeTaskButton(win.taskButton);
+					 * obj_This.updateActiveWindow(); },
+					 */
+					// ------------------------------------------------------
+					// Window context menu handlers
+					onWindowMenuBeforeShow : function(menu)
+					{
+						var items = menu.items.items, win = menu.theWin;
+						items[0].setDisabled(win.maximized !== true
+								&& win.hidden !== true); // Restore
+						items[1].setDisabled(win.minimized === true); // Minimize
+						items[2].setDisabled(win.maximized === true
+								|| win.hidden === true); // Maximize
+					},
+					
+					onWindowMenuClose : function()
+					{
+						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
+						
+						win.close();
+					},
+					
+					onWindowMenuHide : function(menu)
+					{
+						menu.theWin = null;
+					},
+					
+					onWindowMenuMaximize : function()
+					{
+						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
+						
+						win.maximize();
+					},
+					
+					onWindowMenuMinimize : function()
+					{
+						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
+						
+						win.minimize();
+					},
+					
+					onWindowMenuRestore : function()
+					{
+						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
+						
+						obj_This.restoreWindow(win);
+					},
+					
+					// ------------------------------------------------------
+					// Dynamic (re)configuration methods
+					
+					getWallpaper : function()
+					{
+						return this.wallpaper.wallpaper;
+					},
+					
+					setTickSize : function(xTickSize, yTickSize)
+					{
+						var obj_This = this, xt = obj_This.xTickSize = xTickSize, yt = obj_This.yTickSize = (arguments.length > 1) ? yTickSize
+								: xt;
+						
+						obj_This.m_obj_Windows.each(function(win)
+						{
+							var dd = win.dd, resizer = win.resizer;
+							dd.xTickSize = xt;
+							dd.yTickSize = yt;
+							resizer.widthIncrement = xt;
+							resizer.heightIncrement = yt;
+						});
+					},
+					
+					setWallpaper : function(wallpaper, stretch)
+					{
+						this.wallpaper.setWallpaper(wallpaper, stretch);
+						return this;
+					},
+					
+					// ------------------------------------------------------
+					// Window management methods
+					
+					cascadeWindows : function()
+					{
+						var x = 0, y = 0, zmgr = this.getDesktopZIndexManager();
+						
+						zmgr.eachBottomUp(function(win)
+						{
+							if (win.isWindow && win.isVisible()
+									&& !win.maximized)
+							{
+								win.setPosition(x, y);
+								x += 20;
+								y += 20;
+							}
+						});
+					},
+					/*
+					 * createWindow: function(config, cls) { var obj_This =
+					 * this, win, cfg = Ext.applyIf(config || {}, { stateful:
+					 * false, isWindow: true, constrainHeader: true,
+					 * minimizable: true, maximizable: true });
+					 * 
+					 * cls = cls || Ext.window.Window; win = this.add(new
+					 * cls(cfg));
+					 * 
+					 * obj_This.m_obj_Windows.add(win);
+					 * 
+					 * win.taskButton =
+					 * obj_This.m_obj_Taskbar.addTaskButton(win);
+					 * win.animateTarget = win.taskButton.el;
+					 * 
+					 * win.on({ activate: obj_This.updateActiveWindow,
+					 * beforeshow: obj_This.updateActiveWindow, deactivate:
+					 * obj_This.updateActiveWindow, minimize:
+					 * obj_This.minimizeWindow, destroy: obj_This.onWindowClose,
+					 * scope: obj_This });
+					 * 
+					 * win.on({ afterrender: function () { win.dd.xTickSize =
+					 * obj_This.xTickSize; win.dd.yTickSize =
+					 * obj_This.yTickSize;
+					 * 
+					 * if (win.resizer) { win.resizer.widthIncrement =
+					 * obj_This.xTickSize; win.resizer.heightIncrement =
+					 * obj_This.yTickSize; } }, single: true }); // replace
+					 * normal window close w/fadeOut animation: win.doClose =
+					 * function () { win.el.disableShadow(); win.el.fadeOut({
+					 * listeners: { afteranimate: function () { win.destroy(); } }
+					 * }); };
+					 * 
+					 * return win; },
+					 */
+					getActiveWindow : function()
+					{
+						var win = null, zmgr = this.getDesktopZIndexManager();
+						
+						if (zmgr)
+						{
+							// We cannot rely on activate/deactive because that
+							// fires against
+							// non-Window
+							// components in the stack.
+							
+							zmgr.eachTopDown(function(comp)
+							{
+								if (comp.isWindow && !comp.hidden)
+								{
+									win = comp;
+									return false;
+								}
+								return true;
+							});
+						}
+						
+						return win;
+					},
+					
+					getDesktopZIndexManager : function()
+					{
+						var m_obj_Windows = this.m_obj_Windows;
+						// TODO - there has to be a better way to get this...
+						return (m_obj_Windows.getCount() && m_obj_Windows
+								.getAt(0).zIndexManager)
+								|| null;
+					},
+					
+					getWindow : function(id)
+					{
+						return this.m_obj_Windows.get(id);
+					},
+					/*
+					 * minimizeWindow: function(win) { win.minimized = true;
+					 * win.hide(); },
+					 */
+					/*
+					 * restoreWindow: function (win) { if (win.isVisible()) {
+					 * win.restore(); win.toFront(); } else { win.show(); }
+					 * return win; },
+					 */
+					tileWindows : function()
+					{
+						var obj_This = this, availWidth = obj_This.body
+								.getWidth(true);
+						var x = obj_This.xTickSize, y = obj_This.yTickSize, nextY = y;
+						
+						obj_This.m_obj_Windows.each(function(win)
+						{
+							if (win.isVisible() && !win.maximized)
+							{
+								var w = win.el.getWidth();
+								
+								// Wrap to next row if we are not at the line
+								// start and this
+								// Window will
+								// go off the end
+								if (x > obj_This.xTickSize
+										&& x + w > availWidth)
+								{
+									x = obj_This.xTickSize;
+									y = nextY;
+								}
+								
+								win.setPosition(x, y);
+								x += w + obj_This.xTickSize;
+								nextY = Math.max(nextY, y + win.el.getHeight()
+										+ obj_This.yTickSize);
+							}
+						});
+					}
+				/*
+				 * updateActiveWindow: function () { var obj_This = this,
+				 * activeWindow = obj_This.getActiveWindow(), last =
+				 * obj_This.lastActiveWindow; if (activeWindow === last) {
+				 * return; }
+				 * 
+				 * if (last) { if (last.el.dom) {
+				 * last.addCls(obj_This.inactiveWindowCls);
+				 * last.removeCls(obj_This.activeWindowCls); } last.active =
+				 * false; }
+				 * 
+				 * obj_This.lastActiveWindow = activeWindow;
+				 * 
+				 * if (activeWindow) {
+				 * activeWindow.addCls(obj_This.activeWindowCls);
+				 * activeWindow.removeCls(obj_This.inactiveWindowCls);
+				 * activeWindow.minimized = false; activeWindow.active = true; }
+				 * 
+				 * obj_This.m_obj_Taskbar.setActiveButton(activeWindow &&
+				 * activeWindow.taskButton); }
+				 */
+				});

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="user_manager1" defaultIdMethod="native">
+	<table name="users" phpName="cTableUsers">
+		<column name="id" type="varchar" size="36" required="true" primaryKey="true" autoIncrement="false"/>
+		<column name="user_name" type="varchar" size="25" required="true" phpName='userName' />
+		<column name="password" type="varchar" size="40"  />
+		<column name="first_name" type="varchar" size="20" phpName='firstName' />
+		<column name="middle_name" type="varchar" size="20" phpName='middleName' />
+		<column name="last_name" type="varchar" size="50" phpName='lastName' />
+		<column name="personal_title" type="varchar" size="10" phpName='personalTitle' />
+		<column name="professional_title" type="varchar" size="10" phpName='professionalTitle' />
+		<column name="phone_num_1" type="varchar" size="30" phpName='phoneNum1' />
+		<column name="phone_num_2" type="varchar" size="30" phpName='phoneNum2' />
+		<column name="email1" type="varchar" size="30"  />
+		<column name="email2" type="varchar" size="30" />
+		<column name="assigned_org" type="varchar" size="30" phpName='assignedOrg' />
+		<column name="org" type="varchar" size="30"  />
+		<column name="company" type="varchar" size="30" />
+		<column name="affiliation" type="varchar" size="30" />
+		<column name="type" type="varchar" size="10" />
+		<column name="location" type="varchar" size="100" />
+		<column name="suite" type="varchar" size="20" />
+		<column name="last_login" type="TIMESTAMP" phpName='lastLogin' />
+		<column name="last_updated" type="TIMESTAMP" phpName='lastUpdated' />
+		<column name="account_creation" type="TIMESTAMP" phpName='accountCreation' />
+		<column name="comment" type="BLOB" required="false"/>
+	</table>
+</database>
