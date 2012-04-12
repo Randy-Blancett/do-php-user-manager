@@ -9,11 +9,6 @@ Ext.define('darkowl.desktop.cTaskbar',
 			'darkowl.desktop.cWindowBar', 'darkowl.desktop.cStartMenu',
 			'darkowl.desktop.cQuickStart',
 			'darkowl.desktop.sysTray.cTrayClock',
-			// // // 'DarkOwl.User_Manager.Desktop.cStartMenu',
-			// // // 'DarkOwl.User_Manager.Desktop.cWindowBar',
-			// // // 'DarkOwl.User_Manager.Desktop.cQuickStart',
-			// // // 'DarkOwl.User_Manager.EventHandler.cSystemEvents',
-			// // // 'DarkOwl.User_Manager.EventHandler.cWindowEvents',
 			
 			'Ext.button.Button', 'Ext.resizer.Splitter', 'Ext.menu.Menu',
 			"Ext.toolbar.Toolbar"
@@ -65,8 +60,8 @@ Ext.define('darkowl.desktop.cTaskbar',
 		var obj_This = this;
 		
 		this.m_obj_StartMenu = Ext.create('darkowl.desktop.cStartMenu',
-		{// TODO put user name in from config file
-			title : 'UserName'
+		{
+			title : darkowl.desktop.config.cConfig.getUserName()
 		});
 	},
 	

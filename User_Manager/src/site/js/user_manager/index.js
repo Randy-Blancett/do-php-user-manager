@@ -12,11 +12,12 @@ Ext.require('Ext.tip.QuickTipManager');
 // Ext.require("DarkOwl.User_Manager.cUserManager_App",null,null,null,"php");
 Ext.onReady(Setup);
 
-function Setup()
+function Setup ()
 {
 	Ext.tip.QuickTipManager.init();
 	m_obj_UserManager_App = Ext.create('darkowl.desktop.cApplication',
 	{
 		renderTo : Ext.getBody()
 	});
+	darkowl.desktop.config.cConfig.setUserName(g_obj_Config.m_str_UserName);
 }
