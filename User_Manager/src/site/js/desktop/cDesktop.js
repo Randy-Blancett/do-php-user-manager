@@ -3,24 +3,24 @@ Ext
 				'darkowl.desktop.cDesktop',
 				{
 					extend : 'Ext.panel.Panel',
-					
 					alias : 'widget.desktop',
 					requires :
 					[
-					// 'DarkOwl.User_Manager.Desktop.cTaskbar',
-					// 'DarkOwl.User_Manager.Desktop.cWallPaper'
+							'darkowl.desktop.layout.cFitAll',
+							'darkowl.desktop.cTaskbar',
+							'darkowl.desktop.cWallPaper'
 					],
+					
 					uses :
 					[
-					// 'DarkOwl.User_Manager.Layouts.cFitAll',
-					// 'Ext.util.MixedCollection',
-					'Ext.menu.Menu'
-					// 'Ext.view.View', // dataview
-					// 'Ext.window.Window'
+							// // 'Ext.util.MixedCollection',
+							'Ext.menu.Menu', 'Ext.view.View', // dataview
+					// // 'Ext.window.Window'
 					],
 					
 					m_obj_WindowMenu : null,
 					m_obj_Windows : null,
+					m_str_WallPaper : '',
 					
 					activeWindowCls : 'ux-desktop-active-win',
 					inactiveWindowCls : 'ux-desktop-inactive-win',
@@ -33,7 +33,7 @@ Ext
 					xTickSize : 20,
 					yTickSize : 20,
 					
-					app : null,
+					// app: null,
 					
 					/**
 					 * @cfg {Array|Store} shortcuts The items to add to the
@@ -69,79 +69,72 @@ Ext
 							'" title="{name}">',
 							'</div>',
 							'<span class="ux-desktop-shortcut-text">{name}</span>',
-							'</div>', '</tpl>', '<div class="x-clear"></div>' ],
+							'</div>', '</tpl>', '<div class="x-clear"></div>'
+					],
 					
-					initComponent : function()
+					initComponent : function ()
 					{
 						var obj_This = this;
 						
+						this.windows = Ext.create("Ext.util.MixedCollection");
+						
 						this.m_obj_WindowMenu = Ext.create("Ext.menu.Menu",
-								obj_This.createWindowMenu());
-						//
-						// obj_This.bbar = obj_This.m_obj_Taskbar =
-						// Ext.create("DarkOwl.User_Manager.Desktop.cTaskbar");
-						//        
-						// obj_This.m_obj_Taskbar.m_obj_WindowMenu =
-						// obj_This.m_obj_WindowMenu;
-						//
-						// //obj_This.windows =
-						// Ext.create("Ext.util.MixedCollection");
-						//
-						// obj_This.contextMenu =
-						// Ext.create("Ext.menu.Menu",obj_This.createDesktopMenu());
-						//
-						// obj_This.items =
-						// [
-						// Ext.create("DarkOwl.User_Manager.Desktop.cWallPaper",{id:obj_This.id+'_wallpaper'}),
-						// obj_This.createDataView()
-						// ];
-						//
-						// obj_This.callParent();
-						//
-						// obj_This.shortcutsView = obj_This.items.getAt(1);
-						// obj_This.shortcutsView.on('itemclick',
-						// obj_This.onShortcutItemClick, obj_This);
+								this.createWindowMenu());
+						
+						this.m_obj_Taskbar = Ext.create(
+								"darkowl.desktop.cTaskbar",
+								{
+									m_obj_WindowMenu : this.m_obj_WindowMenu,
+									dock : "bottom"
+								});
+						
+						obj_This.contextMenu = Ext.create("Ext.menu.Menu", this
+								.createDesktopMenu());
+						
+						this.m_obj_WallPaper = Ext
+								.create("darkowl.desktop.cWallPaper");
+						
+						this.items =
+						[
+								this.m_obj_WallPaper, this.createDataView()
+						];
+						
+						this.callParent();
+						
+						this.addDocked(this.m_obj_Taskbar);
+						
+						this.shortcutsView = obj_This.items.getAt(1);
+						this.shortcutsView.on('itemclick',
+								this.onShortcutItemClick, this);
 						//
 						// var wallpaper = obj_This.wallpaper;
 						// obj_This.wallpaper = obj_This.items.getAt(0);
-						// if (wallpaper)
-						// {
-						// obj_This.setWallpaper(wallpaper,
-						// obj_This.wallpaperStretch);
-						// }
-					},
-					
-					afterRender : function()
-					{
-						var obj_This = this;
-						this.callParent();
-						this.el.on('contextmenu', obj_This.onDesktopMenu,
-								obj_This);
-					},
-					
-					// ------------------------------------------------------
-					// Overrideable configuration creation methods
-					createDataView : function()
-					{
-						var obj_This = this;
-						var obj_Return =
+						if (this.m_str_WallPaper)
 						{
-							xtype : 'dataview',
+							this.setWallpaper(this.m_str_WallPaper,
+									this.wallpaperStretch);
+						}
+					},
+					createDataView : function ()
+					{
+						var obj_This = this;
+						var obj_Return = Ext.create('Ext.view.View',
+						{
 							overItemCls : 'x-view-over',
 							trackOver : true,
-							itemSelector : obj_This.shortcutItemSelector,
+							itemSelector : this.shortcutItemSelector,
 							store : obj_This.shortcuts,
 							tpl : new Ext.XTemplate(obj_This.shortcutTpl)
-						};
+						});
+						
 						return obj_Return;
 					},
 					
-					createDesktopMenu : function()
+					createDesktopMenu : function ()
 					{
-						var obj_This = this, ret =
+						var ret =
 						{
-							items : obj_This.contextMenuItems ||
-							[]
+							items : this.contextMenuItems || []
 						};
 						
 						if (ret.items.length)
@@ -152,63 +145,66 @@ Ext
 						ret.items.push(
 						{
 							text : 'Tile',
-							handler : obj_This.tileWindows,
-							scope : obj_This,
+							handler : this.tileWindows,
+							scope : this,
 							minWindows : 1
 						},
 						{
 							text : 'Cascade',
-							handler : obj_This.cascadeWindows,
-							scope : obj_This,
+							handler : this.cascadeWindows,
+							scope : this,
 							minWindows : 1
-						});
-						
+						})
+
 						return ret;
 					},
 					
-					createWindowMenu : function()
+					createWindowMenu : function ()
 					{
 						var obj_This = this;
 						var obj_Return =
 						{
 							defaultAlign : 'br-tr',
-							"items" :
+							items :
 							[
-							{
-								text : 'Restore',
-								handler : obj_This.onWindowMenuRestore,
-								scope : obj_This
-							},
-							{
-								text : 'Minimize',
-								handler : obj_This.onWindowMenuMinimize,
-								scope : obj_This
-							},
-							{
-								text : 'Maximize',
-								handler : obj_This.onWindowMenuMaximize,
-								scope : obj_This
-							}, '-',
-							{
-								text : 'Close',
-								handler : obj_This.onWindowMenuClose,
-								scope : obj_This
-							} ],
+									{
+										text : 'Restore',
+										handler : obj_This.onWindowMenuRestore,
+										scope : obj_This
+									},
+									{
+										text : 'Minimize',
+										handler : obj_This.onWindowMenuMinimize,
+										scope : obj_This
+									},
+									{
+										text : 'Maximize',
+										handler : obj_This.onWindowMenuMaximize,
+										scope : obj_This
+									}, '-',
+									{
+										text : 'Close',
+										handler : obj_This.onWindowMenuClose,
+										scope : obj_This
+									}
+							],
 							listeners :
 							{
-								beforeshow : obj_This.onWindowMenuBeforeShow,
-								hide : obj_This.onWindowMenuHide,
-								scope : obj_This
+								beforeshow : this.onWindowMenuBeforeShow,
+								hide : this.onWindowMenuHide,
+								scope : this
 							}
 						};
 						return obj_Return;
 						
 					},
-					
-					// ------------------------------------------------------
-					// Event handler methods
-					
-					onDesktopMenu : function(e)
+					setWallpaper : function (str_Wallpaper, bool_Stretch)
+					{
+						this.m_obj_WallPaper.setWallpaper(str_Wallpaper,
+								bool_Stretch);
+						return this;
+					},
+					onDesktopMenu : function (e)
 					{
 						var obj_This = this, menu = obj_This.contextMenu;
 						e.stopEvent();
@@ -221,19 +217,19 @@ Ext
 						menu.doConstrain();
 					},
 					
-					onDesktopMenuBeforeShow : function(menu)
+					onDesktopMenuBeforeShow : function (menu)
 					{
 						var obj_This = this, count = obj_This.m_obj_Windows
 								.getCount();
 						
-						menu.items.each(function(item)
+						menu.items.each(function (item)
 						{
 							var min = item.minWindows || 0;
 							item.setDisabled(count < min);
 						});
 					},
 					
-					onShortcutItemClick : function(dataView, record)
+					onShortcutItemClick : function (dataView, record)
 					{
 						var obj_This = this, module = obj_This.app
 								.getModule(record.data.module), win = module
@@ -252,7 +248,7 @@ Ext
 					 */
 					// ------------------------------------------------------
 					// Window context menu handlers
-					onWindowMenuBeforeShow : function(menu)
+					onWindowMenuBeforeShow : function (menu)
 					{
 						var items = menu.items.items, win = menu.theWin;
 						items[0].setDisabled(win.maximized !== true
@@ -262,33 +258,33 @@ Ext
 								|| win.hidden === true); // Maximize
 					},
 					
-					onWindowMenuClose : function()
+					onWindowMenuClose : function ()
 					{
 						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
 						
 						win.close();
 					},
 					
-					onWindowMenuHide : function(menu)
+					onWindowMenuHide : function (menu)
 					{
 						menu.theWin = null;
 					},
 					
-					onWindowMenuMaximize : function()
+					onWindowMenuMaximize : function ()
 					{
 						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
 						
 						win.maximize();
 					},
 					
-					onWindowMenuMinimize : function()
+					onWindowMenuMinimize : function ()
 					{
 						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
 						
 						win.minimize();
 					},
 					
-					onWindowMenuRestore : function()
+					onWindowMenuRestore : function ()
 					{
 						var obj_This = this, win = obj_This.m_obj_WindowMenu.theWin;
 						
@@ -298,17 +294,17 @@ Ext
 					// ------------------------------------------------------
 					// Dynamic (re)configuration methods
 					
-					getWallpaper : function()
+					getWallpaper : function ()
 					{
-						return this.wallpaper.wallpaper;
+						return this.m_str_WallPaper.wallpaper;
 					},
 					
-					setTickSize : function(xTickSize, yTickSize)
+					setTickSize : function (xTickSize, yTickSize)
 					{
 						var obj_This = this, xt = obj_This.xTickSize = xTickSize, yt = obj_This.yTickSize = (arguments.length > 1) ? yTickSize
 								: xt;
 						
-						obj_This.m_obj_Windows.each(function(win)
+						obj_This.m_obj_Windows.each(function (win)
 						{
 							var dd = win.dd, resizer = win.resizer;
 							dd.xTickSize = xt;
@@ -318,20 +314,14 @@ Ext
 						});
 					},
 					
-					setWallpaper : function(wallpaper, stretch)
-					{
-						this.wallpaper.setWallpaper(wallpaper, stretch);
-						return this;
-					},
-					
 					// ------------------------------------------------------
 					// Window management methods
 					
-					cascadeWindows : function()
+					cascadeWindows : function ()
 					{
 						var x = 0, y = 0, zmgr = this.getDesktopZIndexManager();
 						
-						zmgr.eachBottomUp(function(win)
+						zmgr.eachBottomUp(function (win)
 						{
 							if (win.isWindow && win.isVisible()
 									&& !win.maximized)
@@ -377,18 +367,19 @@ Ext
 					 * 
 					 * return win; },
 					 */
-					getActiveWindow : function()
+					getActiveWindow : function ()
 					{
 						var win = null, zmgr = this.getDesktopZIndexManager();
 						
 						if (zmgr)
 						{
 							// We cannot rely on activate/deactive because that
-							// fires against
+							// fires
+							// against
 							// non-Window
 							// components in the stack.
 							
-							zmgr.eachTopDown(function(comp)
+							zmgr.eachTopDown(function (comp)
 							{
 								if (comp.isWindow && !comp.hidden)
 								{
@@ -402,7 +393,7 @@ Ext
 						return win;
 					},
 					
-					getDesktopZIndexManager : function()
+					getDesktopZIndexManager : function ()
 					{
 						var m_obj_Windows = this.m_obj_Windows;
 						// TODO - there has to be a better way to get this...
@@ -411,7 +402,7 @@ Ext
 								|| null;
 					},
 					
-					getWindow : function(id)
+					getWindow : function (id)
 					{
 						return this.m_obj_Windows.get(id);
 					},
@@ -424,13 +415,13 @@ Ext
 					 * win.restore(); win.toFront(); } else { win.show(); }
 					 * return win; },
 					 */
-					tileWindows : function()
+					tileWindows : function ()
 					{
 						var obj_This = this, availWidth = obj_This.body
 								.getWidth(true);
 						var x = obj_This.xTickSize, y = obj_This.yTickSize, nextY = y;
 						
-						obj_This.m_obj_Windows.each(function(win)
+						obj_This.m_obj_Windows.each(function (win)
 						{
 							if (win.isVisible() && !win.maximized)
 							{

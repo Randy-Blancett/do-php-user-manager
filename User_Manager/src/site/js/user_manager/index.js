@@ -17,6 +17,6 @@ function Setup()
 	Ext.tip.QuickTipManager.init();
 	m_obj_UserManager_App = Ext.create('darkowl.desktop.cApplication',
 	{
-		renderTo : document.body
+		renderTo : Ext.getBody()
 	});
 }

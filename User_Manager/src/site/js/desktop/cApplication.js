@@ -47,7 +47,7 @@ Ext.define('darkowl.desktop.cApplication',
 //        	m_obj_Desktop	: obj_This.m_obj_Desktop
 //        });
 
-       obj_This.mixins.observable.constructor.call(this, config);
+       this.mixins.observable.constructor.call(this, config);
 
         if (Ext.isReady) 
         {
@@ -68,14 +68,14 @@ Ext.define('darkowl.desktop.cApplication',
         this.m_obj_Desktop = Ext.create("darkowl.desktop.cDesktop",
         {
         	m_obj_Windows	: this.m_obj_Windows,
-        	wallpaper		: "Img/Wallpaper/desktop.jpg"
+        m_str_WallPaper		: "../img/Wallpaper/desktop.jpg"
         });
 
-//        obj_This.m_obj_ViewPort = Ext.create("Ext.container.Viewport",        		
-//        {
-//            layout: 'fit',
-//            items: [  obj_This.m_obj_Desktop ]
-//        });
+        obj_This.m_obj_ViewPort = Ext.create("Ext.container.Viewport",        		
+        {
+            layout: 'fit',
+            items: [ this.m_obj_Desktop ]
+        });
 
         Ext.EventManager.on(window, 'beforeunload',  obj_This.onUnload, obj_This);
 
