@@ -18,9 +18,8 @@ Ext
 							iconCls : "quickstart_logout_icon",
 							handler : function ()
 							{
-								//TODO implement Logout
-				// m_obj_UserManager_App
-				// .fireEvent(DarkOwl.User_Manager.EventHandler.cSystemEvents.C_STR_EVENT_LOGOUT);
+								m_obj_UserManager_App
+										.fireEvent(darkowl.desktop.eventManager.cDesktopEvents.self.C_STR_EVENT_LOGOUT);
 							}
 						}
 					],

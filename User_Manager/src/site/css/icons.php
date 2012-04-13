@@ -1,7 +1,7 @@
 <?php
 	header("Content-type: text/css");
 	use \darkowl\user_manager\webpage\cInfo;
-	require_once dirname(__DIR__).'/conf/cInfo.php';
+	require_once dirname(__DIR__).'/php/conf/cInfo.php';
 ?>
 @CHARSET "ISO-8859-1";
 

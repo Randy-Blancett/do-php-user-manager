@@ -9,7 +9,7 @@ Ext.define('darkowl.desktop.cTaskbar',
 			'darkowl.desktop.cWindowBar', 'darkowl.desktop.cStartMenu',
 			'darkowl.desktop.cQuickStart',
 			'darkowl.desktop.sysTray.cTrayClock',
-			
+
 			'Ext.button.Button', 'Ext.resizer.Splitter', 'Ext.menu.Menu',
 			"Ext.toolbar.Toolbar"
 	],
@@ -61,6 +61,7 @@ Ext.define('darkowl.desktop.cTaskbar',
 		
 		this.m_obj_StartMenu = Ext.create('darkowl.desktop.cStartMenu',
 		{
+			iconCls : 'menu-user-icon',
 			title : darkowl.desktop.config.cConfig.getUserName()
 		});
 	},

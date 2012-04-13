@@ -20,6 +20,7 @@ Ext
 					
 					m_obj_WindowMenu : null,
 					m_obj_Windows : null,
+					m_obj_Shortcut : null,
 					m_str_WallPaper : '',
 					
 					activeWindowCls : 'ux-desktop-active-win',
@@ -94,9 +95,11 @@ Ext
 						this.m_obj_WallPaper = Ext
 								.create("darkowl.desktop.cWallPaper");
 						
+						this.m_obj_Shortcut = this.createDataView();
+						
 						this.items =
 						[
-								this.m_obj_WallPaper, this.createDataView()
+								this.m_obj_WallPaper, this.m_obj_Shortcut
 						];
 						
 						this.callParent();
@@ -115,16 +118,35 @@ Ext
 									this.wallpaperStretch);
 						}
 					},
+					addShortcut : function (obj_Shortcuts)
+					{
+						if (this.m_obj_Shortcut.store == null)
+						{
+							this.m_obj_Shortcut.store = obj_Shortcuts;
+						}
+						else
+						{
+							obj_Shortcuts.each(function (obj_Record)
+							{
+								console.log(arguments)
+							});
+						}
+						darkowl.desktop.util.cLogger.log("shortcut store");
+						darkowl.desktop.util.cLogger
+								.log(this.m_obj_Shortcut.store);
+						darkowl.desktop.util.cLogger.log("shortcut store Data");
+						darkowl.desktop.util.cLogger.log(obj_Shortcuts);
+						this.m_obj_Shortcut;
+					},
 					createDataView : function ()
 					{
-						var obj_This = this;
 						var obj_Return = Ext.create('Ext.view.View',
 						{
 							overItemCls : 'x-view-over',
 							trackOver : true,
 							itemSelector : this.shortcutItemSelector,
-							store : obj_This.shortcuts,
-							tpl : new Ext.XTemplate(obj_This.shortcutTpl)
+							store : this.shortcuts,
+							tpl : new Ext.XTemplate(this.shortcutTpl)
 						});
 						
 						return obj_Return;
