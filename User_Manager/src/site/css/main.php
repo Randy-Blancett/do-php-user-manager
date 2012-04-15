@@ -1,7 +1,7 @@
 <?php
 	header("Content-type: text/css");
 	use \darkowl\user_manager\webpage\cInfo;
-	require_once dirname(__DIR__).'/conf/cInfo.php';
+	require_once dirname(__DIR__).'/php/conf/cInfo.php';
 ?>
 @CHARSET "ISO-8859-1";
 
@@ -42,6 +42,32 @@
 	vertical-align		: top;
 	display				: inline-block;
 	height				: 32px;
+}
+
+.ux-desktop-shortcut {
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
+    margin: 8px;
+    width: 64px;
+}
+
+.ux-desktop-shortcut-icon {
+    width: 48px;
+    height: 48px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+}
+
+.ux-desktop-shortcut-text {
+    font: normal 10px tahoma,arial,verdana,sans-serif;
+    text-decoration: none;
+    padding-top: 5px;
+    color: white;
+}
+
+.x-view-over .ux-desktop-shortcut-text {
+    text-decoration: underline;
 }
 
 .window {

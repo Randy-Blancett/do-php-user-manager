@@ -124,7 +124,8 @@ Ext
 					
 					loadAllModules : function ()
 					{
-						this.m_obj_Modules.eachKey(function (str_Key,obj_Module)
+						this.m_obj_Modules.eachKey(function (str_Key,
+								obj_Module)
 						{
 							this.addModule(obj_Module);
 						}, this);
@@ -138,6 +139,8 @@ Ext
 						{
 							this.m_obj_Desktop.addShortcut(obj_Module
 									.getShortcuts());
+							this.m_obj_Desktop.addQuickStart(obj_Module
+									.getQuickStart());
 						}
 					},
 					

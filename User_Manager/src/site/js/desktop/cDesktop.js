@@ -128,26 +128,44 @@ Ext
 						{
 							obj_Shortcuts.each(function (obj_Record)
 							{
-								console.log(arguments)
-							});
+								this.m_obj_Shortcut.store.add(obj_Record);
+							}, this);
 						}
-						darkowl.desktop.util.cLogger.log("shortcut store");
-						darkowl.desktop.util.cLogger
-								.log(this.m_obj_Shortcut.store);
-						darkowl.desktop.util.cLogger.log("shortcut store Data");
-						darkowl.desktop.util.cLogger.log(obj_Shortcuts);
-						this.m_obj_Shortcut;
+						// darkowl.desktop.util.cLogger.log("shortcut store");
+						// darkowl.desktop.util.cLogger.log(this.m_obj_Shortcut);
+					},
+					addQuickStart : function (obj_Data)
+					{
+						this.m_obj_Taskbar.addQuickStart(obj_Data);
 					},
 					createDataView : function ()
 					{
-						var obj_Return = Ext.create('Ext.view.View',
-						{
-							overItemCls : 'x-view-over',
-							trackOver : true,
-							itemSelector : this.shortcutItemSelector,
-							store : this.shortcuts,
-							tpl : new Ext.XTemplate(this.shortcutTpl)
-						});
+						var obj_Return = Ext
+								.create(
+										'Ext.view.View',
+										{
+											overItemCls : 'x-view-over',
+											trackOver : true,
+											itemSelector : this.shortcutItemSelector,
+											store : Ext
+													.create(
+															'Ext.data.Store',
+															{
+																fields : darkowl.desktop.module.abs_Module.C_ARR_FIELDS,
+																proxy :
+																{
+																	type : 'memory',
+																	reader :
+																	{
+																		type : 'json',
+																		root : 'items'
+																	}
+																}
+															}),
+											// this.shortcuts,
+											tpl : new Ext.XTemplate(
+													this.shortcutTpl)
+										});
 						
 						return obj_Return;
 					},
@@ -251,15 +269,11 @@ Ext
 						});
 					},
 					
-					onShortcutItemClick : function (dataView, record)
+					onShortcutItemClick : function (obj_DataView, obj_Record)
 					{
-						var obj_This = this, module = obj_This.app
-								.getModule(record.data.module), win = module
-								&& module.createWindow();
-						
-						if (win)
+						if (obj_Record.get('onClick'))
 						{
-							obj_This.restoreWindow(win);
+							obj_Record.get('onClick')();
 						}
 					},
 					/*

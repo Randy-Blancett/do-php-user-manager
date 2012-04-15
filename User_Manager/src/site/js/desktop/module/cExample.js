@@ -11,17 +11,18 @@ Ext.define('darkowl.desktop.module.cExample',
 	{
 		this.m_obj_Shortcuts = Ext.create('Ext.data.Store',
 		{
-			fields :
-			[
-					'name', 'iconCls'
-			],
+			fields : darkowl.desktop.module.abs_Module.C_ARR_FIELDS,
 			data :
 			{
 				'items' :
 				[
 					{
 						'name' : 'Example Shortcut',
-						"iconCls" : "menu-action-view-icon"
+						"iconCls" : "menu-action-view-icon",
+						onClick : function ()
+						{
+							alert("Test Alert Example");
+						}
 					}
 				]
 			},
@@ -35,5 +36,33 @@ Ext.define('darkowl.desktop.module.cExample',
 				}
 			}
 		});
+		
+		this.m_obj_QuickStart = Ext.create('Ext.data.Store',
+				{
+					fields : darkowl.desktop.module.abs_Module.C_ARR_FIELDS,
+					data :
+					{
+						'items' :
+						[
+							{
+								'name' : 'Example Shortcut',
+								"iconCls" : "menu-action-view-icon",
+								onClick : function ()
+								{
+									alert("Quick Start Example");
+								}
+							}
+						]
+					},
+					proxy :
+					{
+						type : 'memory',
+						reader :
+						{
+							type : 'json',
+							root : 'items'
+						}
+					}
+				});
 	}
 });

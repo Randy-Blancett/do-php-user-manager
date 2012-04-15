@@ -198,5 +198,27 @@ Ext.define('darkowl.desktop.cTaskbar',
 				}
 			});
 		}
+	},
+	addQuickStart : function (obj_QuickStart)
+	{
+		if (obj_QuickStart != null)
+		{
+			obj_QuickStart.each(function (obj_Record)
+			{
+				this.m_obj_QuickStart.add(
+				{
+					tooltip :
+					{
+						text : obj_Record.get("name"),
+						align : 'bl-tl'
+					},
+					overflowText : obj_Record.get("name"),
+					iconCls : obj_Record.get("iconCls"),
+					handler : obj_Record.get("onClick")
+				});
+			}, this);
+			
+			this.m_obj_QuickStart.size_Box();
+		}
 	}
 });
