@@ -199,6 +199,10 @@ Ext.define('darkowl.desktop.cTaskbar',
 			});
 		}
 	},
+	addStartMenu : function (obj_Menu)
+	{
+		this.m_obj_StartMenu.addStartMenu(obj_Menu);
+	},
 	addQuickStart : function (obj_QuickStart)
 	{
 		if (obj_QuickStart != null)

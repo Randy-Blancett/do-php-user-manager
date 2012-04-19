@@ -8,6 +8,8 @@ Ext
 					[
 							'Ext.menu.Menu', 'Ext.toolbar.Toolbar'
 					],
+					m_obj_Logout : null,
+					m_obj_Sep : null,
 					
 					ariaRole : 'menu',
 					cls : 'x-menu ux-start-menu',
@@ -18,15 +20,11 @@ Ext
 					layout : 'fit',
 					
 					// We have to hardcode a width because the internal Menu
-					// cannot drive our
-					// width.
+					// cannot drive our width.
 					// This is combined with changing the align property of the
-					// menu's layout
-					// from the
+					// menu's layout from the
 					// typical 'stretchmax' to 'stretch' which allows the the
-					// items to fill the
-					// menu
-					// area.
+					// items to fill the menu area.
 					width : 300,
 					height : 300,
 					initComponent : function ()
@@ -51,6 +49,145 @@ Ext
 							this.hide();
 						});
 					},
+					addMenuItem : function (str_Text, obj_Menu, obj_Data)
+					{
+						var obj_Current = null;
+						var str_ID = null;
+						var obj_Submenu = obj_Data.submenu;
+						var bool_IsMenu = false;
+						
+						if (obj_Submenu != null && obj_Submenu.getCount() > 0)
+						{
+							bool_IsMenu = true;
+						}
+						
+						str_ID = str_Text;
+						
+						if (bool_IsMenu)
+						{
+							str_ID += "Menu";
+						}
+						else
+						{
+							str_ID += "Function";
+						}
+						
+						obj_Current = obj_Menu.items.get(str_ID);
+						
+						if (!obj_Current)
+						{
+							var obj_NewItem =
+							{
+								text : str_Text,
+								id : str_ID
+							};
+							if (bool_IsMenu)
+							{
+								obj_NewItem.menu = [];
+							}
+							obj_Current = Ext.create('Ext.menu.Item',
+									obj_NewItem);
+							obj_Menu.add(obj_Current);
+						}
+						
+						if (bool_IsMenu)
+						{
+							this.addMenu2Button(obj_Current, obj_Submenu);
+						}
+						else
+						{
+							obj_Current.on('click', obj_Data.onClick, this);
+						}
+					},
+					addToolbarItem : function (str_Text, obj_Menu, obj_Data)
+					{
+						var obj_Current = null;
+						var str_ID = null;
+						var obj_Submenu = obj_Data.submenu;
+						var bool_IsMenu = false;
+						
+						if (obj_Submenu != null && obj_Submenu.getCount() > 0)
+						{
+							bool_IsMenu = true;
+						}
+						
+						str_ID = str_Text;
+						
+						if (bool_IsMenu)
+						{
+							str_ID += "Menu";
+						}
+						else
+						{
+							str_ID += "Function";
+						}
+						
+						obj_Current = obj_Menu.items.get(str_ID);
+						
+						if (!obj_Current)
+						{
+							var obj_NewItem =
+							{
+								text : str_Text,
+								id : str_ID
+							};
+							if (bool_IsMenu)
+							{
+								obj_NewItem.menu = [];
+							}
+							obj_Current = obj_Menu.add(obj_NewItem);
+						}
+						
+						if (bool_IsMenu)
+						{
+							this.addMenu2Button(obj_Current, obj_Submenu);
+						}
+						else
+						{
+							obj_Current.on('click', obj_Data.onClick, this);
+						}
+					},
+					addMenu2Button : function (obj_Button, obj_SubMenu)
+					{
+						obj_SubMenu.eachKey(function (str_Key, obj_Data)
+						{
+							this
+									.addMenuItem(str_Key, obj_Button.menu,
+											obj_Data);
+						}, this);
+					},
+					
+					addStartMenu : function (obj_Data)
+					{
+						// darkowl.desktop.util.cLogger.log(obj_Data);
+						if (obj_Data.general)
+						{
+							obj_Data.general.eachKey(function (str_Key,
+									obj_Data)
+							{
+								this.addMenuItem(str_Key, this.m_obj_Menu,
+										obj_Data);
+							}, this);
+						}
+						
+						if (obj_Data.special)
+						{
+							this.m_obj_Toolbar.remove(this.m_obj_Sep);
+							this.m_obj_Toolbar.remove(this.m_obj_Logout);
+							
+							obj_Data.special.eachKey(function (str_Key,
+									obj_Data)
+							{
+								this.addToolbarItem(str_Key,
+										this.m_obj_Toolbar, obj_Data);
+							}, this);
+							
+							this.m_obj_Toolbar.add(this.m_obj_Sep);
+							this.m_obj_Toolbar.add(this.m_obj_Logout);
+						}
+						// this.m_obj_Menu
+						// this.m_obj_Toolbar
+					},
 					
 					buildToolbar : function ()
 					{
@@ -64,20 +201,9 @@ Ext
 							vertical : true
 						});
 						
-						this.m_obj_Toolbar.add(
-						{
-							text : 'test 1',
-							iconCls : 'menu-create-db-icon',
-							handler : function ()
-							{
-								// m_obj_UserManager_App.fireEvent(DarkOwl.User_Manager.EventHandler.cWindowEvents.C_STR_EVENT_CREATE_DATABASES)
-							},
-							scope : obj_This
-						});
+						this.m_obj_Sep = this.m_obj_Toolbar.add('->');
 						
-						this.m_obj_Toolbar.add('-');
-						
-						this.m_obj_Toolbar
+						this.m_obj_Logout = this.m_obj_Toolbar
 								.add(
 								{
 									text : 'Logout',
@@ -103,11 +229,6 @@ Ext
 						});
 						
 						this.m_obj_Menu.layout.align = 'stretch';
-					},
-					
-					addMenuItem : function (obj_Item)
-					{
-						this.m_obj_Menu.add(obj_Item);
 					},
 					
 					addToolItem : function ()

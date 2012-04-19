@@ -141,6 +141,8 @@ Ext
 									.getShortcuts());
 							this.m_obj_Desktop.addQuickStart(obj_Module
 									.getQuickStart());
+							this.m_obj_Desktop.addStartMenu(obj_Module
+									.getStartMenu());
 						}
 					},
 					

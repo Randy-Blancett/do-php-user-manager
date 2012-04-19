@@ -138,6 +138,10 @@ Ext
 					{
 						this.m_obj_Taskbar.addQuickStart(obj_Data);
 					},
+					addStartMenu : function (obj_Data)
+					{
+						this.m_obj_Taskbar.addStartMenu(obj_Data);
+					},
 					createDataView : function ()
 					{
 						var obj_Return = Ext
