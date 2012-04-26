@@ -40,22 +40,28 @@ require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 	</div>
 	<link rel="stylesheet" type="text/css" href="../css/main.php" />
 	<link rel="stylesheet" type="text/css" href="../css/icons.php" />
-	<link rel="stylesheet" type="text/css"
-		href="<?php print(webpage\cInfo::C_STR_EXT4_LIB_PATH); ?>/resources/css/ext-all.css" />
+
+	<?php
+	print('<link rel="stylesheet" type="text/css" href="'. webpage\cInfo::C_STR_EXT4_LIB_PATH .'/resources/css/ext-all.css" />');
+	?>
+
+
 
 	<script type="text/javascript">
 	    	document.getElementById('loading-msg').innerHTML = 'Loading Core API...';
-	    </script>
-	<script type="text/javascript"
-		src="<?php print(webpage\cInfo::C_STR_EXT4_LIB_PATH);?>/ext.js"></script>
-		<script type="text/javascript" src='../php/conf/cConfig_JS.php'></script>
-		<script type="text/javascript" src='../js/util/loaderFix.js'></script>
-		
-	    <script type="text/javascript">
+	 </script>
+
+	 <?php
+	 print('<script type="text/javascript" src="'. webpage\cInfo::C_STR_EXT4_LIB_PATH .'/ext.js"></script>'.PHP_EOL);
+	 ?>
+	<script type="text/javascript" src='../php/conf/cConfig_JS.php'></script>
+	<script type="text/javascript" src='../js/util/loaderFix.js'></script>
+
+	<script type="text/javascript">
 	    	document.getElementById('loading-msg').innerHTML = 'Setting up User Manager ...';
-	    </script> 
-	    
-	    
-		<script type="text/javascript" src='../js/user_manager/index.js'></script>
-	</body>
+	    </script>
+
+
+	<script type="text/javascript" src='../js/user_manager/index.js'></script>
+</body>
 </html>
