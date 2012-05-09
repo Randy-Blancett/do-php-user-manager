@@ -24,7 +24,7 @@ function Setup ()
 	var obj_Desktop = Ext.create('darkowl.userManager.module.desktop');
 	
 	m_obj_UserManager_App.addModule(obj_Desktop);
-	m_obj_UserManager_App.addModule(Ext.create('darkowl.desktop.module.cExample'));
+//	m_obj_UserManager_App.addModule(Ext.create('darkowl.desktop.module.cExample'));
 	
 	// m_obj_UserManager_App = darkowl.desktop.cApplication;
 	// m_obj_UserManager_App.render(Ext.getBody());

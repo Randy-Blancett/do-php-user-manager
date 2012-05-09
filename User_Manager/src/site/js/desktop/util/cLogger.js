@@ -1,6 +1,10 @@
 Ext.define('darkowl.desktop.util.cLogger',
 {
 	singleton : true,
+	alternateClassName :
+	[
+		'desktop.logger'
+	],
 	statics :
 	{
 		C_INT_LEVEL_ERROR : 100,

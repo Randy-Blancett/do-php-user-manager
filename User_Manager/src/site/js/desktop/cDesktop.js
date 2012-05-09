@@ -109,9 +109,7 @@ Ext
 						this.shortcutsView = obj_This.items.getAt(1);
 						this.shortcutsView.on('itemclick',
 								this.onShortcutItemClick, this);
-						//
-						// var wallpaper = obj_This.wallpaper;
-						// obj_This.wallpaper = obj_This.items.getAt(0);
+						
 						if (this.m_str_WallPaper)
 						{
 							this.setWallpaper(this.m_str_WallPaper,
@@ -126,13 +124,15 @@ Ext
 						}
 						else
 						{
-							obj_Shortcuts.each(function (obj_Record)
+							if (obj_Shortcuts)
 							{
-								this.m_obj_Shortcut.store.add(obj_Record);
-							}, this);
+								obj_Shortcuts.each(function (obj_Record)
+								{
+									this.m_obj_Shortcut.store.add(obj_Record);
+								}, this);
+							}
 						}
-						// darkowl.desktop.util.cLogger.log("shortcut store");
-						// darkowl.desktop.util.cLogger.log(this.m_obj_Shortcut);
+						
 					},
 					addQuickStart : function (obj_Data)
 					{

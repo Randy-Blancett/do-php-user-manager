@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="user_manager1" defaultIdMethod="native"
+<database name="user_manager" defaultIdMethod="native"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
 	<table name="groups" phpName="cTableGroups">

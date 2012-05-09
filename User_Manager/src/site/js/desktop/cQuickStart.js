@@ -18,8 +18,8 @@ Ext
 							iconCls : "quickstart_logout_icon",
 							handler : function ()
 							{
-								m_obj_UserManager_App
-										.fireEvent(darkowl.desktop.eventManager.cDesktopEvents.self.C_STR_EVENT_LOGOUT);
+								desktop.MsgBus
+										.fireEvent(desktop.MsgBus.self.C_STR_EVENT_LOGOUT);
 							}
 						}
 					],

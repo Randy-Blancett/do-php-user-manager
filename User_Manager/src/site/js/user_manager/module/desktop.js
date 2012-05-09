@@ -9,31 +9,29 @@ Ext.define('darkowl.userManager.module.desktop',
 	],
 	constructor : function (config)
 	{
-		this.m_obj_Shortcuts = Ext.create('Ext.data.Store',
+		this.buildGeneralMenu();
+		this.buildSpecialMenu();
+	},
+	buildSpecialMenu : function ()
+	{
+		this.m_obj_SpecialStartMenu = new Ext.util.MixedCollection();
+		
+		this.m_obj_SpecialStartMenu.add('Create Tables',
 		{
-			fields :
-			[
-					'name', 'iconCls'
-			],
-			data :
+			iconCls : "menu-create-db-icon",
+			onClick : function ()
 			{
-				'items' :
-				[
-					{
-						'name' : 'Test 123',
-						"iconCls" : "menu-action-view-icon"
-					}
-				]
-			},
-			proxy :
-			{
-				type : 'memory',
-				reader :
-				{
-					type : 'json',
-					root : 'items'
-				}
+				alert("Insert Code to create Tables");
 			}
 		});
+	},
+	buildGeneralMenu : function ()
+	{
+//		this.m_obj_GeneralStartMenu = new Ext.util.MixedCollection();
+//		
+//		this.m_obj_GeneralStartMenu.add('Level 1',
+//		{
+//			submenu : this.buildLevel1()
+//		});
 	}
 });
