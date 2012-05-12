@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="user_manager1" defaultIdMethod="native">
+<database name="user_manager" defaultIdMethod="native"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
 	<table name="keybox" phpName="cTableKeybox">
-		<column name="id" type="varchar" size="36" required="true" primaryKey="true" autoIncrement="false"/>
-		<column name="action_id" type="varchar" size="36" required="true" phpName='actionId' />
-		<column name="link_type" type="INTEGER" size="1" required="true" phpName='linkType' />
-		<column name="link_id" type="varchar" size="50" required="true" phpName='linkId' />
-		<column name="comment" type="BLOB" required="false"/>
+		<column name="id" type="varchar" size="36" required="true"
+			primaryKey="true" autoIncrement="false" />
+		<column name="action_id" type="varchar" size="36" required="true"
+			phpName='actionId' />
+		<column name="link_type" type="INTEGER" size="1" required="true"
+			phpName='linkType' />
+		<column name="link_id" type="varchar" size="50" required="true"
+			phpName='linkId' />
+		<column name="comment" type="BLOB" required="false" />
 	</table>
 </database>
