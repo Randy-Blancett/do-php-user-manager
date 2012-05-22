@@ -6,7 +6,7 @@
 
 //namespace darkowl\user_manager\unitTest;
 
-require_once dirname(dirname(dirname(__DIR__)))."/src/main/php/abstract/abs_DBConfig.php";
+require_once dirname(dirname(dirname(__DIR__)))."/src/main/php/do/darkowl/User_Manager/abstract/abs_DBConfig.php";
 
 class cTestConfig extends abs_DBConfig
 {

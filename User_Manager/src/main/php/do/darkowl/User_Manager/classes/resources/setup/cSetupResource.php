@@ -1,6 +1,7 @@
 <?php
 use \darkowl\user_manager\webpage;
-require_once dirname(dirname( __DIR__)).'/propelInclude.php';
+require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
+require_once dirname(dirname( __DIR__)).'/response/cDatabaseResponse.php';
 
 require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/conf/cDBConfig.php";
 
@@ -12,12 +13,11 @@ require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/conf/cDBConfig.php";
 class cSetupResource extends Resource {
 
 	const C_STR_PARAM_ACTION = "action";
-
 	const C_STR_ACTION_CREATE = "create";
 
 	private $m_obj_Response = null;
 
-	function create()
+	private function create()
 	{
 		$obj_Connection =  Propel::getConnection();
 		print_r(Propel::getConfiguration());
@@ -40,7 +40,7 @@ class cSetupResource extends Resource {
 		$obj_Response->code =201;
 	}
 
-	function get($request) {
+	public function get($request) {
 
 		$response = new Response($request);
 
@@ -55,11 +55,13 @@ END;
 
 	}
 
-	function post($request)
+	public 	function post($request)
 	{
-		$this->m_obj_Response = new Response($request);
+		$this->m_obj_Response = new cDatabaseResponse($request);
 
 		$arr_Query = split("&",$request->data);
+		$arr_Data= Array();
+		$arr_Data[self::C_STR_PARAM_ACTION]="";
 
 		foreach ($arr_Query as $str_Data)
 		{
