@@ -19,25 +19,27 @@ class cSetupResource extends Resource {
 
 	private function create()
 	{
-		$obj_Connection =  Propel::getConnection();
-		print_r(Propel::getConfiguration());
-		die("Killer");
+// 		$obj_Connection =  Propel::getConnection();
+// 		print_r(Propel::getConfiguration());
+// 		die("Killer");
 
-		//$query = "SELECT * FROM  `actions` LIMIT 0 , 30   ";
-		$query = "CREATE DATABASE  `user_manager`" ;
+// 		//$query = "SELECT * FROM  `actions` LIMIT 0 , 30   ";
+// 		$query = "CREATE DATABASE  `user_manager`" ;
 
-		$obj_Statement = $obj_Connection->prepare($query);
+// 		$obj_Statement = $obj_Connection->prepare($query);
 
-		$obj_Statement->execute();
+// 		$obj_Statement->execute();
 
-		print_r($obj_Statement->fetch(PDO::FETCH_OBJ));
-		die("Killer");
+// 		print_r($obj_Statement->fetch(PDO::FETCH_OBJ));
+// 		die("Killer");
 
-		$this->totalPrize = $this->resultset->prizeTotal;
+// 		$this->totalPrize = $this->resultset->prizeTotal;
 
-		$this->onePercentOfTotalPrize = round($this->totalPrize / 100);
+// 		$this->onePercentOfTotalPrize = round($this->totalPrize / 100);
 
-		$obj_Response->code =201;
+		print_r(Propel::getDatabaseMap(Propel::));
+
+		$obj_Response->code = Response::OK;
 	}
 
 	public function get($request) {
@@ -73,14 +75,26 @@ END;
 			}
 		}
 
-		switch ($arr_Data[self::C_STR_PARAM_ACTION])
+		if(!isset($arr_Data[self::C_STR_PARAM_ACTION]))
 		{
-			case self::C_STR_ACTION_CREATE :
-				$this->create();
-				break;
-			default:
-				$this->m_obj_Response->code = 406;
-				$this->m_obj_Response->body .= "Unknown Action";
+			$arr_Data[self::C_STR_PARAM_ACTION] = null;
+		}
+		if(!$arr_Data[self::C_STR_PARAM_ACTION])
+		{
+			$this->m_obj_Response->code = 406;
+			$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
+		}
+		else
+		{
+			switch ($arr_Data[self::C_STR_PARAM_ACTION])
+			{
+				case self::C_STR_ACTION_CREATE :
+					$this->create();
+					break;
+				default:
+					$this->m_obj_Response->code = 406;
+					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
+			}
 		}
 
 		return $this->m_obj_Response;

@@ -1,12 +1,13 @@
 <?php
 use \darkowl\user_manager\webpage;
+//use \darkowl\user_manager\restEndPoint
 
 require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 // load Tonic library
 require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH .'/tonic/tonic.php';
 
 // base resource
-require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/classes/resources/cBaseResource.php";
+require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/classes/restEndPoint/cBaseResource.php";
 
 // handle request
 $obj_Request = new Request();

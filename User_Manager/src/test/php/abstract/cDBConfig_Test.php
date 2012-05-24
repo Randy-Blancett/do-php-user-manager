@@ -1,14 +1,9 @@
 <?php
+namespace darkowl\user_manager\unitTest;
 
-// require_once 'PHPUnit/Framework.php';
-//require_once '/usr/share/php/PHPUnit/Framework.php';
-//require_once dirname(dirname(dirname(__DIR__))).'/target/php-test-deps/pear/PHPUnit/PHPUnit/Framework.php';
+require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_DBConfig.php";
 
-//namespace darkowl\user_manager\unitTest;
-
-require_once dirname(dirname(dirname(__DIR__)))."/src/main/php/do/darkowl/User_Manager/abstract/abs_DBConfig.php";
-
-class cTestConfig extends abs_DBConfig
+class cTestConfig extends \abs_DBConfig
 {
 	const C_STR_DB_NAME = "user_manager_Test";
 	const C_STR_DB_HOST = "localhost";
@@ -29,7 +24,7 @@ class cTestConfig extends abs_DBConfig
 }
 
 
-class cDBConfigTest extends PHPUnit_Framework_TestCase
+class cDBConfigTest extends \PHPUnit_Framework_TestCase
 {
 	function setUp() {
 	}

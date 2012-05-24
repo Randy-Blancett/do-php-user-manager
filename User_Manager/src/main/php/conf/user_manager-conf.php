@@ -23,5 +23,5 @@ $conf = array (
 		),
 		'generator_version' => '1.6.4',
 );
-$conf['classmap'] = include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classmap-user_manager-conf.php');
+$conf['classmap'] = include('classmap-user_manager-conf.php');
 return $conf;
