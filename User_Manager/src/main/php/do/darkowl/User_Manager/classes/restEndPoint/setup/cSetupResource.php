@@ -1,7 +1,10 @@
 <?php
+use darkowl\user_manager\resource\cDatabaseResource;
+
 use \darkowl\user_manager\webpage;
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname( __DIR__)).'/response/cDatabaseResponse.php';
+require_once dirname(dirname( __DIR__)).'/resource/cDatabaseResource.php';
 
 require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/conf/cDBConfig.php";
 
@@ -17,29 +20,14 @@ class cSetupResource extends Resource {
 
 	private $m_obj_Response = null;
 
-	private function create()
+	public function outputCreate()
 	{
-// 		$obj_Connection =  Propel::getConnection();
-// 		print_r(Propel::getConfiguration());
-// 		die("Killer");
+		$obj_DatabaseResponse = new cDatabaseResource();
 
-// 		//$query = "SELECT * FROM  `actions` LIMIT 0 , 30   ";
-// 		$query = "CREATE DATABASE  `user_manager`" ;
+		$obj_DatabaseResponse->setURI("../database/user_manager");
+		$obj_DatabaseResponse->setName("User Manager");
 
-// 		$obj_Statement = $obj_Connection->prepare($query);
-
-// 		$obj_Statement->execute();
-
-// 		print_r($obj_Statement->fetch(PDO::FETCH_OBJ));
-// 		die("Killer");
-
-// 		$this->totalPrize = $this->resultset->prizeTotal;
-
-// 		$this->onePercentOfTotalPrize = round($this->totalPrize / 100);
-
-		print_r(Propel::getDatabaseMap(Propel::));
-
-		$obj_Response->code = Response::OK;
+		$this->m_obj_Response->addResource($obj_DatabaseResponse);
 	}
 
 	public function get($request) {
@@ -89,7 +77,7 @@ END;
 			switch ($arr_Data[self::C_STR_PARAM_ACTION])
 			{
 				case self::C_STR_ACTION_CREATE :
-					$this->create();
+					$this->outputCreate();
 					break;
 				default:
 					$this->m_obj_Response->code = 406;
