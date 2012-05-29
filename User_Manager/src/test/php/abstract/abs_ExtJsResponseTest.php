@@ -1,12 +1,14 @@
 <?php
 namespace darkowl\user_manager\unitTest;
+use darkowl\user_manager\resource\abs_ExtJsResponse;
+
 use darkowl\user_manager\resource\abs_Resource;
 
 require_once dirname(dirname(dirname(__DIR__)))."/main/php/tonic/tonic.php";
 require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_ExtJsResponse.php";
 require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_Resource.php";
 
-class cTestExtJsResponse extends \abs_ExtJsResponse
+class cTestExtJsResponse extends abs_ExtJsResponse
 {
 
 }
@@ -34,6 +36,23 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		return $obj_Response;
 	}
 
+	function testInstance()
+	{
+		$obj_Response = $this->getResponse();
+		$this->assertInstanceOf("\\darkowl\\user_manager\\resource\\abs_ExtJsResponse", $obj_Response);
+	}
+
+	function testGetterSetter()
+	{
+		$obj_Response = $this->getResponse();
+		$obj_Response->setSuccess(true);
+		$this->assertTrue($obj_Response->getSuccess());
+
+		$obj_Response = $this->getResponse();
+		$obj_Response->setSuccess(false);
+		$this->assertFalse($obj_Response->getSuccess());
+	}
+
 	function testLogger() {
 		$obj_Response = $this->getResponse();
 		$obj_Resource = new \stdClass();
@@ -41,6 +60,7 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		$obj_Output = null;
 
 		$obj_Response->logError("Test Error");
+		$obj_Response->setSuccess(false);
 
 		ob_start();
 		$obj_Response->output();
@@ -48,6 +68,7 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(1, sizeof($obj_Output->errors));
 		$this->assertEquals("Test Error", $obj_Output->errors[0]);
+		$this->assertFalse( $obj_Output->success);
 	}
 
 	public function testResource()
@@ -64,6 +85,7 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		$obj_Resource->test3 = "test3";
 		$obj_Response->addResource($obj_Resource);
 
+		$obj_Response->setSuccess(true);
 
 		ob_start();
 		$obj_Response->output();
@@ -81,6 +103,8 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals("test2",$obj_Resources[1]->test2);
 		$this->assertEquals("test3",$obj_Resources[1]->test3);
+
+		$this->assertTrue($obj_Output->success);
 
 
 		$obj_Output = null;

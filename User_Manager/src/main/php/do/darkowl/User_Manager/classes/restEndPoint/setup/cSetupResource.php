@@ -1,8 +1,10 @@
 <?php
-use darkowl\user_manager\resource\cDatabaseResource;
+use darkowl\user_manager\response\cDatabaseResponse;
 
+use darkowl\user_manager\resource\cDatabaseResource;
 use \darkowl\user_manager\webpage;
-require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
+
+// require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname( __DIR__)).'/response/cDatabaseResponse.php';
 require_once dirname(dirname( __DIR__)).'/resource/cDatabaseResource.php';
 
@@ -22,12 +24,12 @@ class cSetupResource extends Resource {
 
 	public function outputCreate()
 	{
-		$obj_DatabaseResponse = new cDatabaseResource();
+		$obj_DatabaseResource = new cDatabaseResource();
 
-		$obj_DatabaseResponse->setURI("../database/user_manager");
-		$obj_DatabaseResponse->setName("User Manager");
+		$obj_DatabaseResource->setURI("rest/database/user_manager");
+		$obj_DatabaseResource->setName("User Manager");
 
-		$this->m_obj_Response->addResource($obj_DatabaseResponse);
+		$this->m_obj_Response->addResource($obj_DatabaseResource);
 	}
 
 	public function get($request) {

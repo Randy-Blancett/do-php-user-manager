@@ -1,4 +1,6 @@
 <?php
+namespace darkowl\user_manager\resource;
+
 use darkowl\user_manager\resource\abs_Resource;
 
 if(!class_exists('Response'))
@@ -7,7 +9,7 @@ if(!class_exists('Response'))
 }
 require_once __DIR__."/abs_Resource.php";
 
-abstract class abs_ExtJsResponse extends Response
+abstract class abs_ExtJsResponse extends \Response
 {
 	const C_STR_ACCEPT_JSON = "json";
 
@@ -17,7 +19,7 @@ abstract class abs_ExtJsResponse extends Response
 	{
 		if(!isset($this->m_obj_Output))
 		{
-			$this->m_obj_Output = new stdClass();
+			$this->m_obj_Output = new \stdClass();
 		}
 
 		return $this->m_obj_Output;
@@ -106,5 +108,17 @@ abstract class abs_ExtJsResponse extends Response
 	{
 		$obj_Errors =& $this->getErrors();
 		$obj_Errors[] = $str_Msg;
+	}
+
+	public function setSuccess($bool_Success)
+	{
+		$obj_Response =& $this->getOutput();
+		$obj_Response->success = $bool_Success;
+	}
+
+	public function getSuccess()
+	{
+		$obj_Response =& $this->getOutput();
+		return $obj_Response->success ;
 	}
 }

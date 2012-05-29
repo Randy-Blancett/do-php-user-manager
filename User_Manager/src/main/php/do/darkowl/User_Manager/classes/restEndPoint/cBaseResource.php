@@ -1,5 +1,6 @@
 <?php
 require_once 'setup/cSetupResource.php';
+require_once 'database/cUserManagerDB.php';
 
 /**
  * Basic Resource List
@@ -62,8 +63,8 @@ class cBaseResource extends Resource {
 		}
 
 		$response->body = <<<END
-<h1>User Manager Base</h1>
-<p>Base resource for User Manager</p>
+<h1>User Manager Database</h1>
+<p>Base resource User Manager Database</p>
 <h2>Resources</h2>
 END;
 		$response->body .= '<ul>'.$str_Resources.'</ul>';
