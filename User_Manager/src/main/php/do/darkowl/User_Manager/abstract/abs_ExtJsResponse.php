@@ -36,6 +36,17 @@ abstract class abs_ExtJsResponse extends \Response
 		return $obj_Output->errors;
 	}
 
+	private function &getMsgs()
+	{
+		$obj_Output =& $this->getOutput();
+		if(!isset($obj_Output->msgs))
+		{
+			$obj_Outupt->msgs = array();
+		}
+
+		return $obj_Output->msgs;
+	}
+
 	private function &getResources()
 	{
 		$obj_Output =& $this->getOutput();
@@ -102,6 +113,12 @@ abstract class abs_ExtJsResponse extends \Response
 	private function output_JSON()
 	{
 		print json_encode($this->getOutput());
+	}
+
+	public function addMsg($str_Msg)
+	{
+		$obj_Msgs =& $this->getMsgs();
+		$obj_Msgs[] = $str_Msg;
 	}
 
 	public function logError($str_Msg)

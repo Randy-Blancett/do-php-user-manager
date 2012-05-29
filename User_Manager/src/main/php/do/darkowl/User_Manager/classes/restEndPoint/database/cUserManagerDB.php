@@ -16,6 +16,7 @@ class cUserManagerDB extends Resource {
 
 	const C_STR_PARAM_ACTION = "action";
 	const C_STR_ACTION_CREATE = "create";
+	const C_STR_ACTION_INFO = "info";
 
 	const C_STR_SQL_CREATE_MYSQL = "CREATE DATABASE  `user_manager` ;";
 
@@ -129,6 +130,9 @@ END;
 						$this->m_obj_Response->setSuccess(false);
 					}
 					break;
+				case self::C_STR_ACTION_INFO :
+					$this->outputTableInfo();
+					break;
 				default:
 					$this->m_obj_Response->code = 406;
 					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
@@ -141,18 +145,35 @@ END;
 	private function createDatabase()
 	{
 		try {
-			$obj_Connection = Propel::getConnection();
+			$obj_Connection = Propel::getConnection('mysql');
 			$obj_Statement = $obj_Connection->prepare(self::C_STR_SQL_CREATE_MYSQL);
 		}
 		catch (Exception $e) {
 			return false;
 		}
 
-		print($obj_Statement->execute());
+		try {
+			$obj_Statement->execute();
+			$this->m_obj_Response->addMsg("Table Created.");
+		}
+		catch (PDOException $e) {
+			switch ($e->getCode())
+			{
+				case 'HY000':
+					$this->m_obj_Response->addMsg("Table Already Exists.");
+					return true;
+				default:
+					$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
+					return false;
+			}
+
+			return false;
+		}
+
 		return true;
 	}
 
-	private function outputCreate()
+	private function outputTableInfo()
 	{
 		$obj_TableResource = new cTableResource();
 

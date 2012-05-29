@@ -71,6 +71,24 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse( $obj_Output->success);
 	}
 
+	function testMsgs() {
+		$obj_Response = $this->getResponse();
+		$obj_Resource = new \stdClass();
+
+		$obj_Output = null;
+
+		$obj_Response->addMsg("Test Msg");
+		$obj_Response->setSuccess(true);
+
+		ob_start();
+		$obj_Response->output();
+		$obj_Output = \json_decode(ob_get_clean());
+
+		$this->assertEquals(1, sizeof($obj_Output->msgs));
+		$this->assertEquals("Test Msg", $obj_Output->msgs[0]);
+		$this->assertTrue( $obj_Output->success);
+	}
+
 	public function testResource()
 	{
 		$obj_Response = $this->getResponse();
