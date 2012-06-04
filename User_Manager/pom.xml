@@ -58,7 +58,7 @@
 					</reportPlugins>
 				</configuration>
 			</plugin>
-		
+
 
 		</plugins>
 		<pluginManagement>
@@ -118,6 +118,12 @@
 			<artifactId>PHPUnit</artifactId>
 			<version>3.6.10</version>
 			<type>pear</type>
+		</dependency>
+		<dependency>
+			<groupId>org.propelorm</groupId>
+			<artifactId>propel_runtime</artifactId>
+			<version>1.6.5</version>
+			<type>pome</type>
 		</dependency>
 	</dependencies>
 </project>

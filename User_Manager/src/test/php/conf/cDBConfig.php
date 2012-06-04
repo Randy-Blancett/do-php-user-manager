@@ -1,7 +1,10 @@
 <?php 
-namespace  darkowl\user_manager\code;
+namespace  darkowl\user_manager\unitTest;
 
-class cDBConfig
+
+require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_DBConfig.php";
+
+class cDBConfig extends \abs_DBConfig
 {
 	const C_STR_DB_NAME = "user_manager_test";
 	const C_STR_DB_HOST = "localhost";
@@ -10,33 +13,14 @@ class cDBConfig
 	const C_STR_DB_USER_NAME = "propel";
 	const C_STR_DB_PASSWORD = "propel";
 
-	static function getDNS()
+	function __construct()
 	{
-		$str_DNS = self::C_STR_DB_TYPE;
-		$str_DNS .=":";
-		$str_DNS .="host=".self::C_STR_DB_HOST.";";
-		$str_DNS .="dbname=".self::C_STR_DB_NAME.";";
-		return $str_DNS;
-	}
-	
-	static function getDBName()
-	{
-		return self::C_STR_DB_NAME;
-	}
-
-	static function getUserName()
-	{
-		return self::C_STR_DB_USER_NAME;
-	}
-
-	static function getPassword()
-	{
-		return self::C_STR_DB_PASSWORD;
-	}
-
-	static function getType()
-	{
-		return self::C_STR_DB_TYPE;
+		$this->setDBName(self::C_STR_DB_NAME);
+		$this->setHost(self::C_STR_DB_HOST);
+		$this->setPort(self::C_STR_DB_PORT);
+		$this->setType(self::C_STR_DB_TYPE);
+		$this->setUserName(self::C_STR_DB_USER_NAME);
+		$this->setPassword(self::C_STR_DB_PASSWORD);
 	}
 }
 

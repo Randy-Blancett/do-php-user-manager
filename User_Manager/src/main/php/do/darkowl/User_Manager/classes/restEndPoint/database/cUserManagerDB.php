@@ -3,7 +3,6 @@
 use \darkowl\user_manager\resource\cTableResource;
 use \darkowl\user_manager\response\cTableResponse;
 
-
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname( __DIR__)).'/response/cTableResponse.php';
 require_once dirname(dirname( __DIR__)).'/resource/cTableResource.php';
@@ -18,10 +17,16 @@ class cUserManagerDB extends Resource {
 	const C_STR_ACTION_CREATE = "create";
 	const C_STR_ACTION_INFO = "info";
 
+	const C_STR_DATABASE_ID = "user_manager";
+
 	const C_STR_SQL_CREATE_MYSQL = "CREATE DATABASE  `user_manager` ;";
 
-
 	private $m_obj_Response = null;
+
+	protected function getCreateStatement()
+	{
+		return self::C_STR_SQL_CREATE_MYSQL;
+	}
 
 	function get($request) {
 		$response = new Response($request);
@@ -108,6 +113,7 @@ END;
 		{
 			$arr_Data[self::C_STR_PARAM_ACTION] = null;
 		}
+
 		if(!$arr_Data[self::C_STR_PARAM_ACTION])
 		{
 			$this->m_obj_Response->code = 406;
@@ -120,11 +126,13 @@ END;
 				case self::C_STR_ACTION_CREATE :
 					if($this->createDatabase())
 					{
+						print("DB Created");
 						$this->m_obj_Response->code = 201;
 						$this->m_obj_Response->setSuccess(true);
 					}
 					else
 					{
+						print("DB Not Created");
 						$this->m_obj_Response->code = 500;
 						$this->m_obj_Response->logError("Failed to create Database.");
 						$this->m_obj_Response->setSuccess(false);
@@ -144,9 +152,11 @@ END;
 
 	private function createDatabase()
 	{
+		$str_Statement = $this->getCreateStatement();
+
 		try {
 			$obj_Connection = Propel::getConnection('mysql');
-			$obj_Statement = $obj_Connection->prepare(self::C_STR_SQL_CREATE_MYSQL);
+			$obj_Statement = $obj_Connection->prepare($str_Statement);
 		}
 		catch (Exception $e) {
 			return false;
