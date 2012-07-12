@@ -1,6 +1,6 @@
 <?php
 namespace darkowl\user_manager\unitTest;
-use \darkowl\user_manager\resource\cDatabaseResource; 
+use \darkowl\user_manager\resource\cDatabaseResource;
 
 require_once dirname(dirname(dirname(dirname(__DIR__))))."/main/php/do/darkowl/User_Manager/classes/resource/cDatabaseResource.php";
 
@@ -22,7 +22,7 @@ class cDatabaseResourceTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider providerDatabase
 	 */
-	function testSettersGetters($str_URI,$str_Name) {
+	public function testSettersGetters($str_URI,$str_Name) {
 		$obj_DatabaseResource = new cDatabaseResource();
 		$obj_DatabaseResource->setName($str_Name);
 		$obj_DatabaseResource->setURI($str_URI);

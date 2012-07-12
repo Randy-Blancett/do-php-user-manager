@@ -39,7 +39,6 @@ require_once (dirname(dirname(dirname(__DIR__))))."/main/php/do/darkowl/User_Man
 // 		$this->setPassword(self::C_STR_DB_PASSWORD);
 // 	}
 // }
-
 class cTestUserManagerDB extends \cUserManagerDB
 {
 	protected function getCreateStatement()
@@ -59,7 +58,7 @@ class cSetupIntegrationTest extends \PHPUnit_Framework_TestCase
 			self::$m_obj_Config = new \darkowl\user_manager\unitTest\cDBConfig();
 		}
 		return self::$m_obj_Config;
-	}
+	} 
 
 	public static function getMySqlPDO()
 	{
@@ -71,9 +70,14 @@ class cSetupIntegrationTest extends \PHPUnit_Framework_TestCase
 		}
 		return self::$m_obj_PDO;
 	}
-
+ 
 
 	public static function setUpBeforeClass()
+	{
+		self::checkDBIsClean();
+	}
+
+	public static function checkDBIsClean()
 	{
 		$obj_Config = self::getConfig();
 		$obj_PDO = self::getMySqlPDO();
@@ -82,16 +86,19 @@ class cSetupIntegrationTest extends \PHPUnit_Framework_TestCase
 		$obj_Statement->execute();
 
 		while ($obj_Result = $obj_Statement->fetchObject()) {
-			print($obj_Config->getDBName()."\n");
-			print($obj_Result->Database."\n---\n");
 			self::assertNotEquals($obj_Config->getDBName(), $obj_Result->Database);
 		}
-
 	}
 
 	public static function tearDownAfterClass()
 	{
-		self::$m_obj_PDO = NULL;
+		$obj_Config = self::getConfig();
+		$obj_PDO = self::getMySqlPDO();
+
+		$obj_Statement = $obj_PDO->prepare("DROP DATABASE `".$obj_Config->getDBName()."`;");
+		$obj_Statement->execute();
+
+		self::checkDBIsClean();
 	}
 
 

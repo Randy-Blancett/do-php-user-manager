@@ -6,6 +6,10 @@ use \darkowl\user_manager\response\cTableResponse;
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname( __DIR__)).'/response/cTableResponse.php';
 require_once dirname(dirname( __DIR__)).'/resource/cTableResource.php';
+require_once __DIR__.'/user_manager/cActionTable.php';
+require_once __DIR__.'/user_manager/cApplicationTable.php';
+require_once __DIR__.'/user_manager/cGroupTable.php';
+require_once __DIR__.'/user_manager/cKeyboxTable.php';
 /**
  * Basic Resource List
  * @namespace User_Manager
@@ -126,13 +130,11 @@ END;
 				case self::C_STR_ACTION_CREATE :
 					if($this->createDatabase())
 					{
-						print("DB Created");
 						$this->m_obj_Response->code = 201;
 						$this->m_obj_Response->setSuccess(true);
 					}
 					else
 					{
-						print("DB Not Created");
 						$this->m_obj_Response->code = 500;
 						$this->m_obj_Response->logError("Failed to create Database.");
 						$this->m_obj_Response->setSuccess(false);
@@ -170,7 +172,7 @@ END;
 			switch ($e->getCode())
 			{
 				case 'HY000':
-					$this->m_obj_Response->addMsg("Table Already Exists.");
+					$this->m_obj_Response->addMsg("Database Already Exists.");
 					return true;
 				default:
 					$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
@@ -179,18 +181,26 @@ END;
 
 			return false;
 		}
-
 		return true;
 	}
 
 	private function outputTableInfo()
 	{
-		$obj_TableResource = new cTableResource();
+		$arr_Tables = glob(__DIR__.DIRECTORY_SEPARATOR."user_manager".DIRECTORY_SEPARATOR.'*');
 
-		$obj_TableResource->setURI("rest/database/user_manager/action");
-		$obj_TableResource->setName("Action");
+		foreach ($arr_Tables as $str_Table)
+		{
+			$obj_TableResource = new cTableResource();
 
-		$this->m_obj_Response->addResource($obj_TableResource);
+			require_once $str_Table;
+			$str_Class = basename($str_Table,".php");
+
+			$obj_TableResource->setURI($str_Class::C_STR_URI);
+			$obj_TableResource->setName($str_Class::C_STR_NAME);
+
+			$this->m_obj_Response->addResource($obj_TableResource);
+		}
+
 	}
 
 }

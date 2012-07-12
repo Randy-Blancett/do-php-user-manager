@@ -187,7 +187,7 @@ Ext
 					                                for (int_Key in obj_Response.errors)
 					                                {
 						                                this
-						                                        .log("&nbsp; -"
+						                                        .log("&nbsp; - "
 						                                                + obj_Response.errors[int_Key]);
 					                                }
 				                                }
@@ -256,10 +256,75 @@ Ext
                     },
                     createTable : function(str_Name, str_URI)
                     {
-	                    this.log("Creating <b>" + this.m_str_CurrentDBName
-	                            + "." + str_Name + "</b> ...");
+	                    this.log("Attempting to create <b>"
+	                            + this.m_str_CurrentDBName + "." + str_Name
+	                            + "</b> ...");
 	                    desktop.logger.log("URL - "
 	                            + g_obj_Config.m_str_BaseURL + "/" + str_URI);
+
+	                    Ext.Ajax
+	                            .request(
+	                            {
+	                                url : g_obj_Config.m_str_BaseURL + "/"
+	                                        + str_URI,
+	                                params :
+	                                {
+		                                action : "create"
+	                                },
+	                                headers :
+	                                {
+		                                Accept : "application/json"
+	                                },
+	                                success : function(response)
+	                                {
+		                                var obj_Response = this
+		                                        .validateResponse(response.responseText);
+
+		                                if (obj_Response)
+		                                {
+			                                if (obj_Response.success)
+			                                {
+				                                if (obj_Response.msgs)
+				                                {
+					                                for (int_Key in obj_Response.msgs)
+					                                {
+						                                this
+						                                        .log("&nbsp; - "
+						                                                + obj_Response.msgs[int_Key]);
+					                                }
+				                                }
+				                                if (this.m_arr_TableURIs[0])
+				                                {
+
+					                                this.m_arr_TableURIs
+					                                        .reverse();
+					                                this.m_arr_TableURIs.pop();
+					                                if (this.m_arr_TableURIs.length > 0)
+					                                {
+						                                this
+						                                        .createTable(
+						                                                this.m_arr_TableURIs[0].name,
+						                                                this.m_arr_TableURIs[0].uri);
+					                                }
+				                                }
+			                                }
+			                                else
+			                                {
+				                                if (obj_Response.errors)
+				                                {
+					                                for (int_Key in obj_Response.errors)
+					                                {
+						                                this
+						                                        .log("&nbsp; -"
+						                                                + obj_Response.errors[int_Key]);
+					                                }
+				                                }
+			                                }
+		                                }
+	                                },
+	                                failure : this.failure,
+	                                scope : this
+	                            });
 
                     }
                 });

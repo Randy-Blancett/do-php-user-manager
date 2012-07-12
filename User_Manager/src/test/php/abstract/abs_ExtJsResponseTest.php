@@ -18,6 +18,9 @@ class cTestResource extends abs_Resource
 
 }
 
+/**
+ * @backupGlobals disabled
+ */
 class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 {
 	// 	private $m_obj_Response = null;

@@ -23,7 +23,9 @@ class cTestConfig extends \abs_DBConfig
 	}
 }
 
-
+/**
+ * @backupGlobals disabled
+ */
 class cDBConfigTest extends \PHPUnit_Framework_TestCase
 {
 	function setUp() {
