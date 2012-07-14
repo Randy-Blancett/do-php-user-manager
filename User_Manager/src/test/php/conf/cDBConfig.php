@@ -6,12 +6,12 @@ require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manag
 
 class cDBConfig extends \abs_DBConfig
 {
-	const C_STR_DB_NAME = "user_manager_test";
+	const C_STR_DB_NAME = "user_manager";
 	const C_STR_DB_HOST = "localhost";
 	const C_STR_DB_TYPE = "mysql";
 	const C_STR_DB_PORT = "";
-	const C_STR_DB_USER_NAME = "propel";
-	const C_STR_DB_PASSWORD = "propel";
+	const C_STR_DB_USER_NAME = "root";
+	const C_STR_DB_PASSWORD = "midnight";
 
 	function __construct()
 	{

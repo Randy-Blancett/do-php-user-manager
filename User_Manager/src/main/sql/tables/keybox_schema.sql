@@ -11,12 +11,12 @@ DROP TABLE IF EXISTS `keybox`;
 
 CREATE TABLE `keybox`
 (
-	`id` VARCHAR(36) NOT NULL,
-	`action_id` VARCHAR(36) NOT NULL,
-	`link_type` INTEGER(1) NOT NULL,
-	`link_id` VARCHAR(50) NOT NULL,
-	`comment` LONGBLOB,
-	PRIMARY KEY (`id`)
+    `id` VARCHAR(36) NOT NULL,
+    `action_id` VARCHAR(36) NOT NULL,
+    `link_type` INTEGER(1) NOT NULL,
+    `link_id` VARCHAR(50) NOT NULL,
+    `comment` LONGBLOB,
+    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
 # This restores the fkey checks, after having unset them earlier

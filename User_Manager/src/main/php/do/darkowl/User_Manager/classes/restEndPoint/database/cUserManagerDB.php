@@ -10,6 +10,8 @@ require_once __DIR__.'/user_manager/cActionTable.php';
 require_once __DIR__.'/user_manager/cApplicationTable.php';
 require_once __DIR__.'/user_manager/cGroupTable.php';
 require_once __DIR__.'/user_manager/cKeyboxTable.php';
+require_once __DIR__.'/user_manager/cUserTable.php';
+require_once __DIR__.'/user_manager/cUser2GroupTable.php';
 /**
  * Basic Resource List
  * @namespace User_Manager

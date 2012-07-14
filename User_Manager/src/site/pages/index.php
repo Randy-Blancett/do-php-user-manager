@@ -1,4 +1,7 @@
 <?php
+use darkowl\user_manager\cSession;
+
+use darkowl\user_manager\cUser;
 use \darkowl\user_manager\webpage;
 /**
  * Include Default Path Info
@@ -7,24 +10,24 @@ require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 /**
  * Include User Validation Class
  */
-//	require_once webpage\cInfo::c_Path2UserManagerCode . "/Classes/cUserValidation.php";
+require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cUser.php";
 /**
  * Include Permission Codes
  */
-//	require_once webpage\cInfo::c_Path2UserManagerCode . "/Classes/cPermission.php";
+require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cPermission.php";
 
-//	$m_obj_UserValidation = new cUserValidation();
+$obj_User = new cUser();
 
 // Check Login Status
-//	$m_obj_UserValidation->require_Login(true);
+$obj_User->require_Login(true);
 
 //	if (!$m_obj_UserValidation->check_Permission(cPermission::c_str_UserManager_View))
-//	{
-//		$m_obj_UserValidation->logout();
-//		die("You do not have permision to view this page");
-//	}
+	//	{
+	//		$m_obj_UserValidation->logout();
+	//		die("You do not have permision to view this page");
+	//	}
 
-?>
+	?>
 <html>
 <head>
 <title>User Manager</title>
@@ -45,15 +48,13 @@ require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 	print('<link rel="stylesheet" type="text/css" href="'. webpage\cInfo::C_STR_EXT4_LIB_PATH .'/resources/css/ext-all.css" />');
 	?>
 
-
-
 	<script type="text/javascript">
 	    	document.getElementById('loading-msg').innerHTML = 'Loading Core API...';
 	 </script>
 
-	 <?php
-	 print('<script type="text/javascript" src="'. webpage\cInfo::C_STR_EXT4_LIB_PATH .'/ext.js"></script>'.PHP_EOL);
-	 ?>
+	<?php
+	print('<script type="text/javascript" src="'. webpage\cInfo::C_STR_EXT4_LIB_PATH .'/ext.js"></script>'.PHP_EOL);
+	?>
 	<script type="text/javascript" src='../php/conf/cConfig_JS.php'></script>
 	<script type="text/javascript" src='../js/util/loaderFix.js'></script>
 

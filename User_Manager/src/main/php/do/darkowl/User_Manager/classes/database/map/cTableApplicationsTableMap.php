@@ -17,38 +17,38 @@
 class cTableApplicationsTableMap extends TableMap
 {
 
-	/**
-	 * The (dot-path) name of this class
-	 */
-	const CLASS_NAME = 'database.map.cTableApplicationsTableMap';
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'database.map.cTableApplicationsTableMap';
 
-	/**
-	 * Initialize the table attributes, columns and validators
-	 * Relations are not initialized by this method since they are lazy loaded
-	 *
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function initialize()
-	{
-		// attributes
-		$this->setName('applications');
-		$this->setPhpName('cTableApplications');
-		$this->setClassname('cTableApplications');
-		$this->setPackage('database');
-		$this->setUseIdGenerator(false);
-		// columns
-		$this->addPrimaryKey('ID', 'Id', 'VARCHAR', true, 36, null);
-		$this->addColumn('NAME', 'Name', 'VARCHAR', true, 50, null);
-		$this->addColumn('COMMENT', 'Comment', 'BLOB', false, null, null);
-		// validators
-	} // initialize()
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return void
+     * @throws PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('applications');
+        $this->setPhpName('cTableApplications');
+        $this->setClassname('cTableApplications');
+        $this->setPackage('database');
+        $this->setUseIdGenerator(false);
+        // columns
+        $this->addPrimaryKey('ID', 'Id', 'VARCHAR', true, 36, null);
+        $this->addColumn('NAME', 'Name', 'VARCHAR', true, 50, null);
+        $this->addColumn('COMMENT', 'Comment', 'BLOB', false, null, null);
+        // validators
+    } // initialize()
 
-	/**
-	 * Build the RelationMap objects for this table relationships
-	 */
-	public function buildRelations()
-	{
-	} // buildRelations()
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+    } // buildRelations()
 
 } // cTableApplicationsTableMap

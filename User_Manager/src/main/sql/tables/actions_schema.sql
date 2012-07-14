@@ -11,11 +11,11 @@ DROP TABLE IF EXISTS `actions`;
 
 CREATE TABLE `actions`
 (
-	`id` VARCHAR(36) NOT NULL,
-	`name` VARCHAR(50) NOT NULL,
-	`application` VARCHAR(36) NOT NULL,
-	`comment` LONGBLOB,
-	PRIMARY KEY (`id`)
+    `id` VARCHAR(36) NOT NULL,
+    `name` VARCHAR(50) NOT NULL,
+    `application` VARCHAR(36) NOT NULL,
+    `comment` LONGBLOB,
+    PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
 # This restores the fkey checks, after having unset them earlier

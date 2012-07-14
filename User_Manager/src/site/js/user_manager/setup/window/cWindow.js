@@ -4,6 +4,8 @@ Ext
                 {
                     extend : 'darkowl.desktop.cDesktopWindow',
                     title : 'Setup',
+                    height : 500,
+                    width : 400,
                     iconCls : 'window-create-db-icon',
                     layout : 'fit',
                     m_arr_DatabaseURIs : [],
