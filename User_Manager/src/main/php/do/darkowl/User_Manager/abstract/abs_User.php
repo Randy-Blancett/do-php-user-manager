@@ -58,6 +58,28 @@ class abs_User
 		return cSession::getUserName();
 	}
 
+	public function checkPermissions($mix_Permission)
+	{
+		if($this->isGod())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the user is logged in as GOD
+	 * @return True if god is logged in false if not
+	 */
+	public function isGod()
+	{
+		if (self::$m_bool_GodActive)
+		{
+			return cSession::isGod();
+		}
+		return false;
+	}
+
 	/**
 	 * Checks login credentials and forwards to apropriate page
 	 * @param string $str_UserName User Name
@@ -96,7 +118,7 @@ class abs_User
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Logs a user out will redirect to the $m_str_LogoutURL or simply print that the
 	 * User was loged out
@@ -104,11 +126,11 @@ class abs_User
 	public function logout()
 	{
 		cSession::logOut();
-// 		if ($this->m_str_LogoutURL)
-// 		{
-// 			header('Location: ' . $this->m_str_LogoutURL);
-// 			die();
-// 		}
+		// 		if ($this->m_str_LogoutURL)
+		// 		{
+		// 			header('Location: ' . $this->m_str_LogoutURL);
+		// 			die();
+		// 		}
 		print("You have been Logged Out successfuly.<br/>");
 	}
 

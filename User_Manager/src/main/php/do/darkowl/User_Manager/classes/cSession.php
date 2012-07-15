@@ -56,6 +56,27 @@ class cSession
 		$_SESSION[cSession::C_STR_SESSION_CUR_USERID] = $str_ID;
 	}
 
+	public static function getUserId()
+	{
+		return $_SESSION[cSession::C_STR_SESSION_CUR_USERID];
+	}
+
+	/**
+	 * Checks if the user is logged in as GOD
+	 * @return True if god is logged in false if not
+	 */
+	public static function isGod()
+	{
+		if (self::isLoggedIn())
+		{
+			if (self::getUserId() == "GOD")
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static function increaseLoginAttempt()
 	{
 		$_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT] ++;

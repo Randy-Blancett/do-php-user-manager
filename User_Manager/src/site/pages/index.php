@@ -1,4 +1,6 @@
 <?php
+use darkowl\user_manager\cPermission;
+
 use darkowl\user_manager\cSession;
 
 use darkowl\user_manager\cUser;
@@ -21,13 +23,13 @@ $obj_User = new cUser();
 // Check Login Status
 $obj_User->require_Login(true);
 
-//	if (!$m_obj_UserValidation->check_Permission(cPermission::c_str_UserManager_View))
-	//	{
-	//		$m_obj_UserValidation->logout();
-	//		die("You do not have permision to view this page");
-	//	}
+if (!$obj_User->checkPermissions(cPermission::C_STR_USERMANAGER_VIEW))
+{
+	$obj_User->logout();
+	die("You do not have permision to view this page");
+}
 
-	?>
+?>
 <html>
 <head>
 <title>User Manager</title>

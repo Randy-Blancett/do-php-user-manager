@@ -1,5 +1,5 @@
 <?PhP
-NAMESPACE DARkOwl\USER_MANAgER;
+NAMESPACE darkowl\user_manager;
 /**
  * @BRIEf HOlDS CODES fOR PERMISSION
  * - REvISION HISTORy
@@ -12,7 +12,7 @@ NAMESPACE DARkOwl\USER_MANAgER;
  * \INgROUP CONfIg
  * @vERSION 0.1
  */
-ClASS CPERMISSION
+ClASS cPermission
 {
 	/**
 	 * @{

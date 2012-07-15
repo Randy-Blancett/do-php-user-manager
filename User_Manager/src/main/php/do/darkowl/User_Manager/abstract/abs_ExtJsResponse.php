@@ -14,6 +14,7 @@ abstract class abs_ExtJsResponse extends \Response
 	const C_STR_ACCEPT_JSON = "json";
 
 	private $m_obj_Output = null;
+	protected $m_str_DataType = "resources";
 
 	private function &getOutput()
 	{
@@ -50,12 +51,15 @@ abstract class abs_ExtJsResponse extends \Response
 	private function &getResources()
 	{
 		$obj_Output =& $this->getOutput();
-		if(!isset($obj_Output->resources))
+
+		$str_DataType = $this->m_str_DataType;
+
+		if(!isset($obj_Output->$str_DataType))
 		{
-			$obj_Outupt->resources = array();
+			$obj_Outupt->$str_DataType = array();
 		}
 
-		return $obj_Output->resources;
+		return $obj_Output->$str_DataType;
 	}
 
 	public function addResource(abs_Resource $obj_Resource){

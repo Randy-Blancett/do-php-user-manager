@@ -21,6 +21,16 @@ class cUser extends \cTableUsers
 		return  \cTableUsersQuery::create()->findOneByuserName($str_UserName);
 	}
 
+	public static function getAllUsers($int_Start = 0, $int_PerPage = null)
+	{
+		$obj_Return = \cTableUsersQuery::create();
+		if($int_PerPage)
+		{
+			$obj_Return = $obj_Return->limit($int_PerPage);
+		}
+		return $obj_Return = $obj_Return->offset($int_Start)->find();
+	}
+
 	public function __toString()
 	{
 		foreach($this as $obj_Data)
