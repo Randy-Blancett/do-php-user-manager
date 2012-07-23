@@ -7,22 +7,21 @@ Ext.define('darkowl.userManager.user.view.cGrid',
     columns :
     [
     {
-        header : 'Name',
-        dataIndex : 'name'
+        header : 'User Name',
+        dataIndex : 'userName'
     },
     {
-        header : 'Email',
-        dataIndex : 'email',
+        header : 'First Name',
+        dataIndex : 'firstName',
         flex : 1
     },
     {
-        header : 'Phone',
-        dataIndex : 'phone'
+        header : 'Last Name',
+        dataIndex : 'lastName'
     } ],
     initComponent : function()
     {
 	    this.store = Ext.create('darkowl.userManager.store.cUserList');
-	    
 
 	    this.m_obj_Pageing = Ext.create("Ext.toolbar.Paging",
 	    {

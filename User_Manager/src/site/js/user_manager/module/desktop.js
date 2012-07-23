@@ -39,18 +39,46 @@ Ext
                     {
 	                    this.m_obj_GeneralStartMenu = new Ext.util.MixedCollection();
 
-	                    // this.m_obj_GeneralStartMenu.add('Action',
-	                    // {
-	                    // iconCls : "menu-action-icon",
-	                    // submenu : null
-	                    // });
+	                    this.m_obj_GeneralStartMenu.add('Application',
+	                    {
+	                        iconCls : "menu-application-icon",
+	                        submenu : this.buildAppMenu()
+	                    });
 
-	                     this.m_obj_GeneralStartMenu.add('User',
+	                    this.m_obj_GeneralStartMenu.add('User',
 	                    {
 	                        iconCls : "menu-user-icon",
 	                        submenu : this.buildUserMenu()
 	                    });
 
+                    },
+                    buildAppMenu : function()
+                    {
+	                    var obj_Menu = new Ext.util.MixedCollection();
+
+	                    obj_Menu
+	                            .add(
+	                                    'Add',
+	                                    {
+	                                        iconCls : "menu-application-add-icon",
+	                                        onClick : function()
+	                                        {
+		                                        startMenu.MsgBus
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_ADD);
+	                                        }
+	                                    });
+	                    obj_Menu
+	                            .add(
+	                                    'View',
+	                                    {
+	                                        iconCls : "menu-application-view-icon",
+	                                        onClick : function()
+	                                        {
+		                                        startMenu.MsgBus
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_VIEW);
+	                                        }
+	                                    });
+	                    return obj_Menu;
                     },
                     buildUserMenu : function()
                     {

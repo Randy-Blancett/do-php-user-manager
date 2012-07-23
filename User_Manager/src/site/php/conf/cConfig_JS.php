@@ -20,3 +20,7 @@ g_obj_Config.m_bool_Add = true;
 g_obj_Config.m_bool_Edit = true;
 g_obj_Config.m_bool_Delete = true;
 
+g_obj_Config.m_bool_App_Add = true;
+g_obj_Config.m_bool_App_Edit = true;
+g_obj_Config.m_bool_App_Delete = true;
+

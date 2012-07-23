@@ -31,6 +31,13 @@ class cUser extends \cTableUsers
 		return $obj_Return = $obj_Return->offset($int_Start)->find();
 	}
 
+
+	public static function getTotalUserCount()
+	{
+		$obj_Return = \cTableUsersQuery::create();
+		return $obj_Return->count();
+	}
+
 	public function __toString()
 	{
 		foreach($this as $obj_Data)

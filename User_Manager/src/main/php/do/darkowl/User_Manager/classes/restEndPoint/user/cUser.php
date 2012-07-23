@@ -16,12 +16,14 @@ require_once dirname(dirname(__DIR__))."/resource/cUserResource.php";
  * @uri /user
  */
 class cUser extends Resource {
-	function get($request) {
+	const C_STR_PARAM_START = "start";
+	const C_STR_PARAM_LIMIT = "limit";
+	const C_STR_PARAM_PAGE = "page";
+
+	function get($request,$limit) {
 		$obj_Response = new cUserResponse($request);
 
-		$obj_DOUser = dataObject\cUser::getAllUsers();
-
-		// 		print_R($obj_DOUser->toArray());
+		$obj_DOUser = dataObject\cUser::getAllUsers($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 
 		$arr_Accept = Array();
 		foreach($request->accept as $arr_Object)
@@ -34,25 +36,20 @@ class cUser extends Resource {
 			$obj_Row = new cUserResource();
 			foreach($arr_Object as $str_Key => $obj_Data)
 			{
-				// 				print_r($str_Data);print("\n");
+				$str_Key = lcfirst($str_Key);
 
 				if($obj_Data){
-					$obj_Row->$str_Key = $obj_Data;
+					if(strtolower($str_Key) != "password")
+					{
+						$obj_Row->$str_Key = $obj_Data;
+					}
 				}
 			}
 			$obj_Response->addResource($obj_Row);
 		}
 
-		// 		if(in_array("json",$arr_Accept))
-		// 		{
-		// 			$obj_Response->body =
-		// 			// 			$response->body = "JSON";
-		// 		}
-		// 		else
-		// 		{
-		// 			$obj_Response->body = "Not JSON";
-		// 		}
-
+		$obj_Response->setSuccess(true);
+		$obj_Response->setTotal(dataObject\cUser::getTotalUserCount());
 
 		return $obj_Response;
 	}

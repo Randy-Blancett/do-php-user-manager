@@ -6,11 +6,11 @@ Ext.define('darkowl.userManager.eventManager.cStartMenuEvents',
     extend : 'Ext.util.Observable',
     requires :
     [ 'darkowl.desktop.util.cLogger',
-            'darkowl.desktop.eventManager.cDesktopEvents'// ,
-    // 'darkowl.userManager.user.view.cWindow'
-    ],
+            'darkowl.desktop.eventManager.cDesktopEvents' ],
     statics :
     {
+        C_STR_EVENT_OPEN_APP_ADD : "doopenappadd",
+        C_STR_EVENT_OPEN_APP_VIEW : "doopenappview",
         C_STR_EVENT_OPEN_USER_ADD : "doopenuseradd",
         C_STR_EVENT_OPEN_USER_VIEW : "doopenuserview"
     },
@@ -22,8 +22,13 @@ Ext.define('darkowl.userManager.eventManager.cStartMenuEvents',
 
     addMsgEvents : function()
     {
-	    this.addEvents(this.self.C_STR_EVENT_OPEN_USER_ADD,
+	    this.addEvents(this.self.C_STR_EVENT_OPEN_APP_ADD,
+	            this.self.C_STR_EVENT_OPEN_APP_VIEW,
+	            this.self.C_STR_EVENT_OPEN_USER_ADD,
 	            this.self.C_STR_EVENT_OPEN_USER_VIEW);
+
+	    this.on(this.self.C_STR_EVENT_OPEN_APP_ADD, this.openAppAdd);
+	    this.on(this.self.C_STR_EVENT_OPEN_APP_VIEW, this.openAppView);
 
 	    this.on(this.self.C_STR_EVENT_OPEN_USER_ADD, this.openUserAdd);
 	    this.on(this.self.C_STR_EVENT_OPEN_USER_VIEW, this.openUserView);
@@ -33,6 +38,15 @@ Ext.define('darkowl.userManager.eventManager.cStartMenuEvents',
 	    // desktop.logger.log(arguments);
 	    // darkowl.desktop.eventManager.cDesktopEvents.fireEvent(arguments);
 	    this.callParent(arguments);
+    },
+    openAppView : function()
+    {
+	    desktop.MsgBus.fireEvent(desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+	            {}, 'darkowl.userManager.application.view.cWindow');
+    },
+    openAppAdd : function()
+    {
+	    desktop.logger.log("Opening Application Add.");
     },
     openUserView : function()
     {

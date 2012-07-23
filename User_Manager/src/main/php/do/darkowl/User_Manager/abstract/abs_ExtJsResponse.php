@@ -15,6 +15,7 @@ abstract class abs_ExtJsResponse extends \Response
 
 	private $m_obj_Output = null;
 	protected $m_str_DataType = "resources";
+	protected $m_str_TotalName = "total";
 
 	private function &getOutput()
 	{
@@ -141,5 +142,12 @@ abstract class abs_ExtJsResponse extends \Response
 	{
 		$obj_Response =& $this->getOutput();
 		return $obj_Response->success ;
+	}
+
+	public function setTotal($int_Total = null)
+	{
+		$obj_Response =& $this->getOutput();
+		$str_Total = $this->m_str_TotalName;
+		$obj_Response->$str_Total = $int_Total;
 	}
 }
