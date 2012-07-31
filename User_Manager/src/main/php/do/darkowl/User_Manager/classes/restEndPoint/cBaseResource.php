@@ -2,6 +2,7 @@
 require_once 'setup/cSetupResource.php';
 require_once 'database/cUserManagerDB.php';
 require_once 'user/cUser.php';
+require_once 'application/cApplication.php';
 
 /**
  * Basic Resource List
