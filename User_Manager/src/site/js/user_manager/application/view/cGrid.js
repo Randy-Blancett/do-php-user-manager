@@ -8,13 +8,14 @@ Ext.define('darkowl.userManager.application.view.cGrid',
     [
     {
         header : 'ID',
-        dataIndex : 'userName'
+        dataIndex : 'id',
+        flex : 1
     },
     {
         header : 'Name',
-        dataIndex : 'firstName',
+        dataIndex : 'name',
         flex : 1
-    }],
+    } ],
     initComponent : function()
     {
 	    this.store = Ext.create('darkowl.userManager.store.cApplicationList');
