@@ -144,13 +144,10 @@
 
 .toolbar-user-edit-icon 
 {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_edit.gif") !important;
-}
-
-/*Window Icons*/
-.window-action-add-icon 
-{
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key_add.gif") !important;
+	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>
+/fam/user_edit.gif") !important; } /*Window Icons*/
+.window-action-add-icon { background-image: url("
+<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key_add.gif") !important;
 }
 
 .window-action-view-icon 

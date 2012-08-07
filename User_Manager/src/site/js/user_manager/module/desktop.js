@@ -51,6 +51,12 @@ Ext
 	                        submenu : this.buildAppMenu()
 	                    });
 
+	                    this.m_obj_GeneralStartMenu.add('Group',
+	                    {
+	                        iconCls : "menu-group-icon",
+	                        submenu : this.buildGroupMenu()
+	                    });
+
 	                    this.m_obj_GeneralStartMenu.add('User',
 	                    {
 	                        iconCls : "menu-user-icon",
@@ -62,8 +68,7 @@ Ext
                     {
 	                    var obj_Menu = new Ext.util.MixedCollection();
 
-	                    	                    
-	                     obj_Menu
+	                    obj_Menu
 	                            .add(
 	                                    'Add',
 	                                    {
@@ -71,10 +76,10 @@ Ext
 	                                        onClick : function()
 	                                        {
 		                                        startMenu.MsgBus
-		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_ADD);
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_ACTION_ADD);
 	                                        }
 	                                    });
-	                     obj_Menu
+	                    obj_Menu
 	                            .add(
 	                                    'View',
 	                                    {
@@ -82,7 +87,7 @@ Ext
 	                                        onClick : function()
 	                                        {
 		                                        startMenu.MsgBus
-		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_VIEW);
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_ACTION_VIEW);
 	                                        }
 	                                    });
 	                    return obj_Menu;
@@ -111,6 +116,34 @@ Ext
 	                                        {
 		                                        startMenu.MsgBus
 		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_VIEW);
+	                                        }
+	                                    });
+	                    return obj_Menu;
+                    },
+                    buildGroupMenu : function()
+                    {
+	                    var obj_Menu = new Ext.util.MixedCollection();
+
+	                    obj_Menu
+	                            .add(
+	                                    'Add',
+	                                    {
+	                                        iconCls : "menu-group-add-icon",
+	                                        onClick : function()
+	                                        {
+		                                        startMenu.MsgBus
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_ADD);
+	                                        }
+	                                    });
+	                    obj_Menu
+	                            .add(
+	                                    'View',
+	                                    {
+	                                        iconCls : "menu-group-view-icon",
+	                                        onClick : function()
+	                                        {
+		                                        startMenu.MsgBus
+		                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_VIEW);
 	                                        }
 	                                    });
 	                    return obj_Menu;

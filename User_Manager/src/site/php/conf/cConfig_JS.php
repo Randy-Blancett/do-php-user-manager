@@ -20,7 +20,15 @@ g_obj_Config.m_bool_Add = true;
 g_obj_Config.m_bool_Edit = true;
 g_obj_Config.m_bool_Delete = true;
 
+g_obj_Config.m_bool_Action_Add = true;
+g_obj_Config.m_bool_Action_Edit = true;
+g_obj_Config.m_bool_Action_Delete = true;
+
 g_obj_Config.m_bool_App_Add = true;
 g_obj_Config.m_bool_App_Edit = true;
 g_obj_Config.m_bool_App_Delete = true;
+
+g_obj_Config.m_bool_Group_Add = true;
+g_obj_Config.m_bool_Group_Edit = true;
+g_obj_Config.m_bool_Group_Delete = true;
 

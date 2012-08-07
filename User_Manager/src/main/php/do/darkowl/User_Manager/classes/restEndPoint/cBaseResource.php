@@ -3,6 +3,8 @@ require_once 'setup/cSetupResource.php';
 require_once 'database/cUserManagerDB.php';
 require_once 'user/cUser.php';
 require_once 'application/cApplication.php';
+require_once 'action/cAction.php';
+require_once 'group/cGroup.php';
 
 /**
  * Basic Resource List
