@@ -12,24 +12,57 @@ Ext.define('darkowl.userManager.action.addEdit.cWindow',
     shim : false,
     animCollapse : false,
     constrain : true,
+    m_str_ID : "",
     layout : "fit",
     border : false,
+    m_obj_Mask : null,
     initComponent : function()
     {
+	    console.log(this.m_str_ID);
 	    var obj_This = this;
 
-	    // this.m_obj_TopBar = Ext.create(
-	    // 'darkowl.userManager.action.view.cToolbar',
-	    // {
-	    // dock : 'top'
-	    // });
-	    //
-	    // this.m_obj_Grid =
-	    // Ext.create('darkowl.userManager.action.view.cGrid');
+	    this.m_obj_Form = Ext
+	            .create('darkowl.userManager.action.addEdit.cForm');
 
 	    this.callParent();
 
-	    // this.addDocked(this.m_obj_TopBar);
-	    this.add(Ext.create('darkowl.userManager.action.addEdit.cForm'));
+	    this.add(this.m_obj_Form);
+
+	    if (this.m_str_ID)
+	    {
+		    this.showMask();
+		    this.loadAction(this.m_str_ID);
+	    }
+	    this.on("afterrender", function()
+	    {
+		    if (this.m_bool_Mask)
+		    {
+			    this.showMask();
+		    }
+	    });
+    },
+    loadAction : function(str_ActionID)
+    {
+	    this.m_obj_Form.load(
+	    {
+	        url : "../rest/action/" + str_ActionID,
+	        method : "get"
+	    });
+
+    },
+    showMask : function()
+    {
+	    this.m_bool_Mask = true;
+	    if (this.getEl())
+	    {
+		    if (!this.m_obj_Mask)
+		    {
+			    this.m_obj_Mask = new Ext.LoadMask(this.getEl(),
+			    {
+				    msg : "Loading Data..."
+			    });
+		    }
+		    this.m_obj_Mask.show();
+	    }
     }
 });

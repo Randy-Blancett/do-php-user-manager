@@ -3,6 +3,8 @@ Ext
                 'darkowl.userManager.action.view.cToolbar',
                 {
                     extend : 'Ext.toolbar.Toolbar',
+                    bubbleEvents :
+                    [ 'add', 'remove', 'doedit' ],
                     requires :
                     [ 'Ext.button.Button',
                             'darkowl.userManager.eventManager.cStartMenuEvents' ],
@@ -36,8 +38,8 @@ Ext
 		                                        tooltip : "Edit Action",
 		                                        handler : function()
 		                                        {
-			                                        startMenu.MsgBus
-			                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_ACTION_EDIT);
+			                                        this.ownerCt
+			                                                .fireEvent(darkowl.userManager.action.view.cWindow.C_STR_EVENT_EDIT);
 		                                        }
 		                                    }));
 	                    }

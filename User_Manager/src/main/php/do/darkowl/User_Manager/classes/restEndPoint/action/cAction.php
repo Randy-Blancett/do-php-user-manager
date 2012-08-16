@@ -17,17 +17,21 @@ class cAction extends Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
+	/**
+	 * @method GET
+	 * @provides  application/json
+	 */
 
-	function get($request,$limit) {
+	function getJson($request,$limit) {
 		$obj_Response = new cActionResponse($request);
 
 		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 
-		$arr_Accept = Array();
-		foreach($request->accept as $arr_Object)
-		{
-			$arr_Accept = array_merge($arr_Accept,$arr_Object);
-		}
+		// 		$arr_Accept = Array();
+		// 		foreach($request->accept as $arr_Object)
+			// 		{
+			// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
+			// 		}
 
 		foreach($obj_DOAction->toArray()as $arr_Object)
 		{

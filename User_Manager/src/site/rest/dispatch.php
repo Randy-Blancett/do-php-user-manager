@@ -1,6 +1,5 @@
 <?php
 use \darkowl\user_manager\webpage;
-//use \darkowl\user_manager\restEndPoint
 
 require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 // load Tonic library

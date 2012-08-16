@@ -69,13 +69,22 @@ Ext.define('darkowl.userManager.eventManager.cStartMenuEvents',
 	        iconCls : "window-action-add-icon"
 	    }, 'darkowl.userManager.action.addEdit.cWindow');
     },
-    openActionEdit : function()
+    openActionEdit : function(str_Action)
     {
-	    desktop.MsgBus.fireEvent(desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+	    if (!str_Action)
 	    {
-	        title : "Edit Action",
-	        iconCls : "window-action-edit-icon"
-	    }, 'darkowl.userManager.action.addEdit.cWindow');
+		    this.openActionAdd();
+	    }
+	    else
+	    {
+		    desktop.MsgBus.fireEvent(
+		            desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+		            {
+		                title : "Edit Action",
+		                iconCls : "window-action-edit-icon",
+		                m_str_ID : str_Action
+		            }, 'darkowl.userManager.action.addEdit.cWindow');
+	    }
     },
     openAppView : function()
     {
