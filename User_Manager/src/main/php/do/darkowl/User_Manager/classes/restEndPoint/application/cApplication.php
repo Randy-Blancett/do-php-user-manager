@@ -13,7 +13,7 @@ require_once dirname(dirname(__DIR__))."/resource/cApplicationResource.php";
  * @namespace User_Manager
  * @uri /application
  */
-class cApplication extends Resource {
+class cApplication extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";

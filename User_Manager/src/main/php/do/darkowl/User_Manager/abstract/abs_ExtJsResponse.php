@@ -3,19 +3,30 @@ namespace darkowl\user_manager\resource;
 
 use darkowl\user_manager\resource\abs_Resource;
 
-if(!class_exists('Response'))
+if(!class_exists('Tonic\Response'))
 {
-	require_once dirname(__DIR__).'/tonic/tonic.php';
+	require_once (dirname(__DIR__)).'/Tonic/Autoloader.php';
 }
 require_once __DIR__."/abs_Resource.php";
 
-abstract class abs_ExtJsResponse extends \Response
+abstract class abs_ExtJsResponse
 {
-	const C_STR_ACCEPT_JSON = "json";
+	const C_INT_OUTPUT_JSON = 1;
 
 	private $m_obj_Output = null;
 	protected $m_str_DataType = "resources";
 	protected $m_str_TotalName = "total";
+	protected $m_int_ReturnCode = 200;
+
+	public function setCode($int_Code)
+	{
+		$this->m_int_ReturnCode = $int_Code;
+	}
+
+	public function getCode()
+	{
+		return $this->m_int_ReturnCode;
+	}
 
 	private function &getOutput()
 	{
@@ -68,54 +79,67 @@ abstract class abs_ExtJsResponse extends \Response
 		$obj_Resources[] = $obj_Resource;
 	}
 
-	public function output() {
+	// 	public function output() {
 
-		if (php_sapi_name() != 'cli' && !headers_sent()) {
+	// 		if (php_sapi_name() != 'cli' && !headers_sent()) {
+	// 			// 			header('HTTP/1.1 '.$this->code);
+	// 			foreach ($this->headers as $header => $value) {
+	// 				header($header.': '.$value);
+	// 			}
+	// 		}
 
-			header('HTTP/1.1 '.$this->code);
-			foreach ($this->headers as $header => $value) {
-				header($header.': '.$value);
-			}
-		}
+	// 		print_r($this->request);die("Test");
+	// 		if (strtoupper($this->request->method) !== 'HEAD') {
+	// 			if(!$this->checkOutput($this->request->accept))
+	// 			{
+	// 				print ("Default data output \n");
+	// 				$this->output_Default();
+	// 			}
+	// 		}
+	// 	}
 
-		if (strtoupper($this->request->method) !== 'HEAD') {
-			if(!$this->checkOutput($this->request->accept))
-			{
-				print ("Default data output \n");
-				$this->output_Default();
-			}
-		}
-	}
+	// 	private function checkOutput($mix_Format)
+	// 	{
+	// 		if(is_array($mix_Format))
+	// 		{
+	// 			foreach($mix_Format as $mix_FormatPart)
+		// 			{
+		// 				if($this->checkOutput($mix_FormatPart))
+		// 				{
+		// 					return true;
+	// 				}
+	// 			}
+	// 		}
+	// 		if(is_string($mix_Format))
+	// 		{
+	// 			switch($mix_Format)
+	// 			{
+	// 				case self::C_STR_ACCEPT_JSON:$this->output_JSON();
+	// 				return true;
+	// 			}
+	// 		}
+	// 		return false;
+	// 	}
 
-	private function checkOutput($mix_Format)
+	public function output($int_OutputType)
 	{
-		if(is_array($mix_Format))
+		switch($int_OutputType)
 		{
-			foreach($mix_Format as $mix_FormatPart)
-			{
-				if($this->checkOutput($mix_FormatPart))
-				{
-					return true;
-				}
-			}
+			case self::C_INT_OUTPUT_JSON :
+				return $this->output_JSON();
+			default:
+				return $this->output_Default();
 		}
-		if(is_string($mix_Format))
-		{
-			switch($mix_Format)
-			{
-				case self::C_STR_ACCEPT_JSON:$this->output_JSON();
-				return true;
-			}
-		}
-		return false;
 	}
 
-	private function output_Default()
+
+
+	public function output_Default()
 	{
 		print("Default");
 	}
 
-	private function output_JSON()
+	public function output_JSON()
 	{
 		print json_encode($this->getOutput());
 	}

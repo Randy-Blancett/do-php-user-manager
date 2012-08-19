@@ -18,7 +18,7 @@ require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cUser.php";
  */
 require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cPermission.php";
 
-$obj_User = new cUser();
+$obj_User = new cUser(true,cUser::C_INT_LOGIN_TYPE_CUSTOM);
 
 // Check Login Status
 $obj_User->require_Login(true);

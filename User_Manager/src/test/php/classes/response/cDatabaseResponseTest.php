@@ -12,12 +12,11 @@ class cDatabaseResponseTest extends \PHPUnit_Framework_TestCase
 
 	public function setup()
 	{
-		$this->m_obj_Request = new \Request();
-		$obj_Request->accept = array(cTestExtJsResponse::C_STR_ACCEPT_JSON);
+		$this->m_obj_Request = new \Tonic\Request();
 	}
 
 	function testInstance() {
-		$obj_DatabaseResponse = new cDatabaseResponse($this->m_obj_Request);
+		$obj_DatabaseResponse = new cDatabaseResponse();
 		$this->assertInstanceOf("\\darkowl\\user_manager\\response\\cDatabaseResponse", $obj_DatabaseResponse);
 	}
 }

@@ -11,11 +11,17 @@ require_once 'group/cGroup.php';
  * @namespace User_Manager
  * @uri /
  */
-class cBaseResource extends Resource {
+class cBaseResource extends \Tonic\Resource {
 
-	function get($request) {
+	// 	function get($request) {
+	/**
+	*
+	* @method GET
+	* @return Response
+	*/
+	function Test123() {
 
-		$response = new Response($request);
+		// 		$response = new \Tonic\Response($request);
 			
 		$str_Resources = '';
 		$arr_Dirs = glob(dirname(__FILE__).DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR);
@@ -66,14 +72,16 @@ class cBaseResource extends Resource {
 			$str_Resources .= '<li>No Resources</li>';
 		}
 
-		$response->body = <<<END
-<h1>User Manager Database</h1>
-<p>Base resource User Manager Database</p>
-<h2>Resources</h2>
-END;
-		$response->body .= '<ul>'.$str_Resources.'</ul>';
+		// 		$response->body = <<<END
+		// <h1>User Manager Database</h1>
+		// <p>Base resource User Manager Database</p>
+		// <h2>Resources</h2>
+		// END;
+		// 		$response->body .= '<ul>'.$str_Resources.'</ul>';
 
-		return $response;
+		// 		return $response;
+
+		return $str_Resources;
 
 	}
 

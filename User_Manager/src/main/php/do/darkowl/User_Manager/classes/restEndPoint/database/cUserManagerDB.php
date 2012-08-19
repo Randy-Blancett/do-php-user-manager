@@ -17,7 +17,7 @@ require_once __DIR__.'/user_manager/cUser2GroupTable.php';
  * @namespace User_Manager
  * @uri /database/user_manager
  */
-class cUserManagerDB extends Resource {
+class cUserManagerDB extends \Tonic\Resource {
 
 	const C_STR_PARAM_ACTION = "action";
 	const C_STR_ACTION_CREATE = "create";
@@ -34,6 +34,9 @@ class cUserManagerDB extends Resource {
 		return self::C_STR_SQL_CREATE_MYSQL;
 	}
 
+	/**
+	 * @method GET
+	 */
 	function get($request) {
 		$response = new Response($request);
 			
@@ -96,12 +99,16 @@ END;
 		return $response;
 
 	}
-
-	public 	function post($request)
+	/**
+	 * @method POST
+	 * @accepts application/x-www-form-urlencoded
+	 * @provides application/json
+	 */
+	public 	function postJSON()
 	{
-		$this->m_obj_Response = new cTableResponse($request);
+		$this->m_obj_Response = new cTableResponse();
 
-		$arr_Query = split("&",$request->data);
+		$arr_Query = split("&",$this->request->data);
 		$arr_Data= Array();
 		$arr_Data[self::C_STR_PARAM_ACTION]="";
 
@@ -122,8 +129,9 @@ END;
 
 		if(!$arr_Data[self::C_STR_PARAM_ACTION])
 		{
-			$this->m_obj_Response->code = 406;
+			$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
 			$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
+			$this->m_obj_Response->setSuccess(false);
 		}
 		else
 		{
@@ -132,12 +140,12 @@ END;
 				case self::C_STR_ACTION_CREATE :
 					if($this->createDatabase())
 					{
-						$this->m_obj_Response->code = 201;
+						$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
 						$this->m_obj_Response->setSuccess(true);
 					}
 					else
 					{
-						$this->m_obj_Response->code = 500;
+						$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
 						$this->m_obj_Response->logError("Failed to create Database.");
 						$this->m_obj_Response->setSuccess(false);
 					}
@@ -146,12 +154,12 @@ END;
 					$this->outputTableInfo();
 					break;
 				default:
-					$this->m_obj_Response->code = 406;
+					$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
 					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
 			}
 		}
 
-		return $this->m_obj_Response;
+		return new \TOnic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
 	private function createDatabase()
@@ -169,6 +177,7 @@ END;
 		try {
 			$obj_Statement->execute();
 			$this->m_obj_Response->addMsg("Table Created.");
+			print("Execute Pass");
 		}
 		catch (PDOException $e) {
 			switch ($e->getCode())

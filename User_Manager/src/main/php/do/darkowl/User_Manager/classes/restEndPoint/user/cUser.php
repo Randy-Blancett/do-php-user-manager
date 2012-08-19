@@ -15,7 +15,7 @@ require_once dirname(dirname(__DIR__))."/resource/cUserResource.php";
  * @namespace User_Manager
  * @uri /user
  */
-class cUser extends Resource {
+class cUser extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";

@@ -1,7 +1,7 @@
 <?php
 namespace darkowl\user_manager;
 
-use darkowl\user_manager\dataObject\cUser;
+use \darkowl\user_manager\dataObject\cUser;
 
 require_once dirname(__DIR__)."/classes/cSession.php";
 require_once dirname(__DIR__)."/classes/dataObject/cUser.php";
@@ -37,9 +37,15 @@ class abs_User
 	 */
 	protected static $m_str_LogInUrl = "";
 
-	public function __construct($bool_ActiveGod = false)
+	protected static $m_int_LoginType;
+
+	const 	C_INT_LOGIN_TYPE_CUSTOM = 0,
+	C_INT_LOGIN_TYPE_HTTP = 1;
+
+	public function __construct($bool_ActiveGod = false,$int_LoginType = self::C_INT_LOGIN_TYPE_HTTP)
 	{
 		self::$m_bool_GodActive = $bool_ActiveGod;
+		self::$m_int_LoginType = $int_LoginType;
 	}
 
 	public function setLogInUrl($str_LogInUrl)
@@ -222,21 +228,50 @@ class abs_User
 	public static function redirect_ToLogin($bool_UseSecure = true)
 	{
 		cSession::setLastUrl(self::get_PageURL());
+		print("Go to Redirect - ".self::$m_int_LoginType);
 
-		$str_LoginUrl = "http";
-		if ($bool_UseSecure)
+		switch (self::$m_int_LoginType)
 		{
-			$str_LoginUrl .= "s";
-		}
-		$str_LoginUrl .= "://" . $_SERVER["SERVER_NAME"];
-		if (!$bool_UseSecure)
-		{
-			$str_LoginUrl .= ":" . $_SERVER["SERVER_PORT"];
-		}
+			case self::C_INT_LOGIN_TYPE_CUSTOM :
+				print("Use Custom");
+				$str_LoginUrl = "http";
+				if ($bool_UseSecure)
+				{
+					$str_LoginUrl .= "s";
+				}
+				$str_LoginUrl .= "://" . $_SERVER["SERVER_NAME"];
+				if (!$bool_UseSecure)
+				{
+					$str_LoginUrl .= ":" . $_SERVER["SERVER_PORT"];
+				}
 
-		$str_LoginUrl .= self::getLogInUrl();
+				$str_LoginUrl .= self::getLogInUrl();
 
-		header('Location: ' . $str_LoginUrl);
-		die();
+				header('Location: ' . $str_LoginUrl);
+				die();
+			case self::C_INT_LOGIN_TYPE_HTTP:
+				self::httpLogin();
+				break;
+		}
+	}
+
+	protected  static function sendRequestLogin()
+	{
+		header('WWW-Authenticate: Basic realm="DarkOwl.User_Manager"');
+		header('HTTP/1.0 401 Unauthorized');
+		echo 'You are not authrized to view this page.';
+		exit;
+	}
+
+	protected static function httpLogin()
+	{
+		if (!isset($_SERVER['PHP_AUTH_USER'])) {
+			self::sendRequestLogin();
+		} else {
+			if(!self::login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']))
+			{
+				self::sendRequestLogin();
+			}
+		}
 	}
 }

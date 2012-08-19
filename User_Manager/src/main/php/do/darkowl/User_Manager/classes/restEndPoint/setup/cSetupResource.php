@@ -2,6 +2,7 @@
 use darkowl\user_manager\response\cDatabaseResponse;
 
 use darkowl\user_manager\resource\cDatabaseResource;
+use darkowl\user_manager\cUser;
 use \darkowl\user_manager\webpage;
 
 // require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
@@ -9,18 +10,23 @@ require_once dirname(dirname( __DIR__)).'/response/cDatabaseResponse.php';
 require_once dirname(dirname( __DIR__)).'/resource/cDatabaseResource.php';
 
 require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/conf/cDBConfig.php";
+/**
+ * Include User Validation Class
+ */
+require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cUser.php";
 
 /**
  * Resource used to Handle setup of User Manager
  * @namespace User_Manager\Setup
  * @uri /setup
  */
-class cSetupResource extends Resource {
+class cSetupResource extends \Tonic\Resource {
 
 	const C_STR_PARAM_ACTION = "action";
 	const C_STR_ACTION_CREATE = "create";
 
 	private $m_obj_Response = null;
+	private static $m_obj_UserValidator = null;
 
 	public function outputCreate()
 	{
@@ -30,28 +36,45 @@ class cSetupResource extends Resource {
 		$obj_DatabaseResource->setName("User Manager");
 
 		$this->m_obj_Response->addResource($obj_DatabaseResource);
+		$this->m_obj_Response->setSuccess(true);
 	}
 
-	public function get($request) {
-
-		$response = new Response($request);
-
-
-		$response->body = <<<END
+	/**
+	 * Singleton of the User Validator object
+	 * @return cUser
+	 */
+	private static function getUserValidator()
+	{
+		if(!self::$m_obj_UserValidator)
+		{
+			self::$m_obj_UserValidator = new cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
+		}
+		return self::$m_obj_UserValidator;
+	}
+	/**
+	 * @method GET
+	 */
+	public function getHTML() {
+		// Check Login Status
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+		return <<<END
 <h1>Setup</h1>
 <p>This page is used to setup the database</p>
 
 END;
 
-		return $response;
-
 	}
-
-	public 	function post($request)
+	/**
+	 * @method POST
+	 * @accepts application/x-www-form-urlencoded
+	 * @provides application/json
+	 */
+	public 	function postJSON()
 	{
-		$this->m_obj_Response = new cDatabaseResponse($request);
+		$this->m_obj_Response = new cDatabaseResponse();
 
-		$arr_Query = split("&",$request->data);
+		$arr_Query = split("&",$this->request->data);
 		$arr_Data= Array();
 		$arr_Data[self::C_STR_PARAM_ACTION]="";
 
@@ -71,7 +94,7 @@ END;
 		}
 		if(!$arr_Data[self::C_STR_PARAM_ACTION])
 		{
-			$this->m_obj_Response->code = 406;
+			$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
 			$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
 		}
 		else
@@ -82,12 +105,14 @@ END;
 					$this->outputCreate();
 					break;
 				default:
-					$this->m_obj_Response->code = 406;
+					$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
 					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
 			}
 		}
 
-		return $this->m_obj_Response;
+		//return $this->m_obj_Response->output();
+
+		return new \TOnic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
 	function getInfo()

@@ -13,7 +13,7 @@ require_once dirname(dirname(__DIR__))."/resource/cActionResource.php";
  * @namespace User_Manager
  * @uri /action
  */
-class cAction extends Resource {
+class cAction extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
@@ -22,35 +22,37 @@ class cAction extends Resource {
 	 * @provides  application/json
 	 */
 
-	function getJson($request,$limit) {
-		$obj_Response = new cActionResponse($request);
+	function getJson($limit) {
+		// 		$obj_Response = new cActionResponse($request);
 
-		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+		print($limit);
 
-		// 		$arr_Accept = Array();
-		// 		foreach($request->accept as $arr_Object)
-			// 		{
-			// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
-			// 		}
+		// 		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 
-		foreach($obj_DOAction->toArray()as $arr_Object)
-		{
-			$obj_Row = new cActionResource();
-			foreach($arr_Object as $str_Key => $obj_Data)
-			{
-				$str_Key = lcfirst($str_Key);
+		// 		// 		$arr_Accept = Array();
+		// 		// 		foreach($request->accept as $arr_Object)
+			// 			// 		{
+			// 			// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
+			// 			// 		}
 
-				if($obj_Data){
-					$obj_Row->$str_Key = $obj_Data;
-				}
-			}
-			$obj_Response->addResource($obj_Row);
-		}
+			// 		foreach($obj_DOAction->toArray()as $arr_Object)
+				// 		{
+				// 			$obj_Row = new cActionResource();
+				// 			foreach($arr_Object as $str_Key => $obj_Data)
+					// 			{
+					// 				$str_Key = lcfirst($str_Key);
 
-		$obj_Response->setSuccess(true);
-		$obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
+					// 				if($obj_Data){
+					// 					$obj_Row->$str_Key = $obj_Data;
+					// 				}
+					// 			}
+					// 			$obj_Response->addResource($obj_Row);
+					// 		}
 
-		return $obj_Response;
+					// 		$obj_Response->setSuccess(true);
+					// 		$obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
+
+					// 		return $obj_Response;
 	}
 }
 

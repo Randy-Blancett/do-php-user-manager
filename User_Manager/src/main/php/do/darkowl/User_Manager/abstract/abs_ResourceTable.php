@@ -5,7 +5,7 @@ use darkowl\user_manager\response\cTableResponse;
 require_once dirname( __DIR__).'/classes/response/cTableResponse.php';
 require_once dirname( __DIR__).'/classes/resource/cTableResource.php';
 
-class abs_ResourceTable extends Resource
+class abs_ResourceTable extends \Tonic\Resource
 {
 	const C_STR_PARAM_ACTION = "action";
 	const C_STR_ACTION_CREATE = "create";

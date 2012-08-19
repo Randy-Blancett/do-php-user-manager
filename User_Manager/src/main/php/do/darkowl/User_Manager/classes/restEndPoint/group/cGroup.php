@@ -14,7 +14,7 @@ require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
  * @namespace User_Manager
  * @uri /group
  */
-class cGroup extends Resource {
+class cGroup extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
