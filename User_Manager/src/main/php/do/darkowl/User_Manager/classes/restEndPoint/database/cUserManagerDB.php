@@ -2,6 +2,7 @@
 
 use \darkowl\user_manager\resource\cTableResource;
 use \darkowl\user_manager\response\cTableResponse;
+use \darkowl\user_manager\cUser;
 
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname( __DIR__)).'/response/cTableResponse.php';
@@ -12,6 +13,10 @@ require_once __DIR__.'/user_manager/cGroupTable.php';
 require_once __DIR__.'/user_manager/cKeyboxTable.php';
 require_once __DIR__.'/user_manager/cUserTable.php';
 require_once __DIR__.'/user_manager/cUser2GroupTable.php';
+/**
+ * Include User Validation Class
+ */
+require_once dirname(dirname( __DIR__)). "/cUser.php";
 /**
  * Basic Resource List
  * @namespace User_Manager
@@ -28,6 +33,7 @@ class cUserManagerDB extends \Tonic\Resource {
 	const C_STR_SQL_CREATE_MYSQL = "CREATE DATABASE  `user_manager` ;";
 
 	private $m_obj_Response = null;
+	private static $m_obj_UserValidator = null;
 
 	protected function getCreateStatement()
 	{
@@ -35,10 +41,23 @@ class cUserManagerDB extends \Tonic\Resource {
 	}
 
 	/**
+	 * Singleton of the User Validator object
+	 * @return cUser
+	 */
+	private static function getUserValidator()
+	{
+		if(!self::$m_obj_UserValidator)
+		{
+			self::$m_obj_UserValidator = new cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
+		}
+		return self::$m_obj_UserValidator;
+	}
+
+	/**
 	 * @method GET
 	 */
-	function get($request) {
-		$response = new Response($request);
+	function get() {
+		$response = new Response();
 			
 		$str_Resources = '';
 		$arr_Dirs = glob(dirname(__FILE__).DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR);
@@ -106,60 +125,68 @@ END;
 	 */
 	public 	function postJSON()
 	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
 		$this->m_obj_Response = new cTableResponse();
-
-		$arr_Query = split("&",$this->request->data);
-		$arr_Data= Array();
-		$arr_Data[self::C_STR_PARAM_ACTION]="";
-
-		foreach ($arr_Query as $str_Data)
+		if($obj_User->isGod())
 		{
-			$arr_Temp = split("=",$str_Data);
+			$arr_Query = split("&",$this->request->data);
+			$arr_Data= Array();
+			$arr_Data[self::C_STR_PARAM_ACTION]="";
 
-			if($arr_Temp[0])
+			foreach ($arr_Query as $str_Data)
 			{
-				$arr_Data[$arr_Temp[0]] = $arr_Temp[1];
+				$arr_Temp = split("=",$str_Data);
+
+				if($arr_Temp[0])
+				{
+					$arr_Data[$arr_Temp[0]] = $arr_Temp[1];
+				}
 			}
-		}
 
-		if(!isset($arr_Data[self::C_STR_PARAM_ACTION]))
-		{
-			$arr_Data[self::C_STR_PARAM_ACTION] = null;
-		}
+			if(!isset($arr_Data[self::C_STR_PARAM_ACTION]))
+			{
+				$arr_Data[self::C_STR_PARAM_ACTION] = null;
+			}
 
-		if(!$arr_Data[self::C_STR_PARAM_ACTION])
-		{
-			$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
-			$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
+			if(!$arr_Data[self::C_STR_PARAM_ACTION])
+			{
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
+				$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
+				$this->m_obj_Response->setSuccess(false);
+			}
+			else
+			{
+				switch ($arr_Data[self::C_STR_PARAM_ACTION])
+				{
+					case self::C_STR_ACTION_CREATE :
+						if($this->createDatabase())
+						{
+							$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
+							$this->m_obj_Response->setSuccess(true);
+						}
+						else
+						{
+							$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
+							$this->m_obj_Response->logError("Failed to create Database.");
+							$this->m_obj_Response->setSuccess(false);
+						}
+						break;
+					case self::C_STR_ACTION_INFO :
+						$this->outputTableInfo();
+						break;
+					default:
+						$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
+						$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
+				}
+			}
+		}else{
+			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
 			$this->m_obj_Response->setSuccess(false);
 		}
-		else
-		{
-			switch ($arr_Data[self::C_STR_PARAM_ACTION])
-			{
-				case self::C_STR_ACTION_CREATE :
-					if($this->createDatabase())
-					{
-						$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
-						$this->m_obj_Response->setSuccess(true);
-					}
-					else
-					{
-						$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
-						$this->m_obj_Response->logError("Failed to create Database.");
-						$this->m_obj_Response->setSuccess(false);
-					}
-					break;
-				case self::C_STR_ACTION_INFO :
-					$this->outputTableInfo();
-					break;
-				default:
-					$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
-					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
-			}
-		}
 
-		return new \TOnic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
 	private function createDatabase()

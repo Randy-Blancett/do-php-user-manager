@@ -45,19 +45,22 @@ try {
 	$obj_Resource = $obj_App->getResource($obj_Request);
 
 	#echo $resource;
-
+	// 	print_r($obj_Resource);
 	$obj_Response = $obj_Resource->exec();
 
 } catch (Tonic\NotFoundException $e) {
+	print("ERROR");
 	$obj_Response = new Tonic\Response(404);
 
 } catch (Tonic\UnauthorizedException $e) {
+	print("ERROR");
 	$obj_Response = new Tonic\Response(401);
 	$obj_Response->wwwAuthenticate = 'Basic realm="My Realm"';
 
 } catch (Tonic\Exception $e) {
 
-	print($e);
+	print("Error - ".$e);
+	die();
 	$obj_Response = new Tonic\Response(500);
 }
 

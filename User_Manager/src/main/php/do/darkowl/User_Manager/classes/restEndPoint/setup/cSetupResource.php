@@ -1,6 +1,5 @@
 <?php
 use darkowl\user_manager\response\cDatabaseResponse;
-
 use darkowl\user_manager\resource\cDatabaseResource;
 use darkowl\user_manager\cUser;
 use \darkowl\user_manager\webpage;
@@ -72,47 +71,54 @@ END;
 	 */
 	public 	function postJSON()
 	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
 		$this->m_obj_Response = new cDatabaseResponse();
 
-		$arr_Query = split("&",$this->request->data);
-		$arr_Data= Array();
-		$arr_Data[self::C_STR_PARAM_ACTION]="";
-
-		foreach ($arr_Query as $str_Data)
+		if($obj_User->isGod())
 		{
-			$arr_Temp = split("=",$str_Data);
 
-			if($arr_Temp[0])
+			$arr_Query = split("&",$this->request->data);
+			$arr_Data= Array();
+			$arr_Data[self::C_STR_PARAM_ACTION]="";
+
+			foreach ($arr_Query as $str_Data)
 			{
-				$arr_Data[$arr_Temp[0]] = $arr_Temp[1];
-			}
-		}
+				$arr_Temp = split("=",$str_Data);
 
-		if(!isset($arr_Data[self::C_STR_PARAM_ACTION]))
-		{
-			$arr_Data[self::C_STR_PARAM_ACTION] = null;
-		}
-		if(!$arr_Data[self::C_STR_PARAM_ACTION])
-		{
-			$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
-			$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
-		}
-		else
-		{
-			switch ($arr_Data[self::C_STR_PARAM_ACTION])
+				if($arr_Temp[0])
+				{
+					$arr_Data[$arr_Temp[0]] = $arr_Temp[1];
+				}
+			}
+
+			if(!isset($arr_Data[self::C_STR_PARAM_ACTION]))
 			{
-				case self::C_STR_ACTION_CREATE :
-					$this->outputCreate();
-					break;
-				default:
-					$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
-					$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
+				$arr_Data[self::C_STR_PARAM_ACTION] = null;
 			}
+			if(!$arr_Data[self::C_STR_PARAM_ACTION])
+			{
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
+				$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
+			}
+			else
+			{
+				switch ($arr_Data[self::C_STR_PARAM_ACTION])
+				{
+					case self::C_STR_ACTION_CREATE :
+						$this->outputCreate();
+						break;
+					default:
+						$this->m_obj_Response->setCode(\Tonic\Response::NOTACCEPTABLE);
+						$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
+				}
+			}
+		}else {
+			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
+			$this->m_obj_Response->setSuccess(false);
 		}
 
-		//return $this->m_obj_Response->output();
-
-		return new \TOnic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
 	function getInfo()

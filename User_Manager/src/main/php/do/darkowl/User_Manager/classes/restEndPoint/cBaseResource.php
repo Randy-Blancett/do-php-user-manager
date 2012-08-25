@@ -19,7 +19,7 @@ class cBaseResource extends \Tonic\Resource {
 	* @method GET
 	* @return Response
 	*/
-	function Test123() {
+	function getHTML() {
 
 		// 		$response = new \Tonic\Response($request);
 			
