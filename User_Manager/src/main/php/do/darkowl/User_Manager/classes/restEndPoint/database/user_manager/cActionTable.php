@@ -1,9 +1,11 @@
 <?php
 
-use darkowl\user_manager\resource\cTableResource;
-use darkowl\user_manager\response\cTableResponse;
+use \darkowl\user_manager\resource\cTableResource;
+use \darkowl\user_manager\response\cTableResponse;
+use \darkowl\user_manager\dataObject\cAction;
 
 require_once dirname(dirname(dirname(dirname( __DIR__)))).'/abstract/abs_ResourceTable.php';
+require_once (dirname(dirname(dirname( __DIR__)))).'/dataObject/cAction.php';
 /**
  * Basic Resource List
  * @namespace User_Manager
@@ -15,34 +17,22 @@ class cActionTable extends abs_ResourceTable{
 
 	protected function createTable()
 	{
-		$str_Statement = $this->getCreateStatement();
 
-		try {
-			$obj_Connection = Propel::getConnection(Propel::getDefaultDB());
-			$obj_Statement = $obj_Connection->prepare($str_Statement);
-		}
-		catch (Exception $e) {
-			return false;
-		}
-
-		try {
-			$obj_Statement->execute();
-			$this->m_obj_Response->addMsg("Action Table Created.");
+		try{
+			$str_Return = cAction::createTable();
+			if($str_Return)
+			{
+				$this->m_obj_Response->addMsg($str_Return);
+				cAction::addDefault();
+				$this->m_obj_Response->addMsg("Added default data.");
+				return true;
+			}
 		}
 		catch (PDOException $e) {
-			switch ($e->getCode())
-			{
-				case 'HY000':
-					$this->m_obj_Response->addMsg("Table Already Exists.");
-					return true;
-				default:
-					$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
-					return false;
-			}
-
-			return false;
+			$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
 		}
-		return true;
+
+		return		false;
 	}
 
 
