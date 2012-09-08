@@ -33,8 +33,7 @@
 	<packaging>php</packaging>
 
 	<build>
-		<plugins><!-- <plugin> <groupId>org.phpmaven</groupId> <artifactId>maven-php-plugin</artifactId> 
-				<version>2.0.1</version> </plugin> -->
+		<plugins>
 			<plugin>
 				<groupId>org.phpmaven</groupId>
 				<artifactId>maven-php-plugin</artifactId>
@@ -91,7 +90,9 @@
 							<reportSets>
 								<reportSet>
 									<reports>
-										<report>report-only</report>
+										<report>phpdocumentor</report>
+										<report>phpunit-coverage</report>
+										<report>phpunit</report>
 									</reports>
 								</reportSet>
 							</reportSets>
@@ -137,5 +138,14 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<dependencies> 
+		<dependency>
+			<groupId>org.phpunit</groupId>
+			<artifactId>phpunit5</artifactId>
+			<version>3.3.9</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 </project>

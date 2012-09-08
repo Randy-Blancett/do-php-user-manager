@@ -1,9 +1,11 @@
 <?php
 
-use darkowl\user_manager\resource\cTableResource;
-use darkowl\user_manager\response\cTableResponse;
+use \darkowl\user_manager\resource\cTableResource;
+use \darkowl\user_manager\response\cTableResponse;
+use \darkowl\user_manager\dataObject\cGroup;
 
 require_once dirname(dirname(dirname(dirname( __DIR__)))).'/abstract/abs_ResourceTable.php';
+require_once (dirname(dirname(dirname( __DIR__)))).'/dataObject/cGroup.php';
 /**
  * Basic Resource List
  * @namespace User_Manager
@@ -11,51 +13,30 @@ require_once dirname(dirname(dirname(dirname( __DIR__)))).'/abstract/abs_Resourc
  */
 class cGroupTable extends abs_ResourceTable {
 	const C_STR_NAME = "Group";
-	const C_STR_URI = "rest/database/user_manager/keybox";
+	const C_STR_URI = "rest/database/user_manager/group";
 
 
 	protected function createTable()
 	{
-		$str_Statement = $this->getCreateStatement();
+		// 		$str_Statement = $this->getCreateStatement();
 
 		try {
-			$obj_Connection = Propel::getConnection(Propel::getDefaultDB());
-			$obj_Statement = $obj_Connection->prepare($str_Statement);
+			$str_Return = cGroup::createTable();
+			if($str_Return)
+			{
+				$this->m_obj_Response->addMsg($str_Return);
+				cGroup::addDefault();
+				$this->m_obj_Response->addMsg("Added default data.");
+				return true;
+			}
 		}
 		catch (Exception $e) {
+			print($e);
+			die();
 			return false;
 		}
 
-		try {
-			$obj_Statement->execute();
-			$this->m_obj_Response->addMsg("Group Table Created.");
-		}
-		catch (PDOException $e) {
-			switch ($e->getCode())
-			{
-				case 'HY000':
-					$this->m_obj_Response->addMsg("Table Already Exists.");
-					return true;
-				default:
-					$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
-					return false;
-			}
-
-			return false;
-		}
-		return true;
-	}
-
-
-
-	protected function getCreateStatement()
-	{
-		$str_SQL = file_get_contents(dirname(dirname(dirname(dirname(__DIR__))))."/sql/groups_schema.sql");
-
-		$str_SQL = str_ireplace("DROP TABLE IF EXISTS `groups`;","",$str_SQL);
-
-
-		return $str_SQL;
+		return false;
 	}
 
 }

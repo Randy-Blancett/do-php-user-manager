@@ -37,14 +37,14 @@ class cActionTable extends abs_ResourceTable{
 
 
 
-	protected function getCreateStatement()
-	{
-		$str_SQL = file_get_contents(dirname(dirname(dirname(dirname(__DIR__))))."/sql/actions_schema.sql");
+// 	protected function getCreateStatement()
+// 	{
+// 		$str_SQL = file_get_contents(dirname(dirname(dirname(dirname(__DIR__))))."/sql/actions_schema.sql");
 
-		$str_SQL = str_ireplace("DROP TABLE IF EXISTS `actions`;","",$str_SQL);
+// 		$str_SQL = str_ireplace("DROP TABLE IF EXISTS `actions`;","",$str_SQL);
 
-		return $str_SQL;
-	}
+// 		return $str_SQL;
+// 	}
 
 }
 

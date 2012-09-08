@@ -204,7 +204,6 @@ END;
 		try {
 			$obj_Statement->execute();
 			$this->m_obj_Response->addMsg("Table Created.");
-			print("Execute Pass");
 		}
 		catch (PDOException $e) {
 			switch ($e->getCode())
