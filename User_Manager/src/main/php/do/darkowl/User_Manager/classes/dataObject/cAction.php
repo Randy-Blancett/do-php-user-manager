@@ -7,6 +7,9 @@ require_once 'cApplication.php';
 
 class cAction extends \cTableActions
 {
+	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
+	const C_STR_USER_MANAGER_APPLICATION_VIEW = "D173678F-7C65-440C-A8A8-126B7F996CA0";
+
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
 
@@ -26,6 +29,12 @@ class cAction extends \cTableActions
 		return self::$m_obj_Query;
 	}
 
+	public static function getActionById($str_ID)
+	{
+		$obj_Return = self::getQueryObj();
+		return  $obj_Return->findPk($str_ID);
+	}
+
 	public static function getAllActions($int_Start = 0, $int_PerPage = null)
 	{
 		$obj_Return = self::getQueryObj();
@@ -33,7 +42,7 @@ class cAction extends \cTableActions
 		{
 			$obj_Return = $obj_Return->limit($int_PerPage);
 		}
-		return $obj_Return = $obj_Return->offset($int_Start)->find();
+		return  $obj_Return->offset($int_Start)->find();
 	}
 
 	public static function getTotalActionCount()
@@ -47,6 +56,20 @@ class cAction extends \cTableActions
 		foreach($this as $obj_Data)
 		{
 			print(" - ".$obj_Data);
+		}
+	}
+
+	public static function getCommentString($obj_Resource)
+	{
+		if (is_resource($obj_Resource)) {
+			$str_Content ="";
+			while(!feof($obj_Resource)){
+				$str_Content.= fread($obj_Resource, 1024);
+			}
+			rewind($obj_Resource);
+			return $str_Content;
+		} else {
+			return $obj_Resource;
 		}
 	}
 
@@ -130,7 +153,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("D173678F-7C65-440C-A8A8-126B7F996CA0");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_APPLICATION_VIEW);
 		$obj_Action->setName("View Application");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to view applications in the system.");

@@ -16,6 +16,9 @@ class cUser extends \cTableUsers
 		return self::$m_obj_Query;
 	}
 
+	/**
+	 * @param unknown_type $str_UserName
+	 */
 	public static  function loadFromUserName($str_UserName)
 	{
 		return  \cTableUsersQuery::create()->findOneByuserName($str_UserName);

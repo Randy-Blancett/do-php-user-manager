@@ -9,6 +9,7 @@ Ext.define('darkowl.userManager.action.addEdit.cForm',
             'darkowl.userManager.config.cButton' ],
     labelWidth : 100,
     m_str_ActionID : "",
+    m_str_AppId : "",
     frame : true,
     bodyStyle : 'padding:5px 5px 0',
     standardSubmit : false,
@@ -23,7 +24,7 @@ Ext.define('darkowl.userManager.action.addEdit.cForm',
 	    this.m_obj_AppStore = Ext
 	            .create('darkowl.userManager.store.cApplicationList');
 
-	    this.m_obj_AppStore.load();
+	    // this.m_obj_AppStore.load();
 
 	    this.m_obj_Application = Ext.create("Ext.form.field.ComboBox",
 	    {
@@ -94,5 +95,10 @@ Ext.define('darkowl.userManager.action.addEdit.cForm',
 	    [ this.m_obj_Submit, this.m_obj_Cancel ];
 
 	    this.callParent();
+	    this.m_obj_AppStore.on("load", this.setData, this);
     },
+    setData : function()
+    {
+	    this.m_obj_Application.setValue(this.m_str_AppId);
+    }
 });

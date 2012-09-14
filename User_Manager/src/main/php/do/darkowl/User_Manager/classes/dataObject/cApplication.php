@@ -11,6 +11,20 @@ class cApplication extends \cTableApplications
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
 
+	public static function getCommentString($obj_Resource)
+	{
+		if (is_resource($obj_Resource)) {
+			$str_Content ="";
+			while(!feof($obj_Resource)){
+				$str_Content.= fread($obj_Resource, 1024);
+			}
+			rewind($obj_Resource);
+			return $str_Content;
+		} else {
+			return $obj_Resource;
+		}
+	}
+
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
@@ -41,6 +55,35 @@ class cApplication extends \cTableApplications
 	{
 		$obj_Return = \cTableApplicationsQuery::create();
 		return $obj_Return->count();
+	}
+
+	/**
+	 * Get the information about the application from an ID
+	 * @param string $str_ID
+	 * @return number
+	 */
+	public static function getApplicationById($str_ID)
+	{
+		$obj_Return = \cTableApplicationsQuery::create();
+
+		return $obj_Return->findPk($str_ID);
+	}
+
+	/**
+	 * Convert an application id into a name.
+	 * @param string $str_AppID ID of the application to look up.
+	 * @return string Name attatched to the Application ID
+	 */
+	public static function convertID($str_AppID)
+	{
+		if(!$str_AppID)
+		{
+			return "";
+		}
+
+		$obj_Data = self::getApplicationById($str_AppID);
+
+		return $obj_Data->getName();
 	}
 
 	private static function addApplication(cApplication $obj_Application,$bool_Force = false){

@@ -16,6 +16,10 @@ Ext.define('darkowl.userManager.model.cAction',
         type : 'string'
     },
     {
+        name : 'applicationName',
+        type : 'string'
+    },
+    {
         name : 'comment',
         type : 'string'
     }]

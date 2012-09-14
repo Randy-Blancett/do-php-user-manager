@@ -76,7 +76,24 @@ abstract class abs_ExtJsResponse
 
 	public function addResource(abs_Resource $obj_Resource){
 		$obj_Resources =& $this->getResources();
-		$obj_Resources[] = $obj_Resource;
+
+		if(!$obj_Resources)
+		{
+			$obj_Resources = $obj_Resource;
+		}
+		else
+		{
+			if(is_array($obj_Resources))
+			{
+				$obj_Resources[] = $obj_Resource;
+			}
+			else
+			{
+				$arr_Temp[] = $obj_Resources;
+				$arr_Temp[] = $obj_Resource;
+				$obj_Resources = $arr_Temp;
+			}
+		}
 	}
 
 	// 	public function output() {
@@ -103,10 +120,10 @@ abstract class abs_ExtJsResponse
 	// 		if(is_array($mix_Format))
 	// 		{
 	// 			foreach($mix_Format as $mix_FormatPart)
-		// 			{
-		// 				if($this->checkOutput($mix_FormatPart))
-		// 				{
-		// 					return true;
+	// 			{
+	// 				if($this->checkOutput($mix_FormatPart))
+	// 				{
+	// 					return true;
 	// 				}
 	// 			}
 	// 		}
@@ -141,7 +158,12 @@ abstract class abs_ExtJsResponse
 
 	public function output_JSON()
 	{
-		print json_encode($this->getOutput());
+		$obj_Output = $this->getOutput();
+		if(!$obj_Output)
+		{
+			return "";
+		}
+		return @json_encode($obj_Output);
 	}
 
 	public function addMsg($str_Msg)
