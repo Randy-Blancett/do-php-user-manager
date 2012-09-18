@@ -51,12 +51,17 @@ Ext.define('darkowl.desktop.cStartMenu',
 	    var obj_Submenu = obj_Data.submenu;
 	    var bool_IsMenu = false;
 
+	    console.log(obj_Menu.id);
+	    console.log(str_Text);
+
 	    if (obj_Submenu != null && obj_Submenu.getCount() > 0)
 	    {
 		    bool_IsMenu = true;
 	    }
 
 	    str_ID = str_Text;
+
+	    str_ID += obj_Menu.id;
 
 	    if (bool_IsMenu)
 	    {

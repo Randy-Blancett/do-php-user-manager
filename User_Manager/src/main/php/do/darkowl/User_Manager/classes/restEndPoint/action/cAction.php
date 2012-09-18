@@ -64,6 +64,12 @@ class cAction extends \Tonic\Resource {
 		return $this->getAllJson($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 	}
 
+	/**
+	 * Returns one action in the form Ext-JS Form expects
+	 * 
+	 * @param String $str_ID Id of the Action to return
+	 * @return \Tonic\Response
+	 */
 	public function getSingleJson($str_ID)
 	{
 		$obj_User =  self::getUserValidator();

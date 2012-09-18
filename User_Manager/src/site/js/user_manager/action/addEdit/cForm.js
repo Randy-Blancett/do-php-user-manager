@@ -24,7 +24,7 @@ Ext.define('darkowl.userManager.action.addEdit.cForm',
 	    this.m_obj_AppStore = Ext
 	            .create('darkowl.userManager.store.cApplicationList');
 
-	    // this.m_obj_AppStore.load();
+	    this.m_obj_AppStore.load();
 
 	    this.m_obj_Application = Ext.create("Ext.form.field.ComboBox",
 	    {
@@ -32,6 +32,9 @@ Ext.define('darkowl.userManager.action.addEdit.cForm',
 	        name : "application",
 	        anchor : str_Width,
 	        store : this.m_obj_AppStore,
+	        autoSelect : true,
+	        forceSelection : true,
+	        typeAhead : true,
 	        queryParam : "prefix",
 	        displayField : "name",
 	        valueField : "id",

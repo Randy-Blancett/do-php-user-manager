@@ -28,7 +28,8 @@ Ext
 
                     border : false,
                     html : '&#160;',
-                    layout : 'fitall',
+                    // layout : 'fitall',
+                    layout : 'fit',
 
                     xTickSize : 20,
                     yTickSize : 20,
@@ -115,6 +116,9 @@ Ext
 	                    desktop.MsgBus.on(
 	                            desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
 	                            this.createWindow, this);
+
+	                    this.xTickSize = 20;
+	                    this.yTickSize = 20;
                     },
                     addShortcut : function(obj_Shortcuts)
                     {
@@ -416,6 +420,8 @@ Ext
 
 	                    this.m_obj_Windows.add(obj_Win);
 
+	                    obj_Win.dd = new Object();
+
 	                    obj_Win.taskButton = this.m_obj_Taskbar
 	                            .addTaskButton(obj_Win);
 	                    obj_Win.animateTarget = obj_Win.taskButton.el;
@@ -435,16 +441,18 @@ Ext
 	                            {
 	                                afterrender : function()
 	                                {
-		                                obj_Win.dd.xTickSize = this.xTickSize;
-		                                obj_Win.dd.yTickSize = this.yTickSize;
+		                                console.log(obj_Win);
+		                                obj_Win.dd.xTickSize = obj_This.xTickSize;
+		                                obj_Win.dd.yTickSize = obj_This.yTickSize;
 
 		                                if (obj_Win.resizer)
 		                                {
-			                                obj_Win.resizer.widthIncrement = this.xTickSize;
-			                                obj_Win.resizer.heightIncrement = this.yTickSize;
+			                                obj_Win.resizer.widthIncrement = obj_This.xTickSize;
+			                                obj_Win.resizer.heightIncrement = obj_This.yTickSize;
 		                                }
 	                                },
-	                                single : true
+	                                single : true,
+	                                scope : this
 	                            }); // replace normal window close w/fadeOut
 	                    animation: obj_Win.doClose = function()
 	                    {
