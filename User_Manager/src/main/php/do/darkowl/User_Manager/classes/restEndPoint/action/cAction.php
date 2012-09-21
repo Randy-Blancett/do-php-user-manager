@@ -66,7 +66,7 @@ class cAction extends \Tonic\Resource {
 
 	/**
 	 * Returns one action in the form Ext-JS Form expects
-	 * 
+	 *
 	 * @param String $str_ID Id of the Action to return
 	 * @return \Tonic\Response
 	 */
@@ -159,40 +159,43 @@ class cAction extends \Tonic\Resource {
 		$obj_User =  self::getUserValidator();
 		$obj_User->require_Login(true);
 
-		$this->m_obj_Response = new cActionResponse();
+		$this->m_obj_Response = new cFormResponse();
 
 
-		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 
-		// 		$arr_Accept = Array();
-		// 		foreach($request->accept as $arr_Object)
+		// 		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+
+		// 		// 		$arr_Accept = Array();
+		// 		// 		foreach($request->accept as $arr_Object)
+		// 		// 		{
+		// 		// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
+		// 		// 		}
+		// 		if($obj_User->isGod())
 		// 		{
-		// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
+		// 			foreach($obj_DOAction->toArray()as $arr_Object)
+		// 			{
+		// 				$obj_Row = new cActionResource();
+		// 				foreach($arr_Object as $str_Key => $obj_Data)
+		// 				{
+		// 					$str_Key = lcfirst($str_Key);
+
+		// 					if($obj_Data){
+		// 						$obj_Row->$str_Key = $obj_Data;
+		// 					}
+		// 				}
+		// 				$obj_Response->addResource($obj_Row);
+		// 			}
+
+		// 			$obj_Response->setSuccess(true);
+		// 			$obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
 		// 		}
-		if($obj_User->isGod())
-		{
-			foreach($obj_DOAction->toArray()as $arr_Object)
-			{
-				$obj_Row = new cActionResource();
-				foreach($arr_Object as $str_Key => $obj_Data)
-				{
-					$str_Key = lcfirst($str_Key);
+		// 		else
+		// 		{
+		// 			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
+		// 			$this->m_obj_Response->setSuccess(false);
+		// 		}
 
-					if($obj_Data){
-						$obj_Row->$str_Key = $obj_Data;
-					}
-				}
-				$obj_Response->addResource($obj_Row);
-			}
-
-			$obj_Response->setSuccess(true);
-			$obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
-		}
-		else
-		{
-			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
-			$this->m_obj_Response->setSuccess(false);
-		}
+		$this->m_obj_Response->setSuccess(true);
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 }
