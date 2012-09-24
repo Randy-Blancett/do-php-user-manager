@@ -27,6 +27,12 @@ class cAction extends \Tonic\Resource {
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
 
+	const C_STR_PARAM_DATA_ID = "id";
+	const C_STR_PARAM_DATA_NAME = "name";
+	const C_STR_PARAM_DATA_APPLICATION = "application";
+	const C_STR_PARAM_DATA_COMMENT = "comment";
+
+
 	private $m_obj_Response = null;
 	private static $m_obj_UserValidator = null;
 
@@ -79,6 +85,7 @@ class cAction extends \Tonic\Resource {
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+
 		}
 		else
 		{
@@ -160,42 +167,45 @@ class cAction extends \Tonic\Resource {
 		$obj_User->require_Login(true);
 
 		$this->m_obj_Response = new cFormResponse();
+		$obj_DOAction = new dataObject\cAction();
 
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			if($_POST[self::C_STR_PARAM_DATA_ID])
+			{
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::EXPECTATIONFAILED);
+				$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID." can not be set with a post.");
 
+			}else
+			{
+				$obj_DOAction = new dataObject\cAction();
+				$str_ID = dataObject\cAction::create_GUID();
 
-		// 		$obj_DOAction = dataObject\cAction::getAllActions($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+				$obj_DOAction->setId($str_ID);
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ID." set to ".$str_ID);
 
-		// 		// 		$arr_Accept = Array();
-		// 		// 		foreach($request->accept as $arr_Object)
-		// 		// 		{
-		// 		// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
-		// 		// 		}
-		// 		if($obj_User->isGod())
-		// 		{
-		// 			foreach($obj_DOAction->toArray()as $arr_Object)
-		// 			{
-		// 				$obj_Row = new cActionResource();
-		// 				foreach($arr_Object as $str_Key => $obj_Data)
-		// 				{
-		// 					$str_Key = lcfirst($str_Key);
+				$obj_DOAction->setName($_POST[self::C_STR_PARAM_DATA_NAME]);
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_NAME." set to ".$obj_DOAction->getName());
 
-		// 					if($obj_Data){
-		// 						$obj_Row->$str_Key = $obj_Data;
-		// 					}
-		// 				}
-		// 				$obj_Response->addResource($obj_Row);
-		// 			}
+				$obj_DOAction->setApplication($_POST[self::C_STR_PARAM_DATA_APPLICATION]);
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_APPLICATION." set to ".$obj_DOAction->getApplication());
 
-		// 			$obj_Response->setSuccess(true);
-		// 			$obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
-		// 		}
-		// 		else
-		// 		{
-		// 			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
-		// 			$this->m_obj_Response->setSuccess(false);
-		// 		}
+				$obj_DOAction->setComment($_POST[self::C_STR_PARAM_DATA_COMMENT]);
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." set to ".$obj_DOAction->getComment());
 
-		$this->m_obj_Response->setSuccess(true);
+				$obj_DOAction->save();
+
+				$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
+				$this->m_obj_Response->setSuccess(true);
+			}
+		}
+
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 }

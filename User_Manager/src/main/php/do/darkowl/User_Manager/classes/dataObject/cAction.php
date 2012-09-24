@@ -8,10 +8,21 @@ require_once 'cApplication.php';
 class cAction extends \cTableActions
 {
 	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
+	const C_STR_USER_MANAGER_ACTION_EDIT = "CFD2CA6C-52D7-4334-ACDF-5460835A6B0C";
 	const C_STR_USER_MANAGER_APPLICATION_VIEW = "D173678F-7C65-440C-A8A8-126B7F996CA0";
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
+	
+	public static function create_GUID()
+	{
+		if (function_exists('com_create_guid') === true)
+		{
+			return trim(com_create_guid(), '{}');
+		}
+	
+		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
 
 	protected static function getQueryObj()
 	{
@@ -195,7 +206,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("CFD2CA6C-52D7-4334-ACDF-5460835A6B0C");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_ACTION_EDIT);
 		$obj_Action->setName("Edit Actions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to edit actions in the system.");

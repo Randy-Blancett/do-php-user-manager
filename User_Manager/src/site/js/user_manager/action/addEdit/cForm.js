@@ -8,7 +8,8 @@ Ext
                             'darkowl.userManager.store.cApplicationList',
                             'darkowl.userManager.config.cLabel',
                             'darkowl.userManager.config.cDialog',
-                            'darkowl.userManager.config.cButton' ],
+                            'darkowl.userManager.config.cButton',
+                            'darkowl.userManager.eventManager.cWorkFlowEvents' ],
                     labelWidth : 100,
                     m_str_ActionID : "",
                     m_str_AppId : "",
@@ -138,15 +139,9 @@ Ext
                     },
                     success_Submit : function()
                     {
-	                    console.log("Successfull");
-	                    // var obj_Test =
-	                    // // Ext.getBody().down("div[class=x-mask]");
-	                    // var obj_Test = Ext.getBody().down(
-	                    // "div[class=x-mask]:last-child");
-	                    // console.log(obj_Test);
-	                    // obj_Test.remove();
-	                    // console.log(m_obj_UserManager_App.m_obj_Desktop
-	                    // .hideMask());
+	                    this.ownerCt.close();
+	                    userManager.MsgBus
+	                            .fireEvent(userManager.MsgBus.self.C_STR_EVENT_ACTION_ADDED);
                     },
                     fail_Submit : function()
                     {
