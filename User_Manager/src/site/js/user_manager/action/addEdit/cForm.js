@@ -137,7 +137,7 @@ Ext
                     {
 	                    this.m_obj_Application.setValue(this.m_str_AppId);
                     },
-                    success_Submit : function()
+                    success_Submit : function(obj_Options)
                     {
 	                    this.ownerCt.close();
 	                    userManager.MsgBus

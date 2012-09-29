@@ -69,7 +69,6 @@ Ext
                     },
                     showMask : function()
                     {
-	                    console.log("Show Mask");
 	                    this.m_bool_Mask = true;
 	                    if (this.getEl())
 	                    {
@@ -86,7 +85,6 @@ Ext
                     },
                     hideMask : function()
                     {
-	                    console.log("Hide Mask");
 	                    this.m_bool_Mask = true;
 	                    if (this.getEl())
 	                    {

@@ -441,7 +441,7 @@ Ext
 	                            {
 	                                afterrender : function()
 	                                {
-		                                console.log(obj_Win);
+		                                // console.log(obj_Win);
 		                                obj_Win.dd.xTickSize = obj_This.xTickSize;
 		                                obj_Win.dd.yTickSize = obj_This.yTickSize;
 

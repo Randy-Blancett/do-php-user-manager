@@ -158,6 +158,59 @@ class cAction extends \Tonic\Resource {
 	}
 
 	/**
+	 * Update Action record
+	 * @method PUT
+	 * @param String $str_ID
+	 */
+	public function putJson($str_ID = null)
+	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
+		$this->m_obj_Response = new cFormResponse();
+		$obj_DOAction = new dataObject\cAction();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			$obj_OrigData = $obj_DOAction->getActionById($str_ID);
+			if(!$obj_OrigData){
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
+				$this->m_obj_Response->setSuccess(false);
+
+				$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be updated.");
+			}
+			else
+			{
+				parse_str($this->request->data,$arr_Data);
+
+				$this->m_obj_Response->addMsg("Updateing Data for Action '".$str_ID."'");
+
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_NAME." was changed from ".$obj_OrigData->getName()." to ".$arr_Data[self::C_STR_PARAM_DATA_NAME]);
+				$obj_OrigData->setName($arr_Data[self::C_STR_PARAM_DATA_NAME]);
+
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_APPLICATION." was changed from ".$obj_OrigData->getApplication()." to ".$arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
+				$obj_OrigData->setApplication($arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
+
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." was changed from ".dataObject\cAction::getCommentString($obj_OrigData->getComment())." to ".$arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+				$obj_OrigData->setComment($arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+
+				$obj_OrigData->save();
+
+				$this->m_obj_Response->setCode(\Tonic\Response::OK);
+				$this->m_obj_Response->setSuccess(true);
+			}
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Create a new Action record
 	 * @method POST
 	 * @accepts application/x-www-form-urlencoded
 	 * @provides application/json
@@ -169,7 +222,7 @@ class cAction extends \Tonic\Resource {
 		$this->m_obj_Response = new cFormResponse();
 		$obj_DOAction = new dataObject\cAction();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_EDIT))
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_ADD))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
