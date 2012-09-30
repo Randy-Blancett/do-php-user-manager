@@ -159,6 +159,46 @@ class cAction extends \Tonic\Resource {
 
 	/**
 	 * Update Action record
+	 * @method DELETE
+	 * @param String $str_ID
+	 */
+	public function deleteJson($str_ID = null)
+	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
+		$this->m_obj_Response = new cFormResponse();
+		$obj_DOAction = new dataObject\cAction();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_DELETE))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			$obj_OrigData = $obj_DOAction->getActionById($str_ID);
+			if(!$obj_OrigData){
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
+				$this->m_obj_Response->setSuccess(false);
+
+				$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be deleted.");
+			}
+			else
+			{
+				$obj_OrigData->delete();
+					
+				$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+				$this->m_obj_Response->setCode(\Tonic\Response::OK);
+				$this->m_obj_Response->setSuccess(true);
+			}
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Update Action record
 	 * @method PUT
 	 * @param String $str_ID
 	 */

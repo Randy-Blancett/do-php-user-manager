@@ -60,6 +60,10 @@ Ext
 	                            .on(
 	                                    userManager.MsgBus.self.C_STR_EVENT_ACTION_ADDED,
 	                                    this.refreshData, this);
+	                    userManager.MsgBus
+                        .on(
+                                userManager.MsgBus.self.C_STR_EVENT_ACTION_DELETED,
+                                this.refreshData, this);
                     },
                     doItemDblClick : function(obj_View, obj_Record, obj_Html,
                             int_Index, obj_Event, obj_Options)

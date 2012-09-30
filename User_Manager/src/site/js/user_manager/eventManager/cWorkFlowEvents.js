@@ -10,7 +10,8 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
             'darkowl.userManager.config.cDialog', ],
     statics :
     {
-	    C_STR_EVENT_ACTION_ADDED : "doactionadded"
+        C_STR_EVENT_ACTION_ADDED : "doactionadded",
+        C_STR_EVENT_ACTION_DELETED : "doactiondeleted"
     },
     constructor : function(config)
     {
@@ -20,9 +21,11 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
 
     addMsgEvents : function()
     {
-	    this.addEvents(this.self.C_STR_EVENT_ACTION_ADDED);
+	    this.addEvents(this.self.C_STR_EVENT_ACTION_ADDED,
+	            this.self.C_STR_EVENT_ACTION_DELETED);
 
 	    this.on(this.self.C_STR_EVENT_ACTION_ADDED, this.doActionAdded);
+	    this.on(this.self.C_STR_EVENT_ACTION_DELETED, this.doActionDelete);
     },
     fireEvent : function()
     {
@@ -33,5 +36,10 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
 	    Ext.Msg.alert(userManager.dialog.self.C_STR_DIALOG_SUCCESS_TITLE,
 	            userManager.dialog.self.C_STR_ACTION_SAVE_SUCCESS);
     },
+    doActionDelete : function()
+    {
+	    Ext.Msg.alert(userManager.dialog.self.C_STR_DIALOG_SUCCESS_TITLE,
+	            userManager.dialog.self.C_STR_ACTION_DELETE_SUCCESS);
+    }
 
 });

@@ -10,6 +10,7 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
 	const C_STR_USER_MANAGER_ACTION_EDIT = "CFD2CA6C-52D7-4334-ACDF-5460835A6B0C";
 	const C_STR_USER_MANAGER_ACTION_ADD= "55821781-AD26-4D8E-B010-733F4C84FBA2";
+	const C_STR_USER_MANAGER_ACTION_DELETE= "F8EF305B-294D-4241-BD5A-A19449AA6CCF";
 	const C_STR_USER_MANAGER_APPLICATION_VIEW = "D173678F-7C65-440C-A8A8-126B7F996CA0";
 
 	private static $m_obj_Query;
@@ -214,7 +215,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("F8EF305B-294D-4241-BD5A-A19449AA6CCF");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_ACTION_DELETE);
 		$obj_Action->setName("Delete Actions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to delete actions from the system.");
