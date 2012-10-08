@@ -17,6 +17,8 @@ Ext
                         C_STR_EVENT_OPEN_ACTION_DELETE : "doopenactiondelete",
                         C_STR_EVENT_OPEN_ACTION_VIEW : "doopenactionview",
                         C_STR_EVENT_OPEN_APP_ADD : "doopenappadd",
+                        C_STR_EVENT_OPEN_APP_EDIT : "doopenappedit",
+                        C_STR_EVENT_OPEN_APP_DELETE : "doopenappdelete",
                         C_STR_EVENT_OPEN_APP_VIEW : "doopenappview",
                         C_STR_EVENT_OPEN_GROUP_ADD : "doopengroupadd",
                         C_STR_EVENT_OPEN_GROUP_VIEW : "doopengroupview",
@@ -36,6 +38,8 @@ Ext
 	                            this.self.C_STR_EVENT_OPEN_ACTION_DELETE,
 	                            this.self.C_STR_EVENT_OPEN_ACTION_VIEW,
 	                            this.self.C_STR_EVENT_OPEN_APP_ADD,
+	                            this.self.C_STR_EVENT_OPEN_APP_EDIT,
+	                            this.self.C_STR_EVENT_OPEN_APP_DELETE,
 	                            this.self.C_STR_EVENT_OPEN_APP_VIEW,
 	                            this.self.C_STR_EVENT_OPEN_GROUP_ADD,
 	                            this.self.C_STR_EVENT_OPEN_GROUP_VIEW,
@@ -53,6 +57,10 @@ Ext
 
 	                    this.on(this.self.C_STR_EVENT_OPEN_APP_ADD,
 	                            this.openAppAdd);
+	                    this.on(this.self.C_STR_EVENT_OPEN_APP_EDIT,
+	                            this.openAppEdit);
+	                    this.on(this.self.C_STR_EVENT_OPEN_APP_DELETE,
+	                            this.openAppDelete);
 	                    this.on(this.self.C_STR_EVENT_OPEN_APP_VIEW,
 	                            this.openAppView);
 
@@ -162,7 +170,78 @@ Ext
                     },
                     openAppAdd : function()
                     {
-	                    desktop.logger.log("Opening Application Add.");
+	                    desktop.MsgBus
+	                            .fireEvent(
+	                                    desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+	                                    {
+	                                        title : "Add Application",
+	                                        iconCls : "window-application-add-icon"
+	                                    },
+	                                    'darkowl.userManager.application.addEdit.cWindow');
+                    },
+                    openAppEdit : function(str_App)
+                    {
+	                    if (!str_App)
+	                    {
+		                    this.openAppAdd();
+	                    }
+	                    else
+	                    {
+		                    desktop.MsgBus
+		                            .fireEvent(
+		                                    desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+		                                    {
+		                                        title : "Edit Application",
+		                                        iconCls : "window-application-edit-icon",
+		                                        m_str_ID : str_App
+		                                    },
+		                                    'darkowl.userManager.application.addEdit.cWindow');
+	                    }
+                    },
+                    openAppDelete : function(str_App)
+                    {
+	                    console.log("Delete - " + str_App);
+	                    var obj_Connection = Ext.create("Ext.data.Connection");
+
+	                    obj_Connection
+	                            .request(
+	                            {
+	                                url : '../rest/application/' + str_App,
+	                                method : 'DELETE',
+	                                params :
+	                                {
+		                                "id" : str_App
+	                                },
+	                                success : function(obj_Response, obj_Arg)
+	                                {
+		                                var obj_JSON = Ext
+		                                        .decode(obj_Response.responseText);
+		                                if (obj_JSON.success)
+		                                {
+			                                userManager.MsgBus
+			                                        .fireEvent(userManager.MsgBus.self.C_STR_EVENT_APPLICATION_DELETED);
+		                                }
+		                                else
+		                                {
+			                                Ext.MessageBox
+			                                        .alert(
+			                                                "Delete Error",
+			                                                "Failed to delete Application",
+			                                                function()
+			                                                {
+				                                                Console
+				                                                        .log("Failed to Delete Application");
+			                                                });
+
+		                                }
+		                                console.log("Deleted Object");
+	                                },
+	                                failure : function()
+	                                {
+		                                console.log("Failed to Delete Object");
+	                                }
+	                            });
+
                     },
                     openGroupView : function()
                     {

@@ -11,6 +11,16 @@ class cApplication extends \cTableApplications
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
 
+	public static function create_GUID()
+	{
+		if (function_exists('com_create_guid') === true)
+		{
+			return trim(com_create_guid(), '{}');
+		}
+
+		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
+
 	public static function getCommentString($obj_Resource)
 	{
 		if (is_resource($obj_Resource)) {

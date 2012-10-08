@@ -28,6 +28,18 @@ class cGroup extends \cTableGroups
 		}
 		return self::$m_obj_QueryObj;
 	}
+	
+	/**
+	 * Get the information about the group from an ID
+	 * @param string $str_ID
+	 * @return number
+	 */
+	public static function getGroupById($str_ID)
+	{
+		$obj_Return = self::getQueryObj();
+	
+		return $obj_Return->findPk($str_ID);
+	}
 
 	public static function getAllGroups($int_Start = 0, $int_PerPage = null)
 	{
@@ -53,6 +65,20 @@ class cGroup extends \cTableGroups
 		if(!$obj_CurGroup||$bool_Force)
 		{
 			$obj_Group->save();
+		}
+	}
+	
+	public static function getCommentString($obj_Resource)
+	{
+		if (is_resource($obj_Resource)) {
+			$str_Content ="";
+			while(!feof($obj_Resource)){
+				$str_Content.= fread($obj_Resource, 1024);
+			}
+			rewind($obj_Resource);
+			return $str_Content;
+		} else {
+			return $obj_Resource;
 		}
 	}
 

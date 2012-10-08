@@ -36,8 +36,10 @@ Ext
 		                                        tooltip : "Edit Application",
 		                                        handler : function()
 		                                        {
-			                                        startMenu.MsgBus
-			                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_ADD);
+			                                        this
+			                                                .up("window")
+			                                                .fireEvent(
+			                                                        darkowl.userManager.application.view.cWindow.C_STR_EVENT_EDIT);
 		                                        }
 		                                    }));
 	                    }
@@ -52,8 +54,10 @@ Ext
 		                                        tooltip : "Delete Application",
 		                                        handler : function()
 		                                        {
-			                                        startMenu.MsgBus
-			                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_ADD);
+			                                        this
+			                                                .up("window")
+			                                                .fireEvent(
+			                                                        darkowl.userManager.application.view.cWindow.C_STR_EVENT_DELETE);
 		                                        }
 		                                    }));
 	                    }

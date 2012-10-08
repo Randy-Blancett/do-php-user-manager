@@ -11,7 +11,9 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
     statics :
     {
         C_STR_EVENT_ACTION_ADDED : "doactionadded",
-        C_STR_EVENT_ACTION_DELETED : "doactiondeleted"
+        C_STR_EVENT_ACTION_DELETED : "doactiondeleted",
+        C_STR_EVENT_APPLICATION_ADDED : "doapplicationadded",
+        C_STR_EVENT_APPLICATION_DELETED : "doapplicationdeleted"
     },
     constructor : function(config)
     {
@@ -22,10 +24,17 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
     addMsgEvents : function()
     {
 	    this.addEvents(this.self.C_STR_EVENT_ACTION_ADDED,
-	            this.self.C_STR_EVENT_ACTION_DELETED);
+	            this.self.C_STR_EVENT_ACTION_DELETED,
+	            this.self.C_STR_EVENT_APPLICATION_ADDED,
+	            this.self.C_STR_EVENT_APPLICATION_DELETED);
 
 	    this.on(this.self.C_STR_EVENT_ACTION_ADDED, this.doActionAdded);
 	    this.on(this.self.C_STR_EVENT_ACTION_DELETED, this.doActionDelete);
+
+	    this.on(this.self.C_STR_EVENT_APPLICATION_ADDED,
+	            this.doApplicationAdded);
+	    this.on(this.self.C_STR_EVENT_APPLICATION_DELETED,
+	            this.doApplicationDelete);
     },
     fireEvent : function()
     {
@@ -40,6 +49,16 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents',
     {
 	    Ext.Msg.alert(userManager.dialog.self.C_STR_DIALOG_SUCCESS_TITLE,
 	            userManager.dialog.self.C_STR_ACTION_DELETE_SUCCESS);
+    },
+    doApplicationAdded : function()
+    {
+	    Ext.Msg.alert(userManager.dialog.self.C_STR_DIALOG_SUCCESS_TITLE,
+	            userManager.dialog.self.C_STR_APPLICATION_SAVE_SUCCESS);
+    },
+    doApplicationDelete : function()
+    {
+	    Ext.Msg.alert(userManager.dialog.self.C_STR_DIALOG_SUCCESS_TITLE,
+	            userManager.dialog.self.C_STR_APPLICATION_DELETE_SUCCESS);
     }
 
 });

@@ -38,7 +38,8 @@ Ext
 		                                        tooltip : "Edit Action",
 		                                        handler : function()
 		                                        {
-			                                        this.ownerCt
+		                                        	 this
+		                                                .up("window")
 			                                                .fireEvent(darkowl.userManager.action.view.cWindow.C_STR_EVENT_EDIT);
 		                                        }
 		                                    }));

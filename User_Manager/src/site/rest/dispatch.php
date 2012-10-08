@@ -41,11 +41,11 @@ $obj_Request = new Tonic\Request();
 
 
 try {
-
 	$obj_Resource = $obj_App->getResource($obj_Request);
 
 	#echo $resource;
-	// 	print_r($obj_Resource);
+// 	 	print_r($obj_Resource);
+
 	$obj_Response = $obj_Resource->exec();
 
 } catch (Tonic\NotFoundException $e) {

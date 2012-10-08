@@ -40,6 +40,28 @@ Ext.define('darkowl.userManager.application.view.cGrid',
 	    }, this);
 
 	    this.addDocked(this.m_obj_Pageing);
+	    
+	    if (g_obj_Config.m_bool_App_Edit)
+        {
+            this.on("itemdblclick", this.doItemDblClick);
+        }
+
+	    userManager.MsgBus.on(
+	            userManager.MsgBus.self.C_STR_EVENT_APPLICATION_ADDED,
+	            this.refreshData, this);
+	    userManager.MsgBus.on(
+	            userManager.MsgBus.self.C_STR_EVENT_APPLICATION_DELETED,
+	            this.refreshData, this);
+    },
+    doItemDblClick : function(obj_View, obj_Record, obj_Html,
+            int_Index, obj_Event, obj_Options)
+    {
+	     this.ownerCt
+	     .fireEvent(darkowl.userManager.application.view.cWindow.C_STR_EVENT_EDIT);
+    },
+    refreshData : function()
+    {
+        this.store.load();
     }
 
 });
