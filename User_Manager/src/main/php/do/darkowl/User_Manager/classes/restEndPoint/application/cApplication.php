@@ -260,7 +260,7 @@ class cApplication extends \Tonic\Resource {
 			}else
 			{
 				$obj_DOApplication = new dataObject\cApplication();
-				$str_ID = dataObject\cAction::create_GUID();
+				$str_ID = dataObject\cApplication::create_GUID();
 
 				$obj_DOApplication->setId($str_ID);
 				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ID." set to ".$str_ID);

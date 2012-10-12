@@ -52,8 +52,10 @@ Ext
 		                                        tooltip : "Delete Group",
 		                                        handler : function()
 		                                        {
-			                                        startMenu.MsgBus
-			                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_ADD);
+		                                        	this
+	                                                .up("window")
+	                                                .fireEvent(
+	                                                        darkowl.userManager.group.view.cWindow.C_STR_EVENT_DELETE);
 		                                        }
 		                                    }));
 	                    }

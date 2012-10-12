@@ -117,7 +117,6 @@ Ext
 			                                    {
 				                                    if (obj_Btn.toUpperCase() == "YES")
 				                                    {
-				                                    	console.log("Confirm Delete");
 					                                    startMenu.MsgBus
 					                                            .fireEvent(
 					                                                    startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_DELETE,
@@ -136,6 +135,5 @@ Ext
 			                                icon : Ext.Msg.ERROR
 			                            });
 	                    }
-	                    console.log("Delete Application");
                     }
                 });

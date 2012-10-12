@@ -166,6 +166,11 @@
 	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_add.gif") !important;
 }
 
+.window-application-edit-icon 
+{
+	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_edit.gif") !important;
+}
+
 .window-application-view-icon 
 {
 	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_go.gif") !important;
@@ -184,6 +189,11 @@
 .window-group-add-icon 
 {
 	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_add.gif") !important;
+}
+
+.window-group-edit-icon 
+{
+	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_edit.gif") !important;
 }
 
 .window-group-view-icon 

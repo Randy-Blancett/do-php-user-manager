@@ -13,6 +13,16 @@ class cGroup extends \cTableGroups
 	const C_STR_ID_ANONYMOUS = "2847B2B6-4E16-11DF-BD82-8264710BE148";
 	const C_STR_ID_KNOWN = "2847B2EE-4E16-11DF-BD82-8264710BE148";
 
+	public static function create_GUID()
+	{
+		if (function_exists('com_create_guid') === true)
+		{
+			return trim(com_create_guid(), '{}');
+		}
+	
+		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
+	
 	protected static function getQuery()
 	{
 		if(!self::$m_obj_Query){

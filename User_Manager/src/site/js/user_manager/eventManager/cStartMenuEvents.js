@@ -21,6 +21,8 @@ Ext
                         C_STR_EVENT_OPEN_APP_DELETE : "doopenappdelete",
                         C_STR_EVENT_OPEN_APP_VIEW : "doopenappview",
                         C_STR_EVENT_OPEN_GROUP_ADD : "doopengroupadd",
+                        C_STR_EVENT_OPEN_GROUP_EDIT : "doopengroupedit",
+                        C_STR_EVENT_OPEN_GROUP_DELETE : "doopengroupdelete",
                         C_STR_EVENT_OPEN_GROUP_VIEW : "doopengroupview",
                         C_STR_EVENT_OPEN_USER_ADD : "doopenuseradd",
                         C_STR_EVENT_OPEN_USER_VIEW : "doopenuserview"
@@ -42,6 +44,8 @@ Ext
 	                            this.self.C_STR_EVENT_OPEN_APP_DELETE,
 	                            this.self.C_STR_EVENT_OPEN_APP_VIEW,
 	                            this.self.C_STR_EVENT_OPEN_GROUP_ADD,
+	                            this.self.C_STR_EVENT_OPEN_GROUP_EDIT,
+	                            this.self.C_STR_EVENT_OPEN_GROUP_DELETE,
 	                            this.self.C_STR_EVENT_OPEN_GROUP_VIEW,
 	                            this.self.C_STR_EVENT_OPEN_USER_ADD,
 	                            this.self.C_STR_EVENT_OPEN_USER_VIEW);
@@ -66,6 +70,10 @@ Ext
 
 	                    this.on(this.self.C_STR_EVENT_OPEN_GROUP_ADD,
 	                            this.openGroupAdd);
+	                    this.on(this.self.C_STR_EVENT_OPEN_GROUP_EDIT,
+	                            this.openGroupEdit);
+	                    this.on(this.self.C_STR_EVENT_OPEN_GROUP_DELETE,
+	                            this.openGroupDelete);
 	                    this.on(this.self.C_STR_EVENT_OPEN_GROUP_VIEW,
 	                            this.openGroupView);
 
@@ -241,7 +249,6 @@ Ext
 		                                console.log("Failed to Delete Object");
 	                                }
 	                            });
-
                     },
                     openGroupView : function()
                     {
@@ -249,9 +256,62 @@ Ext
 	                            desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
 	                            {}, 'darkowl.userManager.group.view.cWindow');
                     },
+                    openGroupEdit : function()
+                    {
+	                    desktop.logger.log("Opening Group Edit.");
+                    },
+                    openGroupDelete : function(str_Group)
+                    {
+	                    desktop.logger.log("Delete - " + str_Group);
+	                    var obj_Connection = Ext.create("Ext.data.Connection");
+
+	                    obj_Connection
+	                            .request(
+	                            {
+	                                url : '../rest/group/' + str_Group,
+	                                method : 'DELETE',
+	                                params :
+	                                {
+		                                "id" : str_Group
+	                                },
+	                                success : function(obj_Response, obj_Arg)
+	                                {
+		                                var obj_JSON = Ext
+		                                        .decode(obj_Response.responseText);
+		                                if (obj_JSON.success)
+		                                {
+			                                userManager.MsgBus
+			                                        .fireEvent(userManager.MsgBus.self.C_STR_EVENT_GROUP_DELETED);
+		                                }
+		                                else
+		                                {
+			                                Ext.MessageBox
+			                                        .alert(
+			                                                "Delete Error",
+			                                                "Failed to delete Application",
+			                                                function()
+			                                                {
+				                                                Console
+				                                                        .log("Failed to Delete Group");
+			                                                });
+		                                }
+	                                },
+	                                failure : function()
+	                                {
+		                                console.log("Failed to Delete Object");
+	                                }
+	                            });
+                    },
                     openGroupAdd : function()
                     {
-	                    desktop.logger.log("Opening Group Add.");
+                    	  desktop.MsgBus
+                          .fireEvent(
+                                  desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+                                  {
+                                      title : "Add Group",
+                                      iconCls : "window-group-add-icon"
+                                  },
+                                  'darkowl.userManager.group.addEdit.cWindow');
                     },
                     openUserView : function()
                     {

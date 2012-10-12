@@ -1,14 +1,14 @@
 Ext
         .define(
-                'darkowl.userManager.application.addEdit.cWindow',
+                'darkowl.userManager.group.addEdit.cWindow',
                 {
                     extend : 'darkowl.desktop.cDesktopWindow',
-                    title : "Add/Edit Application",
+                    title : "Add/Edit Group",
                     requires :
-                    [ 'darkowl.userManager.application.addEdit.cForm'
+                    [ 'darkowl.userManager.group.addEdit.cForm'
                     // 'darkowl.userManager.action.view.cGrid'
                     ],
-                    iconCls : "window-application-edit-icon",
+                    iconCls : "window-group-edit-icon",
                     width : 600,
                     height : 300,
                     shim : false,
@@ -23,7 +23,7 @@ Ext
 	                    var obj_This = this;
 
 	                    this.m_obj_Form = Ext
-	                            .create('darkowl.userManager.application.addEdit.cForm');
+	                            .create('darkowl.userManager.group.addEdit.cForm');
 
 	                    this.callParent();
 
@@ -42,7 +42,7 @@ Ext
 		                    }
 	                    });
                     },
-                    loadAction : function(str_AppID)
+                    loadAction : function(str_GroupID)
                     {
 	                    this.m_obj_Form
 	                            .load(
@@ -51,11 +51,11 @@ Ext
 	                                {
 		                                Accept : "application/json"
 	                                },
-	                                url : "../rest/application/" + str_AppID,
+	                                url : "../rest/group/" + str_GroupID,
 	                                method : "get",
-	                                success : function(obj_Form, obj_App)
+	                                success : function(obj_Form, obj_Group)
 	                                {
-		                                this.m_obj_Form.m_str_AppId = obj_App.result.data.application;
+		                                this.m_obj_Form.m_str_GroupID = obj_Group.result.data.application;
 
 		                                this.hideMask();
 	                                },

@@ -40,6 +40,16 @@ Ext.define('darkowl.userManager.group.view.cGrid',
 	    }, this);
 
 	    this.addDocked(this.m_obj_Pageing);
+
+	    userManager.MsgBus.on(userManager.MsgBus.self.C_STR_EVENT_GROUP_ADDED,
+	            this.refreshData, this);
+	    userManager.MsgBus.on(
+	            userManager.MsgBus.self.C_STR_EVENT_gROUP_DELETED,
+	            this.refreshData, this);
+    },
+    refreshData : function()
+    {
+	    this.store.load();
     }
 
 });
