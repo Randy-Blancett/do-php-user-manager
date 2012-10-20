@@ -36,8 +36,11 @@ Ext
 		                                        tooltip : "Edit Group",
 		                                        handler : function()
 		                                        {
-			                                        startMenu.MsgBus
-			                                                .fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_ADD);
+			                                        this
+			                                                .up("window")
+			                                                .fireEvent(
+			                                                        darkowl.userManager.group.view.cWindow.C_STR_EVENT_EDIT);
+
 		                                        }
 		                                    }));
 	                    }
@@ -52,10 +55,10 @@ Ext
 		                                        tooltip : "Delete Group",
 		                                        handler : function()
 		                                        {
-		                                        	this
-	                                                .up("window")
-	                                                .fireEvent(
-	                                                        darkowl.userManager.group.view.cWindow.C_STR_EVENT_DELETE);
+			                                        this
+			                                                .up("window")
+			                                                .fireEvent(
+			                                                        darkowl.userManager.group.view.cWindow.C_STR_EVENT_DELETE);
 		                                        }
 		                                    }));
 	                    }

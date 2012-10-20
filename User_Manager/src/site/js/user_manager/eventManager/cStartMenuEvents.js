@@ -256,9 +256,24 @@ Ext
 	                            desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
 	                            {}, 'darkowl.userManager.group.view.cWindow');
                     },
-                    openGroupEdit : function()
+                    openGroupEdit : function(str_Group)
                     {
-	                    desktop.logger.log("Opening Group Edit.");
+	                    if (!str_Group)
+	                    {
+		                    this.openGroupAdd();
+	                    }
+	                    else
+	                    {
+		                    desktop.MsgBus
+		                            .fireEvent(
+		                                    desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+		                                    {
+		                                        title : "Edit Group",
+		                                        iconCls : "window-group-edit-icon",
+		                                        m_str_ID : str_Group
+		                                    },
+		                                    'darkowl.userManager.group.addEdit.cWindow');
+	                    }
                     },
                     openGroupDelete : function(str_Group)
                     {
@@ -304,14 +319,12 @@ Ext
                     },
                     openGroupAdd : function()
                     {
-                    	  desktop.MsgBus
-                          .fireEvent(
-                                  desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
-                                  {
-                                      title : "Add Group",
-                                      iconCls : "window-group-add-icon"
-                                  },
-                                  'darkowl.userManager.group.addEdit.cWindow');
+	                    desktop.MsgBus.fireEvent(
+	                            desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+	                            {
+	                                title : "Add Group",
+	                                iconCls : "window-group-add-icon"
+	                            }, 'darkowl.userManager.group.addEdit.cWindow');
                     },
                     openUserView : function()
                     {

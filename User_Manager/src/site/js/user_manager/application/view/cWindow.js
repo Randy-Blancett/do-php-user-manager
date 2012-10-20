@@ -119,7 +119,7 @@ Ext
 				                                    {
 					                                    startMenu.MsgBus
 					                                            .fireEvent(
-					                                                    startMenu.MsgBus.self.C_STR_EVENT_OPEN_APP_DELETE,
+					                                                    startMenu.MsgBus.self.C_STR_EVENT_GROUP_DELETED,
 					                                                    arr_Selection[0]
 					                                                            .get("id"));
 				                                    }

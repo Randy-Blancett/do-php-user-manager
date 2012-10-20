@@ -24,7 +24,7 @@ class cGroup extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
-	
+
 	const C_STR_PARAM_DATA_ID = "id";
 	const C_STR_PARAM_DATA_NAME = "name";
 	const C_STR_PARAM_DATA_COMMENT = "comment";
@@ -83,9 +83,10 @@ class cGroup extends \Tonic\Resource {
 			$obj_DOGroup = dataObject\cGroup::getGroupById($str_ID);
 
 			$obj_Row = new cFormResource();
-				
+
 			$obj_Row->id = $obj_DOGroup->getId();
-			$obj_Row->comment = $obj_DOGroup->getComment();
+			$obj_Row->comment = dataObject\cGroup::getCommentString($obj_DOGroup->getComment());
+				
 			$obj_Row->name = $obj_DOGroup->getName();
 
 			$this->m_obj_Response->addResource($obj_Row);
@@ -141,6 +142,55 @@ class cGroup extends \Tonic\Resource {
 	}
 
 	/**
+	 * Update Group record
+	 * @method PUT
+	 * @param String $str_ID
+	 */
+	public function putJson($str_ID = null)
+	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
+		$this->m_obj_Response = new cFormResponse();
+		$obj_DOGroup = new dataObject\cGroup();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			$obj_OrigData = $obj_DOGroup->getGroupById($str_ID);
+			if(!$obj_OrigData){
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
+				$this->m_obj_Response->setSuccess(false);
+
+				$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be updated.");
+			}
+			else
+			{
+				parse_str($this->request->data,$arr_Data);
+
+				$this->m_obj_Response->addMsg("Updateing Data for group '".$str_ID."'");
+
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_NAME." was changed from ".$obj_OrigData->getName()." to ".$arr_Data[self::C_STR_PARAM_DATA_NAME]);
+				$obj_OrigData->setName($arr_Data[self::C_STR_PARAM_DATA_NAME]);
+
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." was changed from ".dataObject\cAction::getCommentString($obj_OrigData->getComment())." to ".$arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+				$obj_OrigData->setComment($arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+
+				$obj_OrigData->save();
+
+				$this->m_obj_Response->setCode(\Tonic\Response::OK);
+				$this->m_obj_Response->setSuccess(true);
+			}
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+
+	/**
 	 * Create a new Group record
 	 * @method POST
 	 * @accepts application/x-www-form-urlencoded
@@ -190,35 +240,44 @@ class cGroup extends \Tonic\Resource {
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
-	// 	function get($request,$limit) {
-	// 		$obj_Response = new cGroupResponse($request);
+	/**
+	 * Delete Group record
+	 * @method DELETE
+	 * @param String $str_ID
+	 */
+	public function deleteJson($str_ID = null)
+	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
 
-	// 		$obj_DOGroup = dataObject\cGroup::getAllGroups($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+		$this->m_obj_Response = new cFormResponse();
 
-	// 		$arr_Accept = Array();
-	// 		foreach($request->accept as $arr_Object)
-		// 		{
-		// 			$arr_Accept = array_merge($arr_Accept,$arr_Object);
-		// 		}
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_DELETE))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			$obj_DOGroup = new dataObject\cGroup();
+			$obj_OrigData = $obj_DOGroup->getGroupById($str_ID);
+			if(!$obj_OrigData){
+				$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
+				$this->m_obj_Response->setSuccess(false);
 
-		// 		foreach($obj_DOGroup->toArray()as $arr_Object)
-			// 		{
-			// 			$obj_Row = new cGroupResource();
-			// 			foreach($arr_Object as $str_Key => $obj_Data)
-				// 			{
-				// 				$str_Key = lcfirst($str_Key);
+				$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be deleted.");
+			}
+			else
+			{
+				$obj_OrigData->delete();
+					
+				$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+				$this->m_obj_Response->setCode(\Tonic\Response::OK);
+				$this->m_obj_Response->setSuccess(true);
+			}
+		}
 
-				// 				if($obj_Data){
-				// 					$obj_Row->$str_Key = $obj_Data;
-				// 				}
-				// 			}
-				// 			$obj_Response->addResource($obj_Row);
-				// 		}
-
-				// 		$obj_Response->setSuccess(true);
-				// 		$obj_Response->setTotal(dataObject\cGroup::getTotalGroupCount());
-
-				// 		return $obj_Response;
-				// 	}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
 }
 
