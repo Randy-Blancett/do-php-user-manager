@@ -14,7 +14,7 @@ require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cSession.ph
 var g_obj_Config = new Object(); g_obj_Config.m_str_ExtJs4Path = "<?php print(webpage\cInfo::C_STR_EXT4_LIB_PATH); ?>"; 
 g_obj_Config.m_str_UserName = "<?php print(cSession::getUserName())?>"; 
 g_obj_Config.m_str_LogoutURL ="/UserManager/php/Logout_Process.php"; 
-g_obj_Config.m_str_BaseURL ="/User_Manager";
+g_obj_Config.m_str_BaseURL ="/UserManager";
 
 g_obj_Config.m_bool_Add = true;
 g_obj_Config.m_bool_Edit = true;

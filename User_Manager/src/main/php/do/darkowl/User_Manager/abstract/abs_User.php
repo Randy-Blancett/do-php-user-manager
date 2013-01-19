@@ -162,12 +162,15 @@ class abs_User
 
 		$obj_DOUser = cUser::loadFromUserName($str_UserName);
 
-		if(is_string($obj_DOUser->getPassword()))
+		if($obj_DOUser)
 		{
-			if(sha1($str_Password) == $obj_DOUser->getPassword() )
+			if(is_string($obj_DOUser->getPassword()))
 			{
-				cSession::setUserId($obj_DOUser->getId());
-				return true;
+				if(sha1($str_Password) == $obj_DOUser->getPassword() )
+				{
+					cSession::setUserId($obj_DOUser->getId());
+					return true;
+				}
 			}
 		}
 		return false;

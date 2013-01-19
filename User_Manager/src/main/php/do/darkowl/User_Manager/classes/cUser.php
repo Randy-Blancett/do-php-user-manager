@@ -10,7 +10,7 @@ class cUser extends abs_User
 	{
 		parent::__construct($bool_ActiveGod,$int_LoginType);
 
-		self::setLogInUrl("/User_Manager/pages/login.php");
+		self::setLogInUrl("/UserManager/pages/login.php");
 	}
 
 }
