@@ -50,10 +50,8 @@ class cUserData extends \Tonic\Resource {
 	const C_STR_PARAM_DATA_LAST_UPDATE = "lastUpdate";
 	const C_STR_PARAM_DATA_COMMENT = "comment";
 
-
 	private $m_obj_Response = null;
 	private static $m_obj_UserValidator = null;
-
 
 	/**
 	 * Singleton of the User Validator object
@@ -67,6 +65,113 @@ class cUserData extends \Tonic\Resource {
 		}
 		return self::$m_obj_UserValidator;
 	}
+
+
+	/**
+	 * Get Users depending on what is passed in
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getJson($str_ID = null)
+	{
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+		if($str_ID)
+		{
+			return $this->getSingleJson($str_ID);
+		}
+		return $this->getAllJson($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+	}
+
+	/**
+	 * Returns one user in the form Ext-JS Form expects
+	 *
+	 * @param String $str_ID Id of the Action to return
+	 * @return \Tonic\Response
+	 */
+	public function getSingleJson($str_ID)
+	{
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+
+		}
+		else
+		{
+			$obj_DOAction = dataObject\cAction::getActionById($str_ID);
+
+			$obj_Row = new cFormResource();
+
+			$obj_Row->id = $obj_DOAction->getId();
+			$obj_Row->name = $obj_DOAction->getName();
+			$obj_Row->application = $obj_DOAction->getApplication();
+			$obj_Row->comment = dataObject\cAction::getCommentString($obj_DOAction->getComment());
+
+			$this->m_obj_Response->addResource($obj_Row);
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Get a paged List of users
+	 * @param integer $int_Start
+	 * @param integer $int_Limit
+	 * @return \Tonic\Response
+	 */
+	public function getAllJson($int_Start=0,$int_Limit=20)
+	{
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cUserResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+		else
+		{
+			$obj_DOUsers =dataObject\cUser::getAllUsers($int_Start,$int_Limit);
+
+
+			foreach($obj_DOUsers->toArray()as $arr_User)
+			{
+				$obj_Row = new cUserResource();
+				foreach($arr_User as $str_Key => $obj_Data)
+				{
+					$str_Key = lcfirst($str_Key);
+
+					if($obj_Data){
+						// 						switch($str_Key)
+						// 						{
+						// 							case "application":
+						// 								$obj_Row->applicationName = cApplication::convertID($obj_Data);
+						// 								break;
+						// 							case "comment":
+						// 								$obj_Data = dataObject\cAction::getCommentString($obj_Data);
+						// 								break;
+						// 						}
+
+						$obj_Row->$str_Key = $obj_Data;
+					}
+				}
+				$this->m_obj_Response->addResource($obj_Row);
+			}
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setTotal(dataObject\cUser::getTotalUserCount());
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
 
 	function get($request,$limit) {
 		$obj_Response = new cUserResponse($request);

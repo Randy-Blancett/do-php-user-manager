@@ -10,7 +10,7 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
 	const C_STR_USER_MANAGER_ACTION_EDIT = "CFD2CA6C-52D7-4334-ACDF-5460835A6B0C";
 	const C_STR_USER_MANAGER_ACTION_ADD= "55821781-AD26-4D8E-B010-733F4C84FBA2";
-	const C_STR_USER_MANAGER_ACTION_DELETE= "F8EF305B-294D-4241-BD5A-A19449AA6CCF";
+	const C_STR_USER_MANAGER_ACTION_DELETE = "F8EF305B-294D-4241-BD5A-A19449AA6CCF";
 
 	const C_STR_USER_MANAGER_APPLICATION_ADD = "6EF64796-E382-4785-94D2-5FB879F6199C";
 	const C_STR_USER_MANAGER_APPLICATION_EDIT = "958B5780-FED0-41BD-8D7A-81E96C9B8FBB";
@@ -22,7 +22,10 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_GROUP_DELETE = "B3CA458D-08D5-49C1-BE87-D16DE3D2CB99";
 	const C_STR_USER_MANAGER_GROUP_VIEW = "2DBAD148-44D2-469A-95CD-4B8F8C2957F4";
 
-	const C_STR_USER_MANAGER_USER_ADD="853B6E7D-AE84-4361-B077-F0B55516A6AC";
+	const C_STR_USER_MANAGER_USER_ADD = "853B6E7D-AE84-4361-B077-F0B55516A6AC";
+	const C_STR_USER_MANAGER_USER_EDIT = "39AF30C8-9A93-4644-AF91-6632B1794A36";
+	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
+	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -112,7 +115,6 @@ class cAction extends \cTableActions
 	public static function addDefault()
 	{
 		$obj_Action = new cAction();
-
 		$obj_Action->setId("7C7445E0-4E08-11DF-BD82-8264710BE148");
 		$obj_Action->setName("Access User Manager GUI");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
@@ -120,14 +122,13 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("D2338B4D-7642-4FCB-9A8D-8A12F179C2BA");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_VIEW);
 		$obj_Action->setName("View Users");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment  ("Allows users to view users in the system.");
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-
 		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_ADD);
 		$obj_Action->setName("Add Users");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
@@ -135,14 +136,14 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("39AF30C8-9A93-4644-AF91-6632B1794A36");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_EDIT);
 		$obj_Action->setName("Edit Users");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment  ("Allows users to Edit a user already in the system.");
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("E3E84EB2-687B-44B3-AB87-1F073D83C2F0");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_DELETE);
 		$obj_Action->setName("Delete Users");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment  ("Allows users to Delete a user from the system.");
