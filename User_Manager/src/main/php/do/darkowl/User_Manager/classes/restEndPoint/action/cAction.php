@@ -1,7 +1,6 @@
 <?php
 
-use darkowl\user_manager\dataObject\cApplication;
-
+use \darkowl\user_manager\dataObject\cApplication;
 use \darkowl\user_manager\resource\cActionResource;
 use \darkowl\user_manager\response\cActionResponse;
 use \darkowl\user_manager\resource\cFormResource;

@@ -52,5 +52,8 @@ Ext.define('darkowl.userManager.user.addEdit.tabs.cAccountInfo', {
 		this.add(this.m_obj_UserName);
 		this.add(this.m_obj_Password);
 		this.add(this.m_obj_Password_Confirm);
+	},
+	getUserID : function() {
+		return this.m_obj_UserId.getValue();
 	}
 });

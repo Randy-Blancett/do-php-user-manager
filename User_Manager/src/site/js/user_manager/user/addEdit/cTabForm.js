@@ -25,5 +25,8 @@ Ext.define('darkowl.userManager.user.addEdit.cTabForm', {
 		this.add(this.m_obj_Tab_ContactInfo);
 		this.add(this.m_obj_Tab_Stats);
 		this.add(this.m_obj_Tab_Comments);
+	},
+	getUserID : function() {
+		return this.m_obj_Tab_Account.getUserID();
 	}
 });

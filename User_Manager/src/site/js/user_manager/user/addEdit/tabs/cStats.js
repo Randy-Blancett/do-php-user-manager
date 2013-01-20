@@ -11,24 +11,27 @@ Ext.define('darkowl.userManager.user.addEdit.tabs.cStats', {
 	initComponent : function() {
 		var obj_This = this;
 
-		this.m_obj_LastLogin = Ext.create("Ext.form.field.Text", {
-			fieldLabel : "Last Login",
-			name : "lastLogin",
-			inputType : "textfield",
-			readOnly : true,
-			allowBlank : true
+		this.m_obj_Creation = Ext.create("Ext.form.field.Display", {
+			fieldLabel : "Account Created",
+			name : "accountCreated",
+			inputType : "textfield"
 		});
 
-		this.m_obj_LastUpdate = Ext.create("Ext.form.field.Text", {
+		this.m_obj_LastLogin = Ext.create("Ext.form.field.Display", {
+			fieldLabel : "Last Login",
+			name : "lastLogin",
+			inputType : "textfield"
+		});
+
+		this.m_obj_LastUpdate = Ext.create("Ext.form.field.Display", {
 			fieldLabel : "Last Update",
 			name : "lastUpdate",
-			inputType : "textfield",
-			readOnly : true,
-			allowBlank : true
+			inputType : "textfield"
 		});
 
 		this.callParent();
 
+		this.add(this.m_obj_Creation);
 		this.add(this.m_obj_LastLogin);
 		this.add(this.m_obj_LastUpdate);
 	}

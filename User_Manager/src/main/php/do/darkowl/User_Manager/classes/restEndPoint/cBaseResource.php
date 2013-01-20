@@ -72,14 +72,6 @@ class cBaseResource extends \Tonic\Resource {
 			$str_Resources .= '<li>No Resources</li>';
 		}
 
-		// 		$response->body = <<<END
-		// <h1>User Manager Database</h1>
-		// <p>Base resource User Manager Database</p>
-		// <h2>Resources</h2>
-		// END;
-		// 		$response->body .= '<ul>'.$str_Resources.'</ul>';
-
-		// 		return $response;
 
 		return $str_Resources;
 

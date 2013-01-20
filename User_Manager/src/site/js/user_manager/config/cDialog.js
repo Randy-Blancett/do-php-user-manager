@@ -18,6 +18,10 @@ Ext.define('darkowl.userManager.config.cDialog',
         C_STR_GROUP_SAVE_SUCCESS : "Group Successfuly Saved.",
         C_STR_GROUP_DELETE_SUCCESS : "Group Successfuly Deleted.",
         C_STR_GROUP_DELETE_CONFIRM : "Group Successfuly Deleted.",
+        
+        C_STR_USER_SAVE_WAIT : "Saveing Data...",
+        C_STR_USER_SAVE_SUCCESS : "User Successfuly Saved.",
+        C_STR_USER_DELETE_SUCCESS : "User Successfuly Deleted.",
 
         C_STR_ERROR_SELECT_ONE : "You must select an Item.",
         C_STR_ERROR_SELECT_ONLY_ONE : "You must select only one Item.",

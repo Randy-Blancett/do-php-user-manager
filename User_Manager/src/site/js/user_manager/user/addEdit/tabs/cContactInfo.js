@@ -46,6 +46,34 @@ Ext.define('darkowl.userManager.user.addEdit.tabs.cContactInfo', {
 			allowBlank : true
 		});
 
+		this.m_obj_Org = Ext.create("Ext.form.field.Text", {
+			fieldLabel : "Organization",
+			name : "org",
+			inputType : "textfield",
+			allowBlank : true
+		});
+
+		this.m_obj_AssignedOrg = Ext.create("Ext.form.field.Text", {
+			fieldLabel : "Assigned Organization",
+			name : "assignedOrg",
+			inputType : "textfield",
+			allowBlank : true
+		});
+
+		this.m_obj_Location = Ext.create("Ext.form.field.Text", {
+			fieldLabel : "Location",
+			name : "location",
+			inputType : "textfield",
+			allowBlank : true
+		});
+
+		this.m_obj_Suite = Ext.create("Ext.form.field.Text", {
+			fieldLabel : "Suite",
+			name : "suite",
+			inputType : "textfield",
+			allowBlank : true
+		});
+
 		this.callParent();
 
 		this.add(this.m_obj_Phone1);
@@ -53,5 +81,9 @@ Ext.define('darkowl.userManager.user.addEdit.tabs.cContactInfo', {
 		this.add(this.m_obj_Email1);
 		this.add(this.m_obj_Email2);
 		this.add(this.m_obj_Company);
+		this.add(this.m_obj_Org);
+		this.add(this.m_obj_AssignedOrg);
+		this.add(this.m_obj_Location);
+		this.add(this.m_obj_Suite);
 	}
 });

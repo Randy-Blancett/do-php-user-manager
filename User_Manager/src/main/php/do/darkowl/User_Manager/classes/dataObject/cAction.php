@@ -11,16 +11,18 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_ACTION_EDIT = "CFD2CA6C-52D7-4334-ACDF-5460835A6B0C";
 	const C_STR_USER_MANAGER_ACTION_ADD= "55821781-AD26-4D8E-B010-733F4C84FBA2";
 	const C_STR_USER_MANAGER_ACTION_DELETE= "F8EF305B-294D-4241-BD5A-A19449AA6CCF";
-	
+
 	const C_STR_USER_MANAGER_APPLICATION_ADD = "6EF64796-E382-4785-94D2-5FB879F6199C";
 	const C_STR_USER_MANAGER_APPLICATION_EDIT = "958B5780-FED0-41BD-8D7A-81E96C9B8FBB";
 	const C_STR_USER_MANAGER_APPLICATION_DELETE = "46AF898C-AA2E-4BB5-BC11-59FCF3DAAF22";
 	const C_STR_USER_MANAGER_APPLICATION_VIEW = "D173678F-7C65-440C-A8A8-126B7F996CA0";
-	
+
 	const C_STR_USER_MANAGER_GROUP_ADD = "62EAD614-944A-49F9-9033-D087E854D784";
 	const C_STR_USER_MANAGER_GROUP_EDIT = "76B56DBB-22BF-4F2B-AE89-27C50022F361";
 	const C_STR_USER_MANAGER_GROUP_DELETE = "B3CA458D-08D5-49C1-BE87-D16DE3D2CB99";
 	const C_STR_USER_MANAGER_GROUP_VIEW = "2DBAD148-44D2-469A-95CD-4B8F8C2957F4";
+
+	const C_STR_USER_MANAGER_USER_ADD="853B6E7D-AE84-4361-B077-F0B55516A6AC";
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -126,7 +128,7 @@ class cAction extends \cTableActions
 
 		$obj_Action = new cAction();
 
-		$obj_Action->setId("853B6E7D-AE84-4361-B077-F0B55516A6AC");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_ADD);
 		$obj_Action->setName("Add Users");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment  ("Allows users to add users to the system.");
@@ -203,7 +205,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("75079AF6-14E1-42D4-8122-016248106E51");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_ACTION_VIEW);
 		$obj_Action->setName("View Actions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to view actions in the system.");
