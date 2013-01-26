@@ -226,6 +226,11 @@
 	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_go.gif") !important;
 }
 
+.window-user-edit-icon 
+{
+	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_edit.gif") !important;
+}
+
 /*Quick Start Icons*/
 
 .quickstart_logout_icon

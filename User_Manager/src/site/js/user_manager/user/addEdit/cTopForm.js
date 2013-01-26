@@ -1,7 +1,7 @@
 Ext.define('darkowl.userManager.user.addEdit.cTopForm', {
 	extend : 'Ext.form.Panel',
 	layout : 'fit',
-	// frame : true,
+    m_str_UserID : "",
 	border : false,
 	requires : [ 'darkowl.userManager.user.addEdit.cTabForm',
 			'darkowl.userManager.config.cButton' ],

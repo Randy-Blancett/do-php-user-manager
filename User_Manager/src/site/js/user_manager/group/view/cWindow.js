@@ -61,7 +61,6 @@ Ext
 									});
 							break;
 						case 1:
-							console.log("edit " + arr_Selection[0].get("id"));
 							startMenu.MsgBus
 									.fireEvent(
 											startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_EDIT,

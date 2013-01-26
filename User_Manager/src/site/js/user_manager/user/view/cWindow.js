@@ -43,40 +43,30 @@ Ext.define('darkowl.userManager.user.view.cWindow', {
 		this.add(this.m_obj_Grid);
 	},
 	editUser : function() {
-		console.log("Edit User");
-		// var arr_Selection = this.m_obj_Grid.getSelectionModel()
-		// .getSelection();
-		//
-		// switch (arr_Selection.length)
-		// {
-		// case 0:
-		// Ext.Msg
-		// .show(
-		// {
-		// title : 'Invalid Selection?',
-		// msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONE,
-		// buttons : Ext.Msg.OK,
-		// icon : Ext.Msg.ERROR
-		// });
-		// break;
-		// case 1:
-		// console.log("edit "
-		// + arr_Selection[0].get("id"));
-		// startMenu.MsgBus
-		// .fireEvent(
-		// startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_EDIT,
-		// arr_Selection[0].get("id"));
-		// break;
-		// default:
-		// Ext.Msg
-		// .show(
-		// {
-		// title : 'Invalid Selection?',
-		// msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONLY_ONE,
-		// buttons : Ext.Msg.OK,
-		// icon : Ext.Msg.ERROR
-		// });
-		// }
+		var arr_Selection = this.m_obj_Grid.getSelectionModel().getSelection();
+
+		switch (arr_Selection.length) {
+		case 0:
+			Ext.Msg.show({
+				title : 'Invalid Selection?',
+				msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONE,
+				buttons : Ext.Msg.OK,
+				icon : Ext.Msg.ERROR
+			});
+			break;
+		case 1:
+			startMenu.MsgBus.fireEvent(
+					startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_EDIT,
+					arr_Selection[0].get("id"));
+			break;
+		default:
+			Ext.Msg.show({
+				title : 'Invalid Selection?',
+				msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONLY_ONE,
+				buttons : Ext.Msg.OK,
+				icon : Ext.Msg.ERROR
+			});
+		}
 	},
 	deleteUser : function() {
 		// var arr_Selection = this.m_obj_Grid.getSelectionModel()

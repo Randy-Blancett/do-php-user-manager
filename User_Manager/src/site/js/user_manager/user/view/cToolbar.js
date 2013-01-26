@@ -23,14 +23,19 @@ Ext
 						}
 
 						if (g_obj_Config.m_bool_Edit) {
-							this.add(new Ext.button.Button({
-								text : "Edit",
-								iconCls : 'toolbar-user-edit-icon',
-								tooltip : "Edit User",
-								handler : function() {
-									this.up("window").fireEvent("doedit");
-								}
-							}));
+							this
+									.add(new Ext.button.Button(
+											{
+												text : "Edit",
+												iconCls : 'toolbar-user-edit-icon',
+												tooltip : "Edit User",
+												handler : function() {
+													this
+															.up("window")
+															.fireEvent(
+																	darkowl.userManager.user.view.cWindow.C_STR_EVENT_EDIT);
+												}
+											}));
 						}
 
 						if (g_obj_Config.m_bool_Delete) {

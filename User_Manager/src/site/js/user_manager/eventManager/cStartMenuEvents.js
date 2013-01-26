@@ -22,6 +22,7 @@ Ext
 						C_STR_EVENT_OPEN_GROUP_DELETE : "doopengroupdelete",
 						C_STR_EVENT_OPEN_GROUP_VIEW : "doopengroupview",
 						C_STR_EVENT_OPEN_USER_ADD : "doopenuseradd",
+						C_STR_EVENT_OPEN_USER_EDIT : "doopenuseredit",
 						C_STR_EVENT_OPEN_USER_VIEW : "doopenuserview"
 					},
 					constructor : function(config) {
@@ -43,6 +44,7 @@ Ext
 								this.self.C_STR_EVENT_OPEN_GROUP_DELETE,
 								this.self.C_STR_EVENT_OPEN_GROUP_VIEW,
 								this.self.C_STR_EVENT_OPEN_USER_ADD,
+								this.self.C_STR_EVENT_OPEN_USER_EDIT,
 								this.self.C_STR_EVENT_OPEN_USER_VIEW);
 
 						this.on(this.self.C_STR_EVENT_OPEN_ACTION_ADD,
@@ -74,6 +76,8 @@ Ext
 
 						this.on(this.self.C_STR_EVENT_OPEN_USER_ADD,
 								this.openUserAdd);
+						this.on(this.self.C_STR_EVENT_OPEN_USER_EDIT,
+								this.openUserEdit);
 						this.on(this.self.C_STR_EVENT_OPEN_USER_VIEW,
 								this.openUserView);
 					},
@@ -284,6 +288,14 @@ Ext
 								desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW, {
 									title : "Add User",
 									iconCls : "window-user-add-icon"
+								}, 'darkowl.userManager.user.addEdit.cWindow');
+					},
+					openUserEdit : function(str_UserID) {
+						desktop.MsgBus.fireEvent(
+								desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW, {
+									title : "Edit User",
+									iconCls : "window-user-edit-icon",
+									m_str_ID : str_UserID
 								}, 'darkowl.userManager.user.addEdit.cWindow');
 					}
 				});

@@ -34,6 +34,20 @@ class cUser extends \cTableUsers
 
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
+	
+	public static function getCommentString($obj_Resource)
+	{
+		if (is_resource($obj_Resource)) {
+			$str_Content ="";
+			while(!feof($obj_Resource)){
+				$str_Content.= fread($obj_Resource, 1024);
+			}
+			rewind($obj_Resource);
+			return $str_Content;
+		} else {
+			return $obj_Resource;
+		}
+	}
 
 	/**
 	 * @param unknown_type $str_UserName
@@ -52,6 +66,18 @@ class cUser extends \cTableUsers
 			$obj_Return = $obj_Return->limit($int_PerPage);
 		}
 		return $obj_Return = $obj_Return->offset($int_Start)->find();
+	}
+
+	/**
+	 * Get the information about the User from an ID
+	 * @param string $str_ID
+	 * @return number
+	 */
+	public static function getUserById($str_ID)
+	{
+		$obj_Return = self::getQueryObj();
+
+		return $obj_Return->findPk($str_ID);
 	}
 
 

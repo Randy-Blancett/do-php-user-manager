@@ -28,6 +28,7 @@ class cUserData extends \Tonic\Resource {
 
 	const C_STR_PARAM_DATA_ID = "userID";
 	const C_STR_PARAM_DATA_AFFILIATION = "affiliation";
+	const C_STR_PARAM_DATA_ACCOUNT_CREATED = "accountCreated";
 	const C_STR_PARAM_DATA_USER_NAME = "userName";
 	const C_STR_PARAM_DATA_PASSWORD = "password";
 	const C_STR_PARAM_DATA_PASSWORD_CONFIRM = "passwordConfirm";
@@ -96,7 +97,7 @@ class cUserData extends \Tonic\Resource {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -104,14 +105,82 @@ class cUserData extends \Tonic\Resource {
 		}
 		else
 		{
-			$obj_DOAction = dataObject\cAction::getActionById($str_ID);
+			$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
 			$obj_Row = new cFormResource();
 
-			$obj_Row->id = $obj_DOAction->getId();
-			$obj_Row->name = $obj_DOAction->getName();
-			$obj_Row->application = $obj_DOAction->getApplication();
-			$obj_Row->comment = dataObject\cAction::getCommentString($obj_DOAction->getComment());
+			$str_Key = self::C_STR_PARAM_DATA_ID;
+			$obj_Row->$str_Key = $obj_DOUser->getId();
+
+			$str_Key = self::C_STR_PARAM_DATA_AFFILIATION;
+			$obj_Row->$str_Key = $obj_DOUser->getAffiliation();
+
+			$str_Key = self::C_STR_PARAM_DATA_USER_NAME;
+			$obj_Row->$str_Key = $obj_DOUser->getuserName();
+
+			$str_Key = self::C_STR_PARAM_DATA_USER_NAME;
+			$obj_Row->$str_Key = $obj_DOUser->getuserName();
+
+			$str_Key = self::C_STR_PARAM_DATA_PERSONAL_TITLE;
+			$obj_Row->$str_Key = $obj_DOUser->getpersonalTitle();
+
+			$str_Key = self::C_STR_PARAM_DATA_PROFESONAL_TITLE;
+			$obj_Row->$str_Key = $obj_DOUser->getprofessionalTitle();
+
+			$str_Key = self::C_STR_PARAM_DATA_F_NAME;
+			$obj_Row->$str_Key = $obj_DOUser->getfirstName();
+
+			$str_Key = self::C_STR_PARAM_DATA_M_NAME;
+			$obj_Row->$str_Key = $obj_DOUser->getmiddleName();
+
+			$str_Key = self::C_STR_PARAM_DATA_L_NAME;
+			$obj_Row->$str_Key = $obj_DOUser->getlastName();
+
+			$str_Key = self::C_STR_PARAM_DATA_PHONE_1;
+			$obj_Row->$str_Key = $obj_DOUser->getphoneNum1();
+
+			$str_Key = self::C_STR_PARAM_DATA_PHONE_2;
+			$obj_Row->$str_Key = $obj_DOUser->getphoneNum2();
+
+			$str_Key = self::C_STR_PARAM_DATA_EMAIL_1;
+			$obj_Row->$str_Key = $obj_DOUser->getEmail1();
+
+			$str_Key = self::C_STR_PARAM_DATA_EMAIL_2;
+			$obj_Row->$str_Key = $obj_DOUser->getEmail2();
+
+			$str_Key = self::C_STR_PARAM_DATA_LOCATION;
+			$obj_Row->$str_Key = $obj_DOUser->getLocation();
+
+			$str_Key = self::C_STR_PARAM_DATA_SUITE;
+			$obj_Row->$str_Key = $obj_DOUser->getSuite();
+
+			$str_Key = self::C_STR_PARAM_DATA_TYPE;
+			$obj_Row->$str_Key = $obj_DOUser->getType();
+
+			$str_Key = self::C_STR_PARAM_DATA_COMPANY;
+			$obj_Row->$str_Key = $obj_DOUser->getCompany();
+
+			$str_Key = self::C_STR_PARAM_DATA_ASSIGNED_ORG;
+			$obj_Row->$str_Key = $obj_DOUser->getassignedOrg();
+
+			$str_Key = self::C_STR_PARAM_DATA_ORG;
+			$obj_Row->$str_Key = $obj_DOUser->getOrg();
+
+			$str_Key = self::C_STR_PARAM_DATA_LAST_LOGIN;
+			$obj_Row->$str_Key = $obj_DOUser->getlastLogin();
+
+			$str_Key = self::C_STR_PARAM_DATA_LAST_UPDATE;
+			$obj_Row->$str_Key = $obj_DOUser->getlastUpdated();
+
+			$str_Key = self::C_STR_PARAM_DATA_ACCOUNT_CREATED;
+			$obj_Row->$str_Key = $obj_DOUser->getaccountCreation();
+
+			$str_Key = self::C_STR_PARAM_DATA_COMMENT;
+			$obj_Row->$str_Key = dataObject\cUser::getCommentString($obj_DOUser->getComment());
+
+
+			// 	const C_STR_PARAM_DATA_COMMENT = "comment";
+			// 			$obj_Row->comment = dataObject\cAction::getCommentString($obj_DOAction->getComment());
 
 			$this->m_obj_Response->addResource($obj_Row);
 			$this->m_obj_Response->setSuccess(true);
@@ -149,17 +218,24 @@ class cUserData extends \Tonic\Resource {
 					$str_Key = lcfirst($str_Key);
 
 					if($obj_Data){
-						// 						switch($str_Key)
-						// 						{
-						// 							case "application":
-						// 								$obj_Row->applicationName = cApplication::convertID($obj_Data);
-						// 								break;
-						// 							case "comment":
-						// 								$obj_Data = dataObject\cAction::getCommentString($obj_Data);
-						// 								break;
-						// 						}
-
-						$obj_Row->$str_Key = $obj_Data;
+						switch($str_Key)
+						{
+							case "password":
+								if($obj_Data)
+								{
+									$obj_Row->$str_Key = "true";
+								}else
+								{
+									$obj_Row->$str_Key = "false";
+								}
+								break;
+							case "comment":
+								$obj_Data = dataObject\cUser::getCommentString($obj_Data);
+								break;
+							default:
+								$obj_Row->$str_Key = $obj_Data;
+								break;
+						}
 					}
 				}
 				$this->m_obj_Response->addResource($obj_Row);
@@ -172,39 +248,157 @@ class cUserData extends \Tonic\Resource {
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
+	/**
+	 * Update User Record
+	 * @method PUT
+	 * @accepts application/x-www-form-urlencoded
+	 * @provides application/json
+	 * @return \Tonic\Response
+	 */
+	public function putJson()
+	{
+		$bool_Fail = false;
 
-	function get($request,$limit) {
-		$obj_Response = new cUserResponse($request);
+		parse_str($this->request->data,$arr_Data);
 
-		$obj_DOUser = dataObject\cUser::getAllUsers($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+		$str_UserName = $arr_Data[self::C_STR_PARAM_DATA_USER_NAME];
+		$str_Password = $arr_Data[self::C_STR_PARAM_DATA_PASSWORD];
+		$str_ID = $arr_Data[self::C_STR_PARAM_DATA_ID];
+		$str_PasswordConfirm = $arr_Data[self::C_STR_PARAM_DATA_PASSWORD_CONFIRM];
 
-		$arr_Accept = Array();
-		foreach($request->accept as $arr_Object)
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_EDIT))
 		{
-			$arr_Accept = array_merge($arr_Accept,$arr_Object);
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
 		}
 
-		foreach($obj_DOUser->toArray()as $arr_Object)
+		if(!$bool_Fail&&!$str_ID)
 		{
-			$obj_Row = new cUserResource();
-			foreach($arr_Object as $str_Key => $obj_Data)
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID." must be set for an update.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail&&!$str_UserName)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME." can not be empty.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail && ($str_Password ||$str_PasswordConfirm))
+		{
+			if(!$bool_Fail && ($str_Password!==$str_PasswordConfirm))
 			{
-				$str_Key = lcfirst($str_Key);
-
-				if($obj_Data){
-					if(strtolower($str_Key) != "password")
-					{
-						$obj_Row->$str_Key = $obj_Data;
-					}
-				}
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_PASSWORD." and ".self::C_STR_PARAM_DATA_PASSWORD_CONFIRM." must match.");
+				$bool_Fail = true;
 			}
-			$obj_Response->addResource($obj_Row);
 		}
 
-		$obj_Response->setSuccess(true);
-		$obj_Response->setTotal(dataObject\cUser::getTotalUserCount());
+		$obj_DOUser = new dataObject\cUser();
 
-		return $obj_Response;
+		$obj_OrigData = $obj_DOUser->getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_OrigData)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError(self::$obj_OrigData." must be an existing record.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			$obj_UpdateDate = new DateTime();
+
+			$this->m_obj_Response->addMsg("Updateing Data for User '".$str_ID."'");
+
+			if($obj_OrigData->getuserName() !== $str_UserName){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_USER_NAME." was changed from ".$obj_OrigData->getuserName() ." to ".$str_UserName);
+				$obj_OrigData->setuserName($str_UserName);
+			}
+
+// 			if($str_Password)
+// 			{
+// 				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD." changed.");
+// 				$obj_OrigData->setPwd($arr_Data[self::C_STR_PARAM_DATA_PASSWORD]);
+// 			}
+
+			if($obj_OrigData->getfirstName() !== $arr_Data[self::C_STR_PARAM_DATA_F_NAME]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME." was changed from ".$obj_OrigData->getfirstName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
+				$obj_OrigData->setuserName($arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
+			}
+
+
+
+
+			// 			$obj_DOUser->setmiddleName($_POST[self::C_STR_PARAM_DATA_M_NAME]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME." set to ".$obj_DOUser->getmiddleName());
+
+			// 			$obj_DOUser->setlastName($_POST[self::C_STR_PARAM_DATA_L_NAME]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME." set to ".$obj_DOUser->getlastName());
+
+			// 			$obj_DOUser->setpersonalTitle($_POST[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE." set to ".$obj_DOUser->getpersonalTitle());
+
+			// 			$obj_DOUser->setprofessionalTitle($_POST[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE." set to ".$obj_DOUser->getprofessionalTitle());
+
+			// 			$obj_DOUser->setphoneNum1($_POST[self::C_STR_PARAM_DATA_PHONE_1]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1." set to ".$obj_DOUser->getphoneNum1());
+
+			// 			$obj_DOUser->setphoneNum2($_POST[self::C_STR_PARAM_DATA_PHONE_2]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2." set to ".$obj_DOUser->getphoneNum2());
+
+			// 			$obj_DOUser->setEmail1($_POST[self::C_STR_PARAM_DATA_EMAIL_1]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1." set to ".$obj_DOUser->getEmail1());
+
+			// 			$obj_DOUser->setEmail2($_POST[self::C_STR_PARAM_DATA_EMAIL_2]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2." set to ".$obj_DOUser->getEmail2());
+
+			// 			$obj_DOUser->setassignedOrg($_POST[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG." set to ".$obj_DOUser->getassignedOrg());
+
+			// 			$obj_DOUser->setOrg($_POST[self::C_STR_PARAM_DATA_ORG]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG." set to ".$obj_DOUser->getOrg());
+
+			// 			$obj_DOUser->setCompany($_POST[self::C_STR_PARAM_DATA_COMPANY]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY." set to ".$obj_DOUser->getCompany());
+
+			// 			$obj_DOUser->setAffiliation($_POST[self::C_STR_PARAM_DATA_AFFILIATION]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION." set to ".$obj_DOUser->getAffiliation());
+
+			// 			$obj_DOUser->setType($_POST[self::C_STR_PARAM_DATA_TYPE]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE." set to ".$obj_DOUser->getType());
+
+			// 			$obj_DOUser->setLocation($_POST[self::C_STR_PARAM_DATA_LOCATION]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION." set to ".$obj_DOUser->getLocation());
+
+			// 			$obj_DOUser->setSuite($_POST[self::C_STR_PARAM_DATA_SUITE]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE." set to ".$obj_DOUser->getSuite());
+
+			// 			$obj_DOUser->setComment($_POST[self::C_STR_PARAM_DATA_COMMENT]);
+			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." set to ".$obj_DOUser->getComment());
+
+			// 			$obj_DOUser->setaccountCreation($obj_CreationDate);
+			// 			$this->m_obj_Response->addMsg("Creation Date set to ".$obj_CreationDate->format('Y-m-d H:i:s'));
+
+			// 			$obj_DOUser->save();
+
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->setSuccess(true);
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 
 	/**
@@ -212,6 +406,7 @@ class cUserData extends \Tonic\Resource {
 	 * @method POST
 	 * @accepts application/x-www-form-urlencoded
 	 * @provides application/json
+	 * @return \Tonic\Response
 	 */
 	public function postJson() {
 		$bool_Fail = false;
@@ -246,7 +441,7 @@ class cUserData extends \Tonic\Resource {
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID." can not be set with a post.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME." can not be empty.");
 			$bool_Fail = true;
 		}
 
