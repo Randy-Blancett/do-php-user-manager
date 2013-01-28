@@ -43,9 +43,6 @@ Ext.define('darkowl.userManager.user.addEdit.cWindow', {
 			url : "../rest/user/" + str_ID,
 			method : "get",
 			success : function(obj_Form, obj_User) {
-				// this.m_obj_Form.m_str_GroupID =
-				// obj_Group.result.data.application;
-
 				this.hideMask();
 			},
 			failure : function() {

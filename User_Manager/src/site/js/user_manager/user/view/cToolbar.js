@@ -46,8 +46,10 @@ Ext
 												iconCls : 'toolbar-user-delete-icon',
 												tooltip : "Delete User",
 												handler : function() {
-													startMenu.MsgBus
-															.fireEvent(startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_ADD);
+													this
+															.up("window")
+															.fireEvent(
+																	darkowl.userManager.user.view.cWindow.C_STR_EVENT_DELETE);
 												}
 											}));
 						}

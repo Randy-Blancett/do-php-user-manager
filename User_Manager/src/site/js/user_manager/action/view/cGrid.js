@@ -75,5 +75,4 @@ Ext
                     {
 	                    this.store.load();
                     }
-
                 });

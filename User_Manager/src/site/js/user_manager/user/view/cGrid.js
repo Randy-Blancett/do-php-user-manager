@@ -24,6 +24,11 @@ Ext.define('darkowl.userManager.user.view.cGrid', {
 
 		this.callParent();
 
+		userManager.MsgBus.on(userManager.MsgBus.self.C_STR_EVENT_USER_ADDED,
+				this.refreshData, this);
+		userManager.MsgBus.on(userManager.MsgBus.self.C_STR_EVENT_USER_DELETED,
+				this.refreshData, this);
+
 		this.on("beforeload", function() {
 			this.body.mask('Loading', 'x-mask-loading');
 		}, this);
@@ -38,6 +43,8 @@ Ext.define('darkowl.userManager.user.view.cGrid', {
 		});
 
 		this.addDocked(this.m_obj_Pageing);
+	},
+	refreshData : function() {
+		this.store.load();
 	}
-
 });

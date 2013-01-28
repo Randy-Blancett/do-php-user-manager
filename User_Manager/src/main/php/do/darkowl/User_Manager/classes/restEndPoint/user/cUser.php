@@ -14,13 +14,31 @@ require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
 
+
+class cUserDataBase extends \Tonic\Resource {
+	private static $m_obj_UserValidator = null;
+
+	/**
+	 * Singleton of the User Validator object
+	 * @return cUser
+	 */
+	protected static function getUserValidator()
+	{
+		if(!self::$m_obj_UserValidator)
+		{
+			self::$m_obj_UserValidator = new \darkowl\user_manager\cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
+		}
+		return self::$m_obj_UserValidator;
+	}
+}
+
 /**
  * Basic Resource List
  * @namespace User_Manager
  * @uri /user
  * @uri /user/{id}
  */
-class cUserData extends \Tonic\Resource {
+class cUserData extends cUserDataBase {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
@@ -52,20 +70,7 @@ class cUserData extends \Tonic\Resource {
 	const C_STR_PARAM_DATA_COMMENT = "comment";
 
 	private $m_obj_Response = null;
-	private static $m_obj_UserValidator = null;
 
-	/**
-	 * Singleton of the User Validator object
-	 * @return cUser
-	 */
-	private static function getUserValidator()
-	{
-		if(!self::$m_obj_UserValidator)
-		{
-			self::$m_obj_UserValidator = new \darkowl\user_manager\cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
-		}
-		return self::$m_obj_UserValidator;
-	}
 
 
 	/**
@@ -328,72 +333,101 @@ class cUserData extends \Tonic\Resource {
 				$obj_OrigData->setuserName($str_UserName);
 			}
 
-// 			if($str_Password)
-// 			{
-// 				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD." changed.");
-// 				$obj_OrigData->setPwd($arr_Data[self::C_STR_PARAM_DATA_PASSWORD]);
-// 			}
+			if($str_Password)
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD." changed.");
+				$obj_OrigData->setPassword(sha1($arr_Data[self::C_STR_PARAM_DATA_PASSWORD]));
+			}
 
 			if($obj_OrigData->getfirstName() !== $arr_Data[self::C_STR_PARAM_DATA_F_NAME]){
 				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME." was changed from ".$obj_OrigData->getfirstName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
-				$obj_OrigData->setuserName($arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
+				$obj_OrigData->setfirstName($arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
 			}
 
+			if($obj_OrigData->getmiddleName() !== $arr_Data[self::C_STR_PARAM_DATA_M_NAME]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME." was changed from ".$obj_OrigData->getmiddleName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_M_NAME]);
+				$obj_OrigData->setmiddleName($arr_Data[self::C_STR_PARAM_DATA_M_NAME]);
+			}
 
+			if($obj_OrigData->getlastName() !== $arr_Data[self::C_STR_PARAM_DATA_L_NAME]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME." was changed from ".$obj_OrigData->getlastName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_L_NAME]);
+				$obj_OrigData->setlastName($arr_Data[self::C_STR_PARAM_DATA_L_NAME]);
+			}
 
+			if($obj_OrigData->getpersonalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE." was changed from ".$obj_OrigData->getpersonalTitle() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
+				$obj_OrigData->setpersonalTitle($arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
+			}
 
-			// 			$obj_DOUser->setmiddleName($_POST[self::C_STR_PARAM_DATA_M_NAME]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME." set to ".$obj_DOUser->getmiddleName());
+			if($obj_OrigData->getprofessionalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE." was changed from ".$obj_OrigData->getprofessionalTitle() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
+				$obj_OrigData->setprofessionalTitle($arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
+			}
 
-			// 			$obj_DOUser->setlastName($_POST[self::C_STR_PARAM_DATA_L_NAME]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME." set to ".$obj_DOUser->getlastName());
+			if($obj_OrigData->getphoneNum1() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_1]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1." was changed from ".$obj_OrigData->getphoneNum1() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PHONE_1]);
+				$obj_OrigData->setphoneNum1($arr_Data[self::C_STR_PARAM_DATA_PHONE_1]);
+			}
 
-			// 			$obj_DOUser->setpersonalTitle($_POST[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE." set to ".$obj_DOUser->getpersonalTitle());
+			if($obj_OrigData->getphoneNum2() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_2]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2." was changed from ".$obj_OrigData->getphoneNum2() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PHONE_2]);
+				$obj_OrigData->setphoneNum2($arr_Data[self::C_STR_PARAM_DATA_PHONE_2]);
+			}
 
-			// 			$obj_DOUser->setprofessionalTitle($_POST[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE." set to ".$obj_DOUser->getprofessionalTitle());
+			if($obj_OrigData->getEmail1() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1." was changed from ".$obj_OrigData->getEmail1() ." to ".$arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]);
+				$obj_OrigData->setEmail1($arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]);
+			}
 
-			// 			$obj_DOUser->setphoneNum1($_POST[self::C_STR_PARAM_DATA_PHONE_1]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1." set to ".$obj_DOUser->getphoneNum1());
+			if($obj_OrigData->getEmail2() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2." was changed from ".$obj_OrigData->getEmail2() ." to ".$arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]);
+				$obj_OrigData->setEmail2($arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]);
+			}
 
-			// 			$obj_DOUser->setphoneNum2($_POST[self::C_STR_PARAM_DATA_PHONE_2]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2." set to ".$obj_DOUser->getphoneNum2());
+			if($obj_OrigData->getassignedOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG." was changed from ".$obj_OrigData->getassignedOrg() ." to ".$arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
+				$obj_OrigData->setassignedOrg($arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
+			}
 
-			// 			$obj_DOUser->setEmail1($_POST[self::C_STR_PARAM_DATA_EMAIL_1]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1." set to ".$obj_DOUser->getEmail1());
+			if($obj_OrigData->getOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ORG]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG." was changed from ".$obj_OrigData->getOrg() ." to ".$arr_Data[self::C_STR_PARAM_DATA_ORG]);
+				$obj_OrigData->setOrg($arr_Data[self::C_STR_PARAM_DATA_ORG]);
+			}
 
-			// 			$obj_DOUser->setEmail2($_POST[self::C_STR_PARAM_DATA_EMAIL_2]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2." set to ".$obj_DOUser->getEmail2());
+			if($obj_OrigData->getCompany() !== $arr_Data[self::C_STR_PARAM_DATA_COMPANY]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY." was changed from ".$obj_OrigData->getCompany() ." to ".$arr_Data[self::C_STR_PARAM_DATA_COMPANY]);
+				$obj_OrigData->setCompany($arr_Data[self::C_STR_PARAM_DATA_COMPANY]);
+			}
 
-			// 			$obj_DOUser->setassignedOrg($_POST[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG." set to ".$obj_DOUser->getassignedOrg());
+			if($obj_OrigData->getAffiliation() !== $arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION." was changed from ".$obj_OrigData->getAffiliation() ." to ".$arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]);
+				$obj_OrigData->setAffiliation($arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]);
+			}
 
-			// 			$obj_DOUser->setOrg($_POST[self::C_STR_PARAM_DATA_ORG]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG." set to ".$obj_DOUser->getOrg());
+			if($obj_OrigData->getType() !== $arr_Data[self::C_STR_PARAM_DATA_TYPE]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE." was changed from ".$obj_OrigData->getType() ." to ".$arr_Data[self::C_STR_PARAM_DATA_TYPE]);
+				$obj_OrigData->setType($arr_Data[self::C_STR_PARAM_DATA_TYPE]);
+			}
 
-			// 			$obj_DOUser->setCompany($_POST[self::C_STR_PARAM_DATA_COMPANY]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY." set to ".$obj_DOUser->getCompany());
+			if($obj_OrigData->getLocation() !== $arr_Data[self::C_STR_PARAM_DATA_LOCATION]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION." was changed from ".$obj_OrigData->getLocation() ." to ".$arr_Data[self::C_STR_PARAM_DATA_LOCATION]);
+				$obj_OrigData->setLocation($arr_Data[self::C_STR_PARAM_DATA_LOCATION]);
+			}
 
-			// 			$obj_DOUser->setAffiliation($_POST[self::C_STR_PARAM_DATA_AFFILIATION]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION." set to ".$obj_DOUser->getAffiliation());
+			if($obj_OrigData->getSuite() !== $arr_Data[self::C_STR_PARAM_DATA_SUITE]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE." was changed from ".$obj_OrigData->getSuite() ." to ".$arr_Data[self::C_STR_PARAM_DATA_SUITE]);
+				$obj_OrigData->setSuite($arr_Data[self::C_STR_PARAM_DATA_SUITE]);
+			}
 
-			// 			$obj_DOUser->setType($_POST[self::C_STR_PARAM_DATA_TYPE]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE." set to ".$obj_DOUser->getType());
+			if($obj_OrigData->getComment() !== $arr_Data[self::C_STR_PARAM_DATA_COMMENT]){
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." was changed from ".$obj_Data = dataObject\cUser::getCommentString($obj_OrigData->getComment()) ." to ".$arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+				$obj_OrigData->setComment($arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+			}
 
-			// 			$obj_DOUser->setLocation($_POST[self::C_STR_PARAM_DATA_LOCATION]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION." set to ".$obj_DOUser->getLocation());
+			$obj_OrigData->setlastUpdated($obj_UpdateDate);
+			$this->m_obj_Response->addMsg("Update Date set to ".$obj_UpdateDate->format('Y-m-d H:i:s'));
 
-			// 			$obj_DOUser->setSuite($_POST[self::C_STR_PARAM_DATA_SUITE]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE." set to ".$obj_DOUser->getSuite());
-
-			// 			$obj_DOUser->setComment($_POST[self::C_STR_PARAM_DATA_COMMENT]);
-			// 			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." set to ".$obj_DOUser->getComment());
-
-			// 			$obj_DOUser->setaccountCreation($obj_CreationDate);
-			// 			$this->m_obj_Response->addMsg("Creation Date set to ".$obj_CreationDate->format('Y-m-d H:i:s'));
-
-			// 			$obj_DOUser->save();
+			$obj_OrigData->save();
 
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
 			$this->m_obj_Response->setSuccess(true);
@@ -540,5 +574,150 @@ class cUserData extends \Tonic\Resource {
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
+
+	/**
+	 * Delete User record
+	 * @method DELETE
+	 * @param String $str_ID
+	 */
+	public function deleteJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$obj_User->require_Login(true);
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_DELETE))
+		{
+			$bool_Fail = true;
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+		}
+
+		$obj_DOUser = new dataObject\cUser();
+
+		$obj_OrigData = $obj_DOUser->getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_OrigData)
+		{
+			$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
+			$this->m_obj_Response->setSuccess(false);
+
+			$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be deleted.");
+
+		}
+
+		if(!$bool_Fail)
+		{
+			$obj_OrigData->delete();
+
+			$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+			$this->m_obj_Response->addMsg("Need to Clean out Keybox");
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
 }
 
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /user/{id}/groups/available
+ */
+class cUserGroupAvail extends cUserDataBase {/**
+	* Get available groups for the given user
+	* @method GET
+	* @provides application/json
+	* @param String $str_ID
+	* @return \Tonic\Response
+	*/
+	public function getAvailGroupsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+
+		if(!$bool_Fail){
+			$obj_Row = new cFormResource();
+			$obj_Row->test = "Avail Test";
+
+			$this->m_obj_Response->addResource($obj_Row);
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /user/{id}/groups/current
+ */
+class cUserGroupCurrent extends cUserDataBase {
+	/**
+	 * Get available groups for the given user
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getCurGroupsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+
+		if(!$bool_Fail){
+			$obj_Row = new cFormResource();
+			$obj_Row->test = "Current Test";
+
+			$this->m_obj_Response->addResource($obj_Row);
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}

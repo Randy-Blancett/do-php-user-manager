@@ -23,6 +23,7 @@ Ext
 						C_STR_EVENT_OPEN_GROUP_VIEW : "doopengroupview",
 						C_STR_EVENT_OPEN_USER_ADD : "doopenuseradd",
 						C_STR_EVENT_OPEN_USER_EDIT : "doopenuseredit",
+						C_STR_EVENT_OPEN_USER_DELETE : "doopenuserdelete",
 						C_STR_EVENT_OPEN_USER_VIEW : "doopenuserview"
 					},
 					constructor : function(config) {
@@ -45,6 +46,7 @@ Ext
 								this.self.C_STR_EVENT_OPEN_GROUP_VIEW,
 								this.self.C_STR_EVENT_OPEN_USER_ADD,
 								this.self.C_STR_EVENT_OPEN_USER_EDIT,
+								this.self.C_STR_EVENT_OPEN_USER_DELETE,
 								this.self.C_STR_EVENT_OPEN_USER_VIEW);
 
 						this.on(this.self.C_STR_EVENT_OPEN_ACTION_ADD,
@@ -78,8 +80,11 @@ Ext
 								this.openUserAdd);
 						this.on(this.self.C_STR_EVENT_OPEN_USER_EDIT,
 								this.openUserEdit);
+						this.on(this.self.C_STR_EVENT_OPEN_USER_DELETE,
+								this.openUserDelete);
 						this.on(this.self.C_STR_EVENT_OPEN_USER_VIEW,
 								this.openUserView);
+
 					},
 					fireEvent : function() {
 						// desktop.logger.log(arguments);
@@ -289,6 +294,36 @@ Ext
 									title : "Add User",
 									iconCls : "window-user-add-icon"
 								}, 'darkowl.userManager.user.addEdit.cWindow');
+					},
+					openUserDelete : function(str_UserID) {
+						desktop.logger.log("Delete - " + str_UserID);
+						var obj_Connection = Ext.create("Ext.data.Connection");
+
+						obj_Connection
+								.request({
+									url : '../rest/user/' + str_UserID,
+									method : 'DELETE',
+									success : function(obj_Response, obj_Arg) {
+										var obj_JSON = Ext
+												.decode(obj_Response.responseText);
+										if (obj_JSON.success) {
+											userManager.MsgBus
+													.fireEvent(userManager.MsgBus.self.C_STR_EVENT_USER_DELETED);
+										} else {
+											Ext.MessageBox
+													.alert(
+															"Delete Error",
+															"Failed to delete User",
+															function() {
+																Console
+																		.log("Failed to Delete User");
+															});
+										}
+									},
+									failure : function() {
+										console.log("Failed to Delete Object");
+									}
+								});
 					},
 					openUserEdit : function(str_UserID) {
 						desktop.MsgBus.fireEvent(

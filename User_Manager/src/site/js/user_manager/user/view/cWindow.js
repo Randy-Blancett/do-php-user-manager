@@ -69,52 +69,29 @@ Ext.define('darkowl.userManager.user.view.cWindow', {
 		}
 	},
 	deleteUser : function() {
-		// var arr_Selection = this.m_obj_Grid.getSelectionModel()
-		// .getSelection();
-		//
-		// switch (arr_Selection.length)
-		// {
-		// case 0:
-		// Ext.Msg
-		// .show(
-		// {
-		// title : 'Invalid Selection',
-		// msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONE,
-		// buttons : Ext.Msg.OK,
-		// icon : Ext.Msg.ERROR
-		// });
-		// break;
-		// case 1:
-		// console.log(arr_Selection[0]);
-		// Ext.MessageBox
-		// .confirm(
-		// userManager.dialog.self.C_STR_DIALOG_CONFIRM_TITLE,
-		// userManager.dialog.self.C_STR_DIALOG_CONFIRM_DIALOG
-		// + "'"
-		// + arr_Selection[0].data.name
-		// + "'",
-		// function(obj_Btn)
-		// {
-		// if (obj_Btn.toUpperCase() == "YES")
-		// {
-		// startMenu.MsgBus
-		// .fireEvent(
-		// startMenu.MsgBus.self.C_STR_EVENT_OPEN_GROUP_DELETE,
-		// arr_Selection[0]
-		// .get("id"));
-		// }
-		// });
-		// break;
-		// default:
-		// Ext.Msg
-		// .show(
-		// {
-		// title : 'Invalid Selection',
-		// msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONLY_ONE,
-		// buttons : Ext.Msg.OK,
-		// icon : Ext.Msg.ERROR
-		// });
-		// }
-		console.log("Delete User");
+		var arr_Selection = this.m_obj_Grid.getSelectionModel().getSelection();
+
+		switch (arr_Selection.length) {
+		case 0:
+			Ext.Msg.show({
+				title : 'Invalid Selection?',
+				msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONE,
+				buttons : Ext.Msg.OK,
+				icon : Ext.Msg.ERROR
+			});
+			break;
+		case 1:
+			startMenu.MsgBus.fireEvent(
+					startMenu.MsgBus.self.C_STR_EVENT_OPEN_USER_DELETE,
+					arr_Selection[0].get("id"));
+			break;
+		default:
+			Ext.Msg.show({
+				title : 'Invalid Selection?',
+				msg : userManager.dialog.self.C_STR_ERROR_SELECT_ONLY_ONE,
+				buttons : Ext.Msg.OK,
+				icon : Ext.Msg.ERROR
+			});
+		}
 	}
 });
