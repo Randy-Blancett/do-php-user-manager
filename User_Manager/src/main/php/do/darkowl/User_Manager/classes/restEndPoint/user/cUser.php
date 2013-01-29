@@ -699,6 +699,7 @@ class cUserGroupCurrent extends cUserDataBase {
 			$bool_Fail = true;
 		}
 
+// 		$obj_DOKeybox = dataObject\cKeybox
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
 		if(!$bool_Fail&&!$obj_DOUser)
