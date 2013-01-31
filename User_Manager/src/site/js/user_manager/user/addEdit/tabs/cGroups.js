@@ -73,6 +73,13 @@ Ext
 						this.add(this.m_obj_AvailGrid);
 						this.add(this.m_obj_Control);
 						this.add(this.m_obj_CurGrid);
+					},
+					loadUser : function(str_ID) {
+						this.m_obj_CurStore.getProxy().url = "../rest/user/"
+								+ str_ID + "/groups/current";
+
+						this.m_obj_AvailStore.getProxy().url = "../rest/user/"
+								+ str_ID + "/groups/available";
 
 						this.m_obj_AvailStore.load();
 						this.m_obj_CurStore.load();

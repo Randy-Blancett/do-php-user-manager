@@ -1,7 +1,7 @@
 Ext.define('darkowl.userManager.user.addEdit.cTopForm', {
 	extend : 'Ext.form.Panel',
 	layout : 'fit',
-    m_str_UserID : "",
+	m_str_UserID : "",
 	border : false,
 	requires : [ 'darkowl.userManager.user.addEdit.cTabForm',
 			'darkowl.userManager.config.cButton' ],
@@ -74,5 +74,8 @@ Ext.define('darkowl.userManager.user.addEdit.cTopForm', {
 		}
 
 		Ext.Msg.alert("Failed", str_Msg);
+	},
+	loadUser : function(str_ID) {
+		this.m_obj_Tabs.loadUser(str_ID);
 	}
 });

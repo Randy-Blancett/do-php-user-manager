@@ -84,7 +84,6 @@ class cAction extends \Tonic\Resource {
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
-
 		}
 		else
 		{

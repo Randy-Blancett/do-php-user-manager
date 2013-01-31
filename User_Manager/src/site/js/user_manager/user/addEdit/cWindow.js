@@ -50,6 +50,8 @@ Ext.define('darkowl.userManager.user.addEdit.cWindow', {
 			},
 			scope : this
 		});
+		
+		this.m_obj_Form.loadUser(str_ID);
 	},
 	showMask : function() {
 		this.m_bool_Mask = true;

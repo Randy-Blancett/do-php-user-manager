@@ -30,7 +30,7 @@ abstract class abs_ExtJsResponse
 
 	private function &getOutput()
 	{
-		if(!isset($this->m_obj_Output))
+		if(!isset($this->m_obj_Output)||($this->m_obj_Output == null))
 		{
 			$this->m_obj_Output = new \stdClass();
 		}
@@ -96,48 +96,6 @@ abstract class abs_ExtJsResponse
 		}
 	}
 
-	// 	public function output() {
-
-	// 		if (php_sapi_name() != 'cli' && !headers_sent()) {
-	// 			// 			header('HTTP/1.1 '.$this->code);
-	// 			foreach ($this->headers as $header => $value) {
-	// 				header($header.': '.$value);
-	// 			}
-	// 		}
-
-	// 		print_r($this->request);die("Test");
-	// 		if (strtoupper($this->request->method) !== 'HEAD') {
-	// 			if(!$this->checkOutput($this->request->accept))
-	// 			{
-	// 				print ("Default data output \n");
-	// 				$this->output_Default();
-	// 			}
-	// 		}
-	// 	}
-
-	// 	private function checkOutput($mix_Format)
-	// 	{
-	// 		if(is_array($mix_Format))
-	// 		{
-	// 			foreach($mix_Format as $mix_FormatPart)
-	// 			{
-	// 				if($this->checkOutput($mix_FormatPart))
-	// 				{
-	// 					return true;
-	// 				}
-	// 			}
-	// 		}
-	// 		if(is_string($mix_Format))
-	// 		{
-	// 			switch($mix_Format)
-	// 			{
-	// 				case self::C_STR_ACCEPT_JSON:$this->output_JSON();
-	// 				return true;
-	// 			}
-	// 		}
-	// 		return false;
-	// 	}
-
 	public function output($int_OutputType)
 	{
 		switch($int_OutputType)
@@ -148,8 +106,6 @@ abstract class abs_ExtJsResponse
 				return $this->output_Default();
 		}
 	}
-
-
 
 	public function output_Default()
 	{

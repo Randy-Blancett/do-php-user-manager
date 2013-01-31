@@ -1,7 +1,7 @@
 <?php
-use darkowl\user_manager\dataObject;
-use darkowl\user_manager\resource\cGroupResource;
-use darkowl\user_manager\response\cGroupResponse;
+use \darkowl\user_manager\dataObject;
+use \darkowl\user_manager\resource\cGroupResource;
+use \darkowl\user_manager\response\cGroupResponse;
 use \darkowl\user_manager\resource\cFormResource;
 use \darkowl\user_manager\response\cFormResponse;
 use \darkowl\user_manager\cUser;

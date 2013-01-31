@@ -1,48 +1,31 @@
 <?php
 use \darkowl\user_manager\resource\cUserResource;
 use \darkowl\user_manager\response\cUserResponse;
+use \darkowl\user_manager\resource\cGroupResource;
+use \darkowl\user_manager\response\cGroupResponse;
 use \darkowl\user_manager\resource\cFormResource;
 use \darkowl\user_manager\response\cFormResponse;
+use \darkowl\user_manager\exception\cMissingParam;
 use \darkowl\user_manager\dataObject;
 use \darkowl\user_manager\cUser;
 
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname(__DIR__))."/dataObject/cUser.php";
+require_once dirname(dirname(__DIR__))."/dataObject/cUser2Groups.php";
 require_once dirname(dirname(__DIR__))."/response/cUserResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cUserResource.php";
 require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
+require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
+require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
+require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
 
 
 class cUserDataBase extends \Tonic\Resource {
-	private static $m_obj_UserValidator = null;
-
-	/**
-	 * Singleton of the User Validator object
-	 * @return cUser
-	 */
-	protected static function getUserValidator()
-	{
-		if(!self::$m_obj_UserValidator)
-		{
-			self::$m_obj_UserValidator = new \darkowl\user_manager\cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
-		}
-		return self::$m_obj_UserValidator;
-	}
-}
-
-/**
- * Basic Resource List
- * @namespace User_Manager
- * @uri /user
- * @uri /user/{id}
- */
-class cUserData extends cUserDataBase {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
-
 
 	const C_STR_PARAM_DATA_ID = "userID";
 	const C_STR_PARAM_DATA_AFFILIATION = "affiliation";
@@ -69,6 +52,29 @@ class cUserData extends cUserDataBase {
 	const C_STR_PARAM_DATA_LAST_UPDATE = "lastUpdate";
 	const C_STR_PARAM_DATA_COMMENT = "comment";
 
+	private static $m_obj_UserValidator = null;
+
+	/**
+	 * Singleton of the User Validator object
+	 * @return cUser
+	 */
+	protected static function getUserValidator()
+	{
+		if(!self::$m_obj_UserValidator)
+		{
+			self::$m_obj_UserValidator = new \darkowl\user_manager\cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
+		}
+		return self::$m_obj_UserValidator;
+	}
+}
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /user
+ * @uri /user/{id}
+ */
+class cUserData extends cUserDataBase {
 	private $m_obj_Response = null;
 
 
@@ -640,7 +646,7 @@ class cUserGroupAvail extends cUserDataBase {/**
 	{
 		$bool_Fail = false;
 		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cFormResponse();
+		$this->m_obj_Response = new cGroupResponse();
 
 		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
@@ -659,12 +665,57 @@ class cUserGroupAvail extends cUserDataBase {/**
 			$bool_Fail = true;
 		}
 
+		$obj_DOGroupsAvail = null;
+		$obj_DOGroupsCur = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOGroupsAvail=dataObject\cGroup::getAllGroups();
+				$obj_DOGroupsCur=dataObject\cUser2Groups::getUsersGroups($str_ID);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
 
 		if(!$bool_Fail){
-			$obj_Row = new cFormResource();
-			$obj_Row->test = "Avail Test";
+			if($obj_DOGroupsAvail)
+			{
+				foreach($obj_DOGroupsAvail->toArray() as $arr_Object)
+				{
+					$bool_Found = false;
+					foreach($obj_DOGroupsCur as $str_I=> $obj_GroupsCur)
+					{
+						if($obj_GroupsCur->getgroupId() == $arr_Object["Id"])
+						{
+							unset($obj_DOGroupsCur[$str_I]);
+							$bool_Found = true;
+							break;
+						}
+					}
 
-			$this->m_obj_Response->addResource($obj_Row);
+					if(!$bool_Found)
+					{
+						$obj_Row = new cGroupResource();
+						foreach($arr_Object as $str_Key => $obj_Data)
+						{
+							$str_Key = lcfirst($str_Key);
+							if($obj_Data){
+								switch($str_Key)
+								{
+									case "comment":
+										$obj_Data = dataObject\cGroup::getCommentString($obj_Data);
+										break;
+								}
+								$obj_Row->$str_Key = $obj_Data;
+							}
+						}
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
 			$this->m_obj_Response->setSuccess(true);
 		}
 
@@ -690,7 +741,7 @@ class cUserGroupCurrent extends cUserDataBase {
 	{
 		$bool_Fail = false;
 		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cFormResponse();
+		$this->m_obj_Response = new cGroupResponse();
 
 		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
@@ -699,7 +750,6 @@ class cUserGroupCurrent extends cUserDataBase {
 			$bool_Fail = true;
 		}
 
-// 		$obj_DOKeybox = dataObject\cKeybox
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
 		if(!$bool_Fail&&!$obj_DOUser)
@@ -710,12 +760,37 @@ class cUserGroupCurrent extends cUserDataBase {
 			$bool_Fail = true;
 		}
 
+		$obj_DOGroups = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOGroups=dataObject\cUser2Groups::getUsersGroups($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
 
 		if(!$bool_Fail){
-			$obj_Row = new cFormResource();
-			$obj_Row->test = "Current Test";
+			if($obj_DOGroups)
+			{
+				foreach($obj_DOGroups->toArray() as $arr_Groups)
+				{
+					if(isset($arr_Groups["groupId"]))
+					{
+						$obj_DOGroup = dataObject\cGroup::getGroupById($arr_Groups["groupId"]);
+						$obj_Row = new cGroupResource();
 
-			$this->m_obj_Response->addResource($obj_Row);
+						$obj_Row->id = $obj_DOGroup->getId();
+						$obj_Row->comment = dataObject\cGroup::getCommentString($obj_DOGroup->getComment());
+						$obj_Row->name = $obj_DOGroup->getName();
+
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
 			$this->m_obj_Response->setSuccess(true);
 		}
 

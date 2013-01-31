@@ -32,5 +32,8 @@ Ext.define('darkowl.userManager.user.addEdit.cTabForm', {
 	},
 	getUserID : function() {
 		return this.m_obj_Tab_Account.getUserID();
+	},
+	loadUser : function(str_ID) {
+		this.m_obj_Tab_Groups.loadUser(str_ID);
 	}
 });
