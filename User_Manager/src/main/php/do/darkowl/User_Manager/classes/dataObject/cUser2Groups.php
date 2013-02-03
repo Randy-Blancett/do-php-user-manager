@@ -79,6 +79,53 @@ class cUser2Groups extends \cTableUsers2Groups
 		return $obj_Return = $obj_Return->find();
 	}
 
+	public static function countUser2Group($str_User,$str_Group)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing Group ID.");
+		}
+
+		$obj_Return = self::getQueryObj();
+
+		$obj_Return->filterByuserId($str_User);
+		$obj_Return->filterBygroupId($str_Group);
+
+		return  $obj_Return->count();
+	}
+
+	private static function addUser2Groups(cUser2Groups $obj_User2Group,$bool_Force = false){
+		$obj_Return = self::getQueryObj();
+
+		$obj_CurUser2Group = $obj_Return->findPk($obj_User2Group->getId());
+
+		if(!$obj_CurUser2Group||$bool_Force)
+		{
+			$obj_User2Group->save();
+		}
+	}
+	/**
+	 * Link a user to a group
+	 * @param String $obj_User
+	 * @param String $obj_Group
+	 */
+	public static function linkUser2Group($str_User, $str_Group)
+	{
+		$obj_Link = new cUser2Groups();
+
+		$obj_Link->setId(self::create_GUID());
+
+		$obj_Link->setuserId($str_User);
+		$obj_Link->setgroupId($str_Group);
+
+		self::addUser2Groups($obj_Link);
+	}
+
 	public function __toString()
 	{
 		foreach($this as $obj_Data)

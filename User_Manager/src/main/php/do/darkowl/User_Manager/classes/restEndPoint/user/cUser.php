@@ -20,6 +20,7 @@ require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
+require_once dirname(dirname(__DIR__))."/dataObject/cUser2Groups.php";
 
 
 class cUserDataBase extends \Tonic\Resource {
@@ -794,6 +795,79 @@ class cUserGroupCurrent extends cUserDataBase {
 			$this->m_obj_Response->setSuccess(true);
 		}
 
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+/**
+ * User ID to Group ID
+ * @namespace User_Manager
+ * @uri /user/{id}/groups/{groupID}
+ */
+class cUserGroupAdd extends cUserDataBase {
+	/**
+	 * Add a group id to a user
+	 * @method PUT
+	 * @provides application/json
+	 * @param String $str_UserID
+	 * @param String $str_GroupID
+	 * @return \Tonic\Response
+	 */
+	public function putGroup($str_UserID = null,$str_GroupID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOGroup = dataObject\cGroup::getGroupById($str_GroupID);
+		if(!$bool_Fail&&!$obj_DOGroup)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_GroupID." is not a valid Group.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID,$str_GroupID);
+
+		if(!$bool_Fail&& $obj_DOUser2Groups>0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Link already Exists, no action taken.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cUser2Groups::linkUser2Group($str_UserID,$str_GroupID);
+				
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Link created.");
+		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 }

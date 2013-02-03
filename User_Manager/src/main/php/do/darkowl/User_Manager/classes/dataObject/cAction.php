@@ -27,6 +27,11 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
+	const C_STR_USER_MANAGER_USER_GROUP_EDIT = "5290C859-C300-4926-A936-1A0C93226DF8";
+// 	const C_STR_USER_MANAGER_USER_EDIT = "39AF30C8-9A93-4644-AF91-6632B1794A36";
+// 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
+// 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
+
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
 
@@ -255,7 +260,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("5290C859-C300-4926-A936-1A0C93226DF8");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_GROUP_EDIT);
 		$obj_Action->setName("Edit User's Groups");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to change what groups a user belongs to.");

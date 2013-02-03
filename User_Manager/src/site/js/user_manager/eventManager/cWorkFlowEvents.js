@@ -13,7 +13,10 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents', {
 		C_STR_EVENT_GROUP_ADDED : "dogroupadded",
 		C_STR_EVENT_GROUP_DELETED : "dogroupdeleted",
 		C_STR_EVENT_USER_ADDED : "douseradded",
-		C_STR_EVENT_USER_DELETED : "douserdeleted"
+		C_STR_EVENT_USER_DELETED : "douserdeleted",
+		C_STR_EVENT_USER_GROUP_ADDED : "dousergroupadded",
+		C_STR_EVENT_USER_GROUP_DELETED : "dousergroupdeleted",
+		C_STR_EVENT_USER_GROUP_REFRESH : "dousergrouprefresh"
 	},
 	constructor : function(config) {
 		this.callParent(arguments);
@@ -28,7 +31,10 @@ Ext.define('darkowl.userManager.eventManager.cWorkFlowEvents', {
 				this.self.C_STR_EVENT_GROUP_ADDED,
 				this.self.C_STR_EVENT_GROUP_DELETED,
 				this.self.C_STR_EVENT_USER_ADDED,
-				this.self.C_STR_EVENT_USER_DELETED);
+				this.self.C_STR_EVENT_USER_DELETED,
+				this.self.C_STR_EVENT_USER_GROUP_ADDED,
+				this.self.C_STR_EVENT_USER_GROUP_DELETED,
+				this.self.C_STR_EVENT_USER_GROUP_REFRESH);
 
 		this.on(this.self.C_STR_EVENT_ACTION_ADDED, this.doActionAdded);
 		this.on(this.self.C_STR_EVENT_ACTION_DELETED, this.doActionDelete);
