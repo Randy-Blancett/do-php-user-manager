@@ -861,12 +861,69 @@ class cUserGroupAdd extends cUserDataBase {
 		if(!$bool_Fail)
 		{
 			dataObject\cUser2Groups::linkUser2Group($str_UserID,$str_GroupID);
-				
+
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
 			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
 			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
 			$this->m_obj_Response->addMsg( "Link created.");
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Remove a Group ID from a User
+	 * @method DELETE
+	 * @provides application/json
+	 * @param String $str_UserID
+	 * @param String $str_GroupID
+	 * @return \Tonic\Response
+	 */
+	public function deleteGroup($str_UserID = null,$str_GroupID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID,$str_GroupID);
+
+		if(!$bool_Fail&& $obj_DOUser2Groups==0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Dose Not have the group assigned to the user.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cUser2Groups::unlinkUser2Group($str_UserID,$str_GroupID);
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Link Removed.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}

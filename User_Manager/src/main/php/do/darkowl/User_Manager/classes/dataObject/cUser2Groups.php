@@ -126,6 +126,42 @@ class cUser2Groups extends \cTableUsers2Groups
 		self::addUser2Groups($obj_Link);
 	}
 
+	public static function getLinkById($str_ID)
+	{
+		$obj_Return = self::getQueryObj();
+		return  $obj_Return->findPk($str_ID);
+	}
+
+	public static function deleteUser2Group( $obj_User2Group)
+	{
+		$obj_User2Group->delete();
+	}
+
+	public static function unlinkUser2Group($str_User, $str_Group)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing Group ID.");
+		}
+
+		$obj_Links = self::getQueryObj();
+
+		$obj_Links = $obj_Links->filterByuserId($str_User);
+		$obj_Links = $obj_Links->filterBygroupId($str_Group);
+
+		$obj_Links = $obj_Links->find();
+
+		foreach($obj_Links as $str_Key=>$obj_Data)
+		{
+			self::deleteUser2Group($obj_Data);
+		}
+	}
+
 	public function __toString()
 	{
 		foreach($this as $obj_Data)
