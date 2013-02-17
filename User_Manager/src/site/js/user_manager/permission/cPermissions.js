@@ -1,13 +1,14 @@
 Ext
 		.define(
-				'darkowl.userManager.user.addEdit.tabs.cGroups',
+				'darkowl.userManager.permission.cPermissions',
 				{
 					extend : 'Ext.form.Panel',
 					closable : false,
-					title : 'Groups',
+					title : 'Permission',
 					requires : [ 'darkowl.userManager.model.cGroup',
 							'darkowl.userManager.eventManager.cWorkFlowEvents' ],
-					tooltip : 'Groups user has access to.',
+					tooltip : 'Permissions user has access to.',
+					m_int_Type : 0,
 					layout : {
 						type : 'hbox',
 						align : 'stretch'
@@ -16,7 +17,9 @@ Ext
 						C_STR_EVENT_ADD_ALL : "doaddall",
 						C_STR_EVENT_ADD_GROUP : "doaddgroup",
 						C_STR_EVENT_REMOVE_ALL : "doremoveall",
-						C_STR_EVENT_REMOVE_GROUP : "doremovegroup"
+						C_STR_EVENT_REMOVE_GROUP : "doremovegroup",
+						C_INT_TYPE_GROUP : 0,
+						C_INT_TYPE_USER : 1
 					},
 					initComponent : function() {
 						var obj_This = this;

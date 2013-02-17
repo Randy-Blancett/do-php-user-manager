@@ -51,10 +51,23 @@ class cUser2Groups extends \cTableUsers2Groups
 			return $obj_Resource;
 		}
 	}
+	/**
+	 * Delete all groups for a given User
+	 * @param String $str_User GUID of the User
+	 */
+	public static function deleteUsersGroups($str_User)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+		$obj_Query = self::getQueryObj();
+		$obj_Query->filterByuserId($str_User)->delete();
+	}
 
 	/**
 	 * Get the groups that a user is assigned to
-	 * @param String $str_User
+	 * @param String $str_User The User ID
 	 * @param Integer $int_Start
 	 * @param Integer $int_PerPage
 	 */
@@ -64,7 +77,7 @@ class cUser2Groups extends \cTableUsers2Groups
 
 		if(!$str_User)
 		{
-			throw new cMissingParam(__FUNCTION__,"str_User","Missing User Name.");
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
 		}
 
 		$obj_Return = self::getQueryObj();

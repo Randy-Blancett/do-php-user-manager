@@ -612,11 +612,25 @@ class cUserData extends cUserDataBase {
 			$this->m_obj_Response->setSuccess(false);
 
 			$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be deleted.");
-
 		}
 
 		if(!$bool_Fail)
 		{
+			try {
+				dataObject\cUser2Groups::deleteUsersGroups($str_ID);
+			}
+			catch (Exception $e)
+			{
+				$bool_Fail = true;
+				$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->logError("Failed to remove User's Groups: ".$e->getMessage());
+			}
+		}
+
+		if(!$bool_Fail)
+		{
+
 			$obj_OrigData->delete();
 
 			$this->m_obj_Response->addMsg("Deleted ".$str_ID);
