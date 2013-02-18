@@ -39,7 +39,7 @@ Ext
 								reader : {
 									totalProperty : 'total',
 									type : 'json',
-									root : 'groups'
+									root : 'actions'
 								}
 							},
 							model : 'darkowl.userManager.model.cGroup'
@@ -55,14 +55,14 @@ Ext
 								reader : {
 									totalProperty : 'total',
 									type : 'json',
-									root : 'groups'
+									root : 'actions'
 								}
 							},
 							model : 'darkowl.userManager.model.cGroup'
 						});
 
 						this.m_obj_AvailGrid = Ext.create('Ext.grid.Panel', {
-							title : 'Available Groups',
+							title : 'Available Permissions',
 							store : this.m_obj_AvailStore,
 							flex : 1,
 							multiSelect : true,
@@ -77,7 +77,7 @@ Ext
 								.create('darkowl.userManager.user.addEdit.tabs.cGroups.cControl');
 
 						this.m_obj_CurGrid = Ext.create('Ext.grid.Panel', {
-							title : 'Current Groups',
+							title : 'Current Permissions',
 							store : this.m_obj_CurStore,
 							flex : 1,
 							multiSelect : true,
@@ -112,13 +112,14 @@ Ext
 								this.doRemoveSelected, this);
 					},
 					loadUser : function(str_ID) {
-						this.m_obj_CurStore.getProxy().url = "../rest/user/"
-								+ str_ID + "/groups/current";
+						this.m_str_ID = str_ID;
 
-						this.m_obj_AvailStore.getProxy().url = "../rest/user/"
-								+ str_ID + "/groups/available";
+						this.m_obj_CurStore.getProxy().url = this.getURL()
+								+ "current";
 
-						this.m_str_UserID = str_ID;
+						this.m_obj_AvailStore.getProxy().url = this.getURL()
+								+ "available";
+
 						this.reload();
 					},
 					loadAvailStore : function(obj_Store, obj_Record,
@@ -137,9 +138,22 @@ Ext
 						this.m_obj_CurStore.load();
 
 					},
+					getURL : function() {
+						if (this.m_int_Type == darkowl.userManager.permission.cPermissions.C_INT_TYPE_GROUP) {
+							return "../rest/user/" + this.m_str_ID
+									+ "/permissions/";
+						}
+
+						if (this.m_int_Type == darkowl.userManager.permission.cPermissions.C_INT_TYPE_USER) {
+							return "../rest/user/" + this.m_str_ID
+									+ "/permissions/";
+						}
+					},
 					doAddSelected : function() {
 						var arr_Selection = this.m_obj_AvailGrid
 								.getSelectionModel().getSelection();
+
+						var str_URL = "";
 
 						if (arr_Selection.length <= 0) {
 							Ext.Msg
@@ -158,9 +172,7 @@ Ext
 										headers : {
 											Accept : "application/json"
 										},
-										url : "../rest/user/"
-												+ this.m_str_UserID
-												+ "/groups/"
+										url : this.getURL()
 												+ arr_Selection[str_Key]
 														.get("id"),
 										method : "PUT",
@@ -185,9 +197,7 @@ Ext
 														headers : {
 															Accept : "application/json"
 														},
-														url : "../rest/user/"
-																+ this.m_str_UserID
-																+ "/groups/"
+														url : this.getURL()
 																+ obj_Record
 																		.get("id"),
 														method : "PUT",
@@ -216,9 +226,7 @@ Ext
 														headers : {
 															Accept : "application/json"
 														},
-														url : "../rest/user/"
-																+ this.m_str_UserID
-																+ "/groups/"
+														url : this.getURL()
 																+ obj_Record
 																		.get("id"),
 														method : "DELETE",
@@ -258,9 +266,7 @@ Ext
 										headers : {
 											Accept : "application/json"
 										},
-										url : "../rest/user/"
-												+ this.m_str_UserID
-												+ "/groups/"
+										url : this.getURL()
 												+ arr_Selection[str_Key]
 														.get("id"),
 										method : "DELETE",

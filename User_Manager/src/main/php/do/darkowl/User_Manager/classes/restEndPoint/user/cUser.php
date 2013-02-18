@@ -5,6 +5,8 @@ use \darkowl\user_manager\resource\cGroupResource;
 use \darkowl\user_manager\response\cGroupResponse;
 use \darkowl\user_manager\resource\cFormResource;
 use \darkowl\user_manager\response\cFormResponse;
+use \darkowl\user_manager\resource\cActionResource;
+use \darkowl\user_manager\response\cActionResponse;
 use \darkowl\user_manager\exception\cMissingParam;
 use \darkowl\user_manager\dataObject;
 use \darkowl\user_manager\cUser;
@@ -18,9 +20,12 @@ require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
 require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
+require_once dirname(dirname(__DIR__))."/response/cActionResponse.php";
+require_once dirname(dirname(__DIR__))."/resource/cActionResource.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cUser2Groups.php";
+require_once dirname(dirname(__DIR__))."/dataObject/cKeybox.php";
 
 
 class cUserDataBase extends \Tonic\Resource {
@@ -627,6 +632,20 @@ class cUserData extends cUserDataBase {
 				$this->m_obj_Response->logError("Failed to remove User's Groups: ".$e->getMessage());
 			}
 		}
+		
+		if(!$bool_Fail)
+		{
+			try {
+				dataObject\cKeybox::deleteUsersPermissions($str_ID);
+			}
+			catch (Exception $e)
+			{
+				$bool_Fail = true;
+				$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->logError("Failed to remove User's Permissions: ".$e->getMessage());
+			}
+		}
 
 		if(!$bool_Fail)
 		{
@@ -650,13 +669,14 @@ class cUserData extends cUserDataBase {
  * @namespace User_Manager
  * @uri /user/{id}/groups/available
  */
-class cUserGroupAvail extends cUserDataBase {/**
-	* Get available groups for the given user
-	* @method GET
-	* @provides application/json
-	* @param String $str_ID
-	* @return \Tonic\Response
-	*/
+class cUserGroupAvail extends cUserDataBase {
+	/**
+	 * Get available groups for the given user
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
 	public function getAvailGroupsJson($str_ID = null)
 	{
 		$bool_Fail = false;
@@ -758,7 +778,7 @@ class cUserGroupCurrent extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -937,6 +957,313 @@ class cUserGroupAdd extends cUserDataBase {
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
 			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
 			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Link Removed.");
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /user/{id}/permissions/available
+ */
+class cUserPermissionAvail extends cUserDataBase {
+	/**
+	 * Get available permissions for the given user
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getAvailPermissionsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response =new cActionResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOPermissionsAvail = null;
+		$obj_DOPermissionsCur = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOPermissionsAvail=dataObject\cAction::getAllActions();
+				$obj_DOPermissionsCur=$obj_DOPermissions=dataObject\cKeybox::getUsersPermissions($str_ID);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
+
+		if(!$bool_Fail){
+			if($obj_DOPermissionsAvail)
+			{
+				foreach($obj_DOPermissionsAvail->toArray() as $arr_Object)
+				{
+					$bool_Found = false;
+					foreach($obj_DOPermissionsCur as $str_I=> $obj_PermissionsCur)
+					{
+						if($obj_PermissionsCur->getactionId() == $arr_Object["Id"])
+						{
+							unset($obj_DOPermissionsCur[$str_I]);
+							$bool_Found = true;
+							break;
+						}
+					}
+
+					if(!$bool_Found)
+					{
+						$obj_Row = new cActionResource();
+						foreach($arr_Object as $str_Key => $obj_Data)
+						{
+							$str_Key = lcfirst($str_Key);
+							if($obj_Data){
+								switch($str_Key)
+								{
+									case "comment":
+										$obj_Data = dataObject\cGroup::getCommentString($obj_Data);
+										break;
+								}
+								$obj_Row->$str_Key = $obj_Data;
+							}
+						}
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /user/{id}/permissions/current
+ */
+class cUserPermissionCurrent extends cUserDataBase {
+	/**
+	 * Get available groups for the given user
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getCurPermissionsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cActionResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOPermissions = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOPermissions=dataObject\cKeybox::getUsersPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
+
+		if(!$bool_Fail){
+			if($obj_DOPermissions)
+			{
+				foreach($obj_DOPermissions->toArray() as $arr_Permissions)
+				{
+					if(isset($arr_Permissions["actionId"]))
+					{
+						$obj_DOPermission = dataObject\cAction::getActionById($arr_Permissions["actionId"]);
+
+						$obj_Row = new cActionResource();
+
+						$obj_Row->id = $obj_DOPermission->getId();
+						$obj_Row->name = $obj_DOPermission->getName();
+						$obj_Row->comment = dataObject\cAction::getCommentString( $obj_DOPermission->getComment());
+
+							
+						// 						$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_APPLICATION." was changed from ".$obj_OrigData->getApplication()." to ".$arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
+						// 						$obj_OrigData->setApplication($arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
+						// 									case "application":
+						// 										$obj_Row->applicationName = cApplication::convertID($obj_Data);
+						// 										break;
+
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+/**
+ * User ID to Permission ID
+ * @namespace User_Manager
+ * @uri /user/{id}/permissions/{permissionID}
+ */
+class cUserPermissionAdd extends cUserDataBase {
+	/**
+	 * Add a Permission id to a user
+	 * @method PUT
+	 * @provides application/json
+	 * @param String $str_UserID
+	 * @param String $str_PermissionID
+	 * @return \Tonic\Response
+	 */
+	public function putPermission($str_UserID = null,$str_PermissionID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOAction = dataObject\cAction::getActionById($str_PermissionID);
+		if(!$bool_Fail&&!$obj_DOAction)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_PermissionID." is not a valid Action.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID,$str_PermissionID);
+
+		if(!$bool_Fail&& $obj_DOKeybox>0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Link already Exists, no action taken.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cKeybox::linkUser2Permission($str_UserID,$str_PermissionID);
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Link created.");
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Remove a Permission ID from a User
+	 * @method DELETE
+	 * @provides application/json
+	 * @param String $str_UserID
+	 * @param String $str_PermissionID
+	 * @return \Tonic\Response
+	 */
+	public function deleteGroup($str_UserID = null,$str_PermissionID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
+
+		if(!$bool_Fail&&!$obj_DOUser)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID,$str_PermissionID);
+
+		if(!$bool_Fail&& $obj_DOKeybox==0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Dose Not have the Permission assigned to the user.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cKeybox::unlinkUser2Permission($str_UserID,$str_PermissionID);
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
 			$this->m_obj_Response->addMsg( "Link Removed.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());

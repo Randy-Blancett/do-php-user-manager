@@ -28,7 +28,9 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
 	const C_STR_USER_MANAGER_USER_GROUP_EDIT = "5290C859-C300-4926-A936-1A0C93226DF8";
-// 	const C_STR_USER_MANAGER_USER_EDIT = "39AF30C8-9A93-4644-AF91-6632B1794A36";
+	const C_STR_USER_MANAGER_USER_GROUP_VIEW = "A1C1A7A0-E712-4B02-B22A-BAD53FA492BF";
+	const C_STR_USER_MANAGER_USER_PERMISSION_VIEW = "EDBBC3E6-CF47-464D-A490-19C0C01A6889";
+	const C_STR_USER_MANAGER_USER_PERMISSION_EDIT = "D7C64AAC-87BB-4EEA-A02D-2D0C6E1C6367";
 // 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
 // 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
@@ -253,7 +255,7 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("A1C1A7A0-E712-4B02-B22A-BAD53FA492BF");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_GROUP_VIEW);
 		$obj_Action->setName("View User's Groups");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to view what groups a user belongs to.");
@@ -267,15 +269,15 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("D7C64AAC-87BB-4EEA-A02D-2D0C6E1C6367");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_PERMISSION_EDIT);
 		$obj_Action->setName("Edit User's Permissions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to change what permissions a user has.");
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("EDBBC3E6-CF47-464D-A490-19C0C01A6889");
-		$obj_Action->setName("Edit User's Permissions");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_USER_PERMISSION_VIEW);
+		$obj_Action->setName("View User's Permissions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to view what permissions a user has.");
 		self::addAction($obj_Action);

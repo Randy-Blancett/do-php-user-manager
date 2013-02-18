@@ -20,6 +20,125 @@ class cKeybox extends \cTableKeybox
 		return self::$m_obj_Query;
 	}
 
+	public static function countUser2Permission($str_User,$str_Permission)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+
+		if(!$str_Permission)
+		{
+			throw new cMissingParam(__FUNCTION__,"$str_Permission","Missing Permission ID.");
+		}
+
+		return self::countPermission($str_User, $str_Permission, self::C_INT_LINKTYPE_USER);
+	}
+
+	public static function create_GUID()
+	{
+		if (function_exists('com_create_guid') === true)
+		{
+			return trim(com_create_guid(), '{}');
+		}
+
+		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
+
+	/**
+	 * Delete all permissions for a given User
+	 * @param String $str_User GUID of the User
+	 */
+	public static function deleteUsersPermissions($str_User)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+		$obj_Query = self::getQueryObj();
+		$obj_Query->filterBylinkId($str_User)->filterBylinkType(self::C_INT_LINKTYPE_USER)->delete();
+	}
+
+	/**
+	 * Link a user to a Permission
+	 * @param String $obj_User
+	 * @param String $obj_Group
+	 */
+	public static function linkUser2Permission($str_User, $str_Permission)
+	{
+		$obj_Link = new cKeybox();
+
+		$obj_Link->setId(self::create_GUID());
+
+		$obj_Link->setactionId($str_Permission);
+		$obj_Link->setlinkId($str_User);
+		$obj_Link->setlinkType(self::C_INT_LINKTYPE_USER);
+
+		self::addKey($obj_Link);
+	}
+
+	public static function unlinkUser2Permission($str_User, $str_Permission)
+	{
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+
+		if(!$str_Permission)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
+		}
+
+		$obj_Keys = self::getQueryObj();
+
+		$obj_Keys->filterBylinkId($str_User);
+		$obj_Keys->filterBylinkType(self::C_INT_LINKTYPE_USER);
+		$obj_Keys->filterByactionId($str_Permission);
+
+		$obj_Keys = $obj_Keys->find();
+
+		foreach($obj_Keys as $str_Key=>$obj_Data)
+		{
+			self::deleteKey($obj_Data);
+		}
+	}
+
+	public static function deleteKey( $obj_Key)
+	{
+		$obj_Key->delete();
+	}
+
+	/**
+	 * Counts the number of times the permission is attatched to the ID
+	 * @param string $str_ID
+	 * @param string $str_Permission
+	 * @param integer $int_LinkType
+	 * @throws cMissingParam
+	 */
+	public static function countPermission($str_ID,$str_Permission,$int_LinkType)
+	{
+		if(!$str_ID)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_ID","Missing Link ID.");
+		}
+		if(!$str_Permission)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
+		}
+		if(!$int_LinkType)
+		{
+			throw new cMissingParam(__FUNCTION__,"int_LinkType","Missing Link Type.");
+		}
+
+		$obj_Return = self::getQueryObj();
+
+		$obj_Return->filterBylinkId($str_ID);
+		$obj_Return->filterBylinkType($int_LinkType);
+		$obj_Return->filterByactionId($str_Permission);
+
+		return  $obj_Return->count();
+	}
+
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
@@ -54,6 +173,53 @@ class cKeybox extends \cTableKeybox
 		{
 			$obj_Key->save();
 		}
+	}
+
+	/**
+	 * Get the users permissions
+	 * @param String $str_User The User ID
+	 * @param Integer $int_Start
+	 * @param Integer $int_PerPage
+	 */
+	public static function getUsersPermissions($str_User,$int_Start = 0, $int_PerPage = null)
+	{
+		$bool_Fail = false;
+
+		if(!$str_User)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_User","Missing User ID.");
+		}
+		return self::getPermissions($str_User, self::C_INT_LINKTYPE_USER,$int_Start,$int_PerPage);
+	}
+
+	/**
+	 * Get List of permissions for a given ID and LinkType
+	 * @param string $str_ID Id to look for
+	 * @param integer $int_LinkType The type of link
+	 * @param number $int_Start
+	 * @param string $int_PerPage
+	 */
+	public static function getPermissions($str_ID,$int_LinkType,$int_Start = 0, $int_PerPage = null)
+	{
+		if(!$str_ID)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_ID","Missing Link ID.");
+		}
+		if(!$int_LinkType)
+		{
+			throw new cMissingParam(__FUNCTION__,"int_LinkType","Missing Link Type.");
+		}
+		$obj_Return = self::getQueryObj();
+		if($int_PerPage)
+		{
+			$obj_Return = $obj_Return->limit($int_PerPage);
+		}
+		$obj_Return->offset($int_Start);
+
+		$obj_Return->filterBylinkId($str_ID);
+		$obj_Return->filterBylinkType($int_LinkType);
+
+		return $obj_Return = $obj_Return->find();
 	}
 
 	public static function addDefault()
