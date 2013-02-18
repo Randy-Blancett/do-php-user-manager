@@ -371,7 +371,7 @@ class cGroupPermissionCurrent extends cGroupDataBase {
  * @namespace User_Manager
  * @uri /group/{id}/permissions/available
  */
-class cGroupPermissionAvail extends cUserDataBase {
+class cGroupPermissionAvail extends cGroupDataBase {
 	/**
 	 * Get available permissions for the given group
 	 * @method GET
@@ -456,6 +456,136 @@ class cGroupPermissionAvail extends cUserDataBase {
 			$this->m_obj_Response->setSuccess(true);
 		}
 
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+/**
+ * Group ID to Permission ID
+ * @namespace User_Manager
+ * @uri /group/{id}/permissions/{permissionID}
+ */
+class cGroupPermissionAdd extends cGroupDataBase {
+	/**
+	 * Add a Permission id to a user
+	 * @method PUT
+	 * @provides application/json
+	 * @param String $str_GroupID
+	 * @param String $str_PermissionID
+	 * @return \Tonic\Response
+	 */
+	public function putPermission($str_GroupID = null,$str_PermissionID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOGroup = dataObject\cGroup::getGroupById($str_GroupID);
+
+		if(!$bool_Fail&&!$obj_DOGroup)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_GroupID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOAction = dataObject\cAction::getActionById($str_PermissionID);
+		if(!$bool_Fail&&!$obj_DOAction)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_PermissionID." is not a valid Action.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOKeybox = dataObject\cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
+
+		if(!$bool_Fail&& $obj_DOKeybox>0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Link already Exists, no action taken.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cKeybox::linkGroup2Permission($str_GroupID,$str_PermissionID);
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Link created.");
+		}
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+
+	/**
+	 * Remove a Permission ID from a Group
+	 * @method DELETE
+	 * @provides application/json
+	 * @param String $str_GroupID
+	 * @param String $str_PermissionID
+	 * @return \Tonic\Response
+	 */
+	public function deleteGroup($str_GroupID = null,$str_PermissionID=null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+
+		$this->m_obj_Response = new cFormResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOGroup = dataObject\cGroup::getGroupById($str_GroupID);
+
+		if(!$bool_Fail&&!$obj_DOGroup)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_GroupID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOKeybox = dataObject\cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
+
+		if(!$bool_Fail&& $obj_DOKeybox==0)
+		{
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Dose Not have the Permission assigned to the user.");
+			$bool_Fail = true;
+		}
+
+		if(!$bool_Fail)
+		{
+			dataObject\cKeybox::unlinkGroup2Permission($str_GroupID,$str_PermissionID);
+
+			$this->m_obj_Response->setSuccess(true);
+			$this->m_obj_Response->setCode(\Tonic\Response::OK);
+			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
+			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
+			$this->m_obj_Response->addMsg( "Link Removed.");
+		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
 }

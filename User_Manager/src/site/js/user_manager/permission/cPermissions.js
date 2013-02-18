@@ -304,7 +304,7 @@ Ext
 														.up("panel")
 														.up("panel")
 														.fireEvent(
-																darkowl.userManager.user.addEdit.tabs.cGroups.C_STR_EVENT_ADD_ALL);
+																darkowl.userManager.permission.cPermissions.C_STR_EVENT_ADD_ALL);
 											}
 										});
 
@@ -319,7 +319,7 @@ Ext
 														.up("panel")
 														.up("panel")
 														.fireEvent(
-																darkowl.userManager.user.addEdit.tabs.cGroups.C_STR_EVENT_ADD_GROUP);
+																darkowl.userManager.permission.cPermissions.C_STR_EVENT_ADD_GROUP);
 											}
 										});
 
@@ -334,7 +334,7 @@ Ext
 														.up("panel")
 														.up("panel")
 														.fireEvent(
-																darkowl.userManager.user.addEdit.tabs.cGroups.C_STR_EVENT_REMOVE_GROUP);
+																darkowl.userManager.permission.cPermissions.C_STR_EVENT_REMOVE_GROUP);
 											}
 										});
 
@@ -349,7 +349,7 @@ Ext
 														.up("panel")
 														.up("panel")
 														.fireEvent(
-																darkowl.userManager.user.addEdit.tabs.cGroups.C_STR_EVENT_REMOVE_ALL);
+																darkowl.userManager.permission.cPermissions.C_STR_EVENT_REMOVE_ALL);
 											}
 										});
 						this.callParent();

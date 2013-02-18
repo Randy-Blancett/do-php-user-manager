@@ -32,10 +32,25 @@ class cKeybox extends \cTableKeybox
 
 		if(!$str_Permission)
 		{
-			throw new cMissingParam(__FUNCTION__,"$str_Permission","Missing Permission ID.");
+			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
 		}
 
 		return self::countPermission($str_User, $str_Permission, self::C_INT_LINKTYPE_USER);
+	}
+
+	public static function countGroup2Permission($str_Group,$str_Permission)
+	{
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing Group ID.");
+		}
+
+		if(!$str_Permission)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
+		}
+
+		return self::countPermission($str_Group, $str_Permission, self::C_INT_LINKTYPE_GROUP);
 	}
 
 	public static function create_GUID()
@@ -65,7 +80,7 @@ class cKeybox extends \cTableKeybox
 	/**
 	 * Link a user to a Permission
 	 * @param String $obj_User
-	 * @param String $obj_Group
+	 * @param String $str_Permission
 	 */
 	public static function linkUser2Permission($str_User, $str_Permission)
 	{
@@ -76,6 +91,24 @@ class cKeybox extends \cTableKeybox
 		$obj_Link->setactionId($str_Permission);
 		$obj_Link->setlinkId($str_User);
 		$obj_Link->setlinkType(self::C_INT_LINKTYPE_USER);
+
+		self::addKey($obj_Link);
+	}
+
+	/**
+	 * Link a group to a Permission
+	 * @param String $str_Group
+	 * @param String $str_Permission
+	 */
+	public static function linkGroup2Permission($str_Group, $str_Permission)
+	{
+		$obj_Link = new cKeybox();
+
+		$obj_Link->setId(self::create_GUID());
+
+		$obj_Link->setactionId($str_Permission);
+		$obj_Link->setlinkId($str_Group);
+		$obj_Link->setlinkType(self::C_INT_LINKTYPE_GROUP);
 
 		self::addKey($obj_Link);
 	}
@@ -105,6 +138,32 @@ class cKeybox extends \cTableKeybox
 			self::deleteKey($obj_Data);
 		}
 	}
+	
+	public static function unlinkGroup2Permission($str_Group, $str_Permission)
+	{
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing User ID.");
+		}
+	
+		if(!$str_Permission)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
+		}
+	
+		$obj_Keys = self::getQueryObj();
+	
+		$obj_Keys->filterBylinkId($str_Group);
+		$obj_Keys->filterBylinkType(self::C_INT_LINKTYPE_GROUP);
+		$obj_Keys->filterByactionId($str_Permission);
+	
+		$obj_Keys = $obj_Keys->find();
+	
+		foreach($obj_Keys as $str_Key=>$obj_Data)
+		{
+			self::deleteKey($obj_Data);
+		}
+	}
 
 	public static function deleteKey( $obj_Key)
 	{
@@ -128,7 +187,7 @@ class cKeybox extends \cTableKeybox
 		{
 			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
 		}
-		if(!$int_LinkType)
+		if($int_LinkType!==0 && !$int_LinkType)
 		{
 			throw new cMissingParam(__FUNCTION__,"int_LinkType","Missing Link Type.");
 		}
