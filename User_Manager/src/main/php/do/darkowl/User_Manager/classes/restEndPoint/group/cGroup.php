@@ -4,23 +4,22 @@ use \darkowl\user_manager\resource\cGroupResource;
 use \darkowl\user_manager\response\cGroupResponse;
 use \darkowl\user_manager\resource\cFormResource;
 use \darkowl\user_manager\response\cFormResponse;
+use \darkowl\user_manager\resource\cActionResource;
+use \darkowl\user_manager\response\cActionResponse;
 use \darkowl\user_manager\cUser;
 
 require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
 require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
+require_once dirname(dirname(__DIR__))."/dataObject/cKeybox.php";
 require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
 require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
 require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
 require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
+require_once dirname(dirname(__DIR__))."/response/cActionResponse.php";
+require_once dirname(dirname(__DIR__))."/resource/cActionResource.php";
 
-/**
- * Basic Resource List
- * @namespace User_Manager
- * @uri /group
- * @uri /group/{id}
- */
-class cGroup extends \Tonic\Resource {
+class cGroupDataBase extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
 	const C_STR_PARAM_LIMIT = "limit";
 	const C_STR_PARAM_PAGE = "page";
@@ -29,14 +28,13 @@ class cGroup extends \Tonic\Resource {
 	const C_STR_PARAM_DATA_NAME = "name";
 	const C_STR_PARAM_DATA_COMMENT = "comment";
 
-	private $m_obj_Response = null;
 	private static $m_obj_UserValidator = null;
 
 	/**
 	 * Singleton of the User Validator object
 	 * @return cUser
 	 */
-	private static function getUserValidator()
+	protected static function getUserValidator()
 	{
 		if(!self::$m_obj_UserValidator)
 		{
@@ -44,6 +42,18 @@ class cGroup extends \Tonic\Resource {
 		}
 		return self::$m_obj_UserValidator;
 	}
+}
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /group
+ * @uri /group/{id}
+ */
+class cGroup extends cGroupDataBase {
+
+
+	private $m_obj_Response = null;
+
 
 	/**
 	 * Get Applications depending on what is passed
@@ -86,7 +96,7 @@ class cGroup extends \Tonic\Resource {
 
 			$obj_Row->id = $obj_DOGroup->getId();
 			$obj_Row->comment = dataObject\cGroup::getCommentString($obj_DOGroup->getComment());
-				
+
 			$obj_Row->name = $obj_DOGroup->getName();
 
 			$this->m_obj_Response->addResource($obj_Row);
@@ -281,3 +291,171 @@ class cGroup extends \Tonic\Resource {
 	}
 }
 
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /group/{id}/permissions/current
+ */
+class cGroupPermissionCurrent extends cGroupDataBase {
+	/**
+	 * Get available Permissions for the given Group
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getCurPermissionsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response = new cActionResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOGroup = dataObject\cGroup::getGroupById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOGroup)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOPermissions = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOPermissions=dataObject\cKeybox::getGroupsPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
+
+		if(!$bool_Fail){
+			if($obj_DOPermissions)
+			{
+				foreach($obj_DOPermissions->toArray() as $arr_Permissions)
+				{
+					if(isset($arr_Permissions["actionId"]))
+					{
+						$obj_DOPermission = dataObject\cAction::getActionById($arr_Permissions["actionId"]);
+
+						$obj_Row = new cActionResource();
+
+						$obj_Row->id = $obj_DOPermission->getId();
+						$obj_Row->name = $obj_DOPermission->getName();
+						$obj_Row->comment = dataObject\cAction::getCommentString( $obj_DOPermission->getComment());
+
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}
+
+/**
+ * Basic Resource List
+ * @namespace User_Manager
+ * @uri /group/{id}/permissions/available
+ */
+class cGroupPermissionAvail extends cUserDataBase {
+	/**
+	 * Get available permissions for the given group
+	 * @method GET
+	 * @provides application/json
+	 * @param String $str_ID
+	 * @return \Tonic\Response
+	 */
+	public function getAvailPermissionsJson($str_ID = null)
+	{
+		$bool_Fail = false;
+		$obj_User =  self::getUserValidator();
+		$this->m_obj_Response =new cActionResponse();
+
+		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
+			$bool_Fail = true;
+		}
+
+		$obj_DOGroup = dataObject\cGroup::getGroupById($str_ID);
+
+		if(!$bool_Fail&&!$obj_DOGroup)
+		{
+			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$bool_Fail = true;
+		}
+
+		$obj_DOPermissionsAvail = null;
+		$obj_DOPermissionsCur = null;
+		if(!$bool_Fail){
+			try {
+				$obj_DOPermissionsAvail=dataObject\cAction::getAllActions();
+				$obj_DOPermissionsCur=$obj_DOPermissions=dataObject\cKeybox::getGroupsPermissions($str_ID);
+			} catch (cMissingParam $e) {
+				$this->m_obj_Response->setSuccess(false);
+				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
+				$this->m_obj_Response->logError( $e->getMessage());
+				$bool_Fail = true;
+			}
+		}
+
+		if(!$bool_Fail){
+			if($obj_DOPermissionsAvail)
+			{
+				foreach($obj_DOPermissionsAvail->toArray() as $arr_Object)
+				{
+					$bool_Found = false;
+					foreach($obj_DOPermissionsCur as $str_I=> $obj_PermissionsCur)
+					{
+						if($obj_PermissionsCur->getactionId() == $arr_Object["Id"])
+						{
+							unset($obj_DOPermissionsCur[$str_I]);
+							$bool_Found = true;
+							break;
+						}
+					}
+
+					if(!$bool_Found)
+					{
+						$obj_Row = new cActionResource();
+						foreach($arr_Object as $str_Key => $obj_Data)
+						{
+							$str_Key = lcfirst($str_Key);
+							if($obj_Data){
+								switch($str_Key)
+								{
+									case "comment":
+										$obj_Data = dataObject\cGroup::getCommentString($obj_Data);
+										break;
+								}
+								$obj_Row->$str_Key = $obj_Data;
+							}
+						}
+						$this->m_obj_Response->addResource($obj_Row);
+					}
+				}
+			}
+
+			$this->m_obj_Response->setSuccess(true);
+		}
+
+		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
+	}
+}

@@ -31,8 +31,11 @@ class cAction extends \cTableActions
 	const C_STR_USER_MANAGER_USER_GROUP_VIEW = "A1C1A7A0-E712-4B02-B22A-BAD53FA492BF";
 	const C_STR_USER_MANAGER_USER_PERMISSION_VIEW = "EDBBC3E6-CF47-464D-A490-19C0C01A6889";
 	const C_STR_USER_MANAGER_USER_PERMISSION_EDIT = "D7C64AAC-87BB-4EEA-A02D-2D0C6E1C6367";
-// 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
-// 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
+
+	const C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT ="AC08ABE8-55E9-4A91-A97B-133E86C83595";
+	const C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW ="C39D4045-70C4-49B9-A82D-56541762385A";
+	// 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
+	// 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -241,14 +244,14 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("C39D4045-70C4-49B9-A82D-56541762385A");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW);
 		$obj_Action->setName("View Group Permissions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to view permissions assigned to a group.");
 		self::addAction($obj_Action);
 
 		$obj_Action = new cAction();
-		$obj_Action->setId("AC08ABE8-55E9-4A91-A97B-133E86C83595");
+		$obj_Action->setId(self::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT);
 		$obj_Action->setName("Edit Group Permissions");
 		$obj_Action->setApplication (cApplication::C_STR_ID_USER_MANAGER);
 		$obj_Action->setComment("Allows users to edit permissions assigned to a group.");

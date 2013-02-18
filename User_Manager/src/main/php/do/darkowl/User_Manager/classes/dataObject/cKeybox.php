@@ -1,8 +1,11 @@
 <?php
 namespace darkowl\user_manager\dataObject;
 
+use \darkowl\user_manager\exception\cMissingParam;
+
 require_once dirname(dirname(__DIR__)).'/propelInclude.php';
 require_once dirname(__DIR__).'/database/cTableKeyboxQuery.php';
+require_once dirname(__DIR__).'/exception/cMissingParam.php';
 
 class cKeybox extends \cTableKeybox
 {
@@ -176,6 +179,23 @@ class cKeybox extends \cTableKeybox
 	}
 
 	/**
+	 * Get the group permissions
+	 * @param String $str_Group The Group ID
+	 * @param Integer $int_Start
+	 * @param Integer $int_PerPage
+	 */
+	public static function getGroupsPermissions($str_Group,$int_Start = 0, $int_PerPage = null)
+	{
+		$bool_Fail = false;
+
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing Group ID.");
+		}
+		return self::getPermissions($str_Group, self::C_INT_LINKTYPE_GROUP,$int_Start,$int_PerPage);
+	}
+
+	/**
 	 * Get the users permissions
 	 * @param String $str_User The User ID
 	 * @param Integer $int_Start
@@ -205,7 +225,7 @@ class cKeybox extends \cTableKeybox
 		{
 			throw new cMissingParam(__FUNCTION__,"str_ID","Missing Link ID.");
 		}
-		if(!$int_LinkType)
+		if($int_LinkType!==0&&!$int_LinkType)
 		{
 			throw new cMissingParam(__FUNCTION__,"int_LinkType","Missing Link Type.");
 		}
