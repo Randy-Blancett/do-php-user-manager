@@ -46,6 +46,6 @@ Ext
 					},
 					loadUser : function(str_ID) {
 						this.m_obj_Tab_Groups.loadUser(str_ID);
-						this.m_obj_Tab_Permissions.loadUser(str_ID);
+						this.m_obj_Tab_Permissions.loadId(str_ID);
 					}
 				});

@@ -111,7 +111,7 @@ Ext
 						this.on(this.self.C_STR_EVENT_REMOVE_GROUP,
 								this.doRemoveSelected, this);
 					},
-					loadUser : function(str_ID) {
+					loadId : function(str_ID) {
 						this.m_str_ID = str_ID;
 
 						this.m_obj_CurStore.getProxy().url = this.getURL()
@@ -140,7 +140,7 @@ Ext
 					},
 					getURL : function() {
 						if (this.m_int_Type == darkowl.userManager.permission.cPermissions.C_INT_TYPE_GROUP) {
-							return "../rest/user/" + this.m_str_ID
+							return "../rest/group/" + this.m_str_ID
 									+ "/permissions/";
 						}
 
