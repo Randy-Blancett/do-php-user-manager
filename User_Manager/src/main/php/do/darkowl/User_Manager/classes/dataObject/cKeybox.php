@@ -76,6 +76,20 @@ class cKeybox extends \cTableKeybox
 		$obj_Query = self::getQueryObj();
 		$obj_Query->filterBylinkId($str_User)->filterBylinkType(self::C_INT_LINKTYPE_USER)->delete();
 	}
+	
+	/**
+	 * Delete all permissions for a given Group
+	 * @param String $str_Group GUID of the User
+	 */
+	public static function deleteGroupsPermissions($str_Group)
+	{
+		if(!$str_Group)
+		{
+			throw new cMissingParam(__FUNCTION__,"str_Group","Missing Group ID.");
+		}
+		$obj_Query = self::getQueryObj();
+		$obj_Query->filterBylinkId($str_Group)->filterBylinkType(self::C_INT_LINKTYPE_GROUP)->delete();
+	}
 
 	/**
 	 * Link a user to a Permission

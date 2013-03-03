@@ -6,14 +6,6 @@ namespace darkowl\user_manager\webpage;
  * @package PHP_User_Manager
  * @subpackage Classes
  */
-/**
- * Class holds infomration to setup the application
- *
- *
- * @package PHP_User_Manager
- * @subpackage Classes
- * @author Randy Blancett
- */
 class cInfo
 {
 	const C_STR_USER_MANAGER_CODE_PATH	= "/var/www_Common/User_Manager";

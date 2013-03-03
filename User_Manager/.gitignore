@@ -1,4 +1,8 @@
-/target
-/bin
+.build
+dist
+.tmp
+nbproject
+review
+vendor
 /.settings
-/.classpath
+/bin

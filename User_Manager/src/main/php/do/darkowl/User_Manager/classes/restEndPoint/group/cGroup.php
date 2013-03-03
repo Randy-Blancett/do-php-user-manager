@@ -279,11 +279,22 @@ class cGroup extends cGroupDataBase {
 			}
 			else
 			{
-				$obj_OrigData->delete();
-					
-				$this->m_obj_Response->addMsg("Deleted ".$str_ID);
-				$this->m_obj_Response->setCode(\Tonic\Response::OK);
-				$this->m_obj_Response->setSuccess(true);
+
+					try {
+						dataObject\cKeybox::deleteGroupsPermissions($str_ID);
+						$obj_OrigData->delete();
+							
+						$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+						$this->m_obj_Response->setCode(\Tonic\Response::OK);
+						$this->m_obj_Response->setSuccess(true);
+					}
+					catch (Exception $e)
+					{
+						$bool_Fail = true;
+						$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
+						$this->m_obj_Response->setSuccess(false);
+						$this->m_obj_Response->logError("Failed to remove User's Permissions: ".$e->getMessage());
+					}
 			}
 		}
 
