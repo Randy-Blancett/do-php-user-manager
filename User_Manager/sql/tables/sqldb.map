@@ -1,0 +1,7 @@
+# Sqlfile -> Database map
+actions_schema.sql=user_manager
+applications_schema.sql=user_manager
+groups_schema.sql=user_manager
+keybox_schema.sql=user_manager
+users2groups_schema.sql=user_manager
+users_schema.sql=user_manager
