@@ -16,7 +16,7 @@ if(!defined("MP_AUTOLOADER_SET")) {
 		// autoloader support
 		public static function  normalisePath($str_ClassName)
 		{
-// 			print("PSR0 Normalise Path '$str_ClassName'\n");
+			// 			print("PSR0 Normalise Path '$str_ClassName'\n");
 			$str_FileName  = '';
 			$int_LastNsPos = strripos($str_ClassName, '\\');
 
@@ -49,10 +49,9 @@ if(!defined("MP_AUTOLOADER_SET")) {
 
 		public static function autoload($str_ClassName)
 		{
-// 			print("PSR0 AutoLoad '$str_ClassName'\n");
+			// 			print("PSR0 AutoLoad '$str_ClassName'\n");
 			if (class_exists($str_ClassName) || interface_exists($str_ClassName))
 			{
-				print($str_ClassName." Is already loaded.\n");
 				return FALSE;
 			}
 
@@ -60,14 +59,12 @@ if(!defined("MP_AUTOLOADER_SET")) {
 			$str_ClassFile = self::normalisePath($str_ClassName) . '.php';
 
 
-// 			print("PSR0 AutoLoad Class File '$str_ClassFile'\n");
-
 			return self::includeFile($str_ClassFile);
 		}
 
 		public static function includeFile($str_FileName)
 		{
-// 			print("PSR0 includeFile '$str_FileName'\n");
+			// 			print("PSR0 includeFile '$str_FileName'\n");
 			$arr_PathToSearch = explode(PATH_SEPARATOR, get_include_path());
 
 			// keep track of what we have tried; this info may help other
@@ -76,13 +73,13 @@ if(!defined("MP_AUTOLOADER_SET")) {
 
 			foreach ($arr_PathToSearch as $str_SearchPath)
 			{
-// 				print("Searching Path '$str_SearchPath'\n");
+				// 				print("Searching Path '$str_SearchPath'\n");
 				$str_File2Load = $str_SearchPath . '/' . $str_FileName;
 				// var_dump($str_File2Load);
 				if (!file_exists($str_File2Load))
 				{
 
-// 					print(" - File Not found in '$str_SearchPath'\n");
+					// 					print(" - File Not found in '$str_SearchPath'\n");
 					$arr_FailedFiles[] = $str_File2Load;
 					continue;
 				}
@@ -90,7 +87,7 @@ if(!defined("MP_AUTOLOADER_SET")) {
 				require($str_File2Load);
 				return TRUE;
 			}
-				
+
 			print_r($arr_FailedFiles);
 
 			// if we get here, we could not find the requested file
@@ -146,11 +143,11 @@ if(!defined("MP_AUTOLOADER_SET")) {
 
 	function mpAutoLoader($str_ClassName)
 	{
-// 		print("In Autoloader for $str_ClassName\n");
+		// 		print("In Autoloader for $str_ClassName\n");
 		PSR0Autoloader::autoload($str_ClassName);
 	}
 
-// 	print("Setting UP Autoload\n");
+	// 	print("Setting UP Autoload\n");
 
 	spl_autoload_register('mpAutoLoader');
 	// assume that we are at the top of a vendor tree to load from

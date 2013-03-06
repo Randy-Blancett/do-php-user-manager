@@ -58,7 +58,7 @@ Ext.define('darkowl.desktop.cApplication',
 	    this.m_obj_Desktop = Ext.create("darkowl.desktop.cDesktop",
 	    {
 	        m_obj_Windows : this.m_obj_Windows,
-	        m_str_WallPaper : "../img/Wallpaper/desktop.jpg"
+	        m_str_WallPaper : "../img/wallpaper/desktop.jpg"
 	    });
 
 	    obj_This.m_obj_ViewPort = Ext.create("Ext.container.Viewport",
