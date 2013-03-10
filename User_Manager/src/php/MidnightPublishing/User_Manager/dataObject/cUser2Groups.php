@@ -1,16 +1,20 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-use \darkowl\user_manager\exception\cMissingParam;
+use MidnightPublishing\User_Manager\database\cTableUsers2GroupsQuery;
+use MidnightPublishing\User_Manager\database\cTableUsers2Groups;
+use MidnightPublishing\User_Manager\cPropelConnector;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableUsers2Groups.php';
-require_once dirname(__DIR__).'/exception/cMissingParam.php';
 
-class cUser2Groups extends \cTableUsers2Groups
+class cUser2Groups extends cTableUsers2Groups
 {
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
+
+	public static function addDefault()
+	{
+
+	}
 
 	protected static function getQuery()
 	{
@@ -23,7 +27,7 @@ class cUser2Groups extends \cTableUsers2Groups
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableUsers2GroupsQuery::create();
+			self::$m_obj_QueryObj = cTableUsers2GroupsQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
@@ -36,6 +40,42 @@ class cUser2Groups extends \cTableUsers2Groups
 		}
 
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+	}
+
+	public static function createTable()
+	{
+		cPropelConnector::initPropel();
+
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/users2groups_schema.sql");
+		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `users2groups`;","",$str_Statement);
+
+		try {
+			$obj_Connection = \Propel::getConnection(\Propel::getDefaultDB());
+			$obj_Statement = $obj_Connection->prepare($str_Statement);
+		}
+		catch (Exception $e) {
+			print("Threw Exceptiion\n");
+			return false;
+		}
+
+		try {
+			$obj_Statement->execute();
+			return "Users2Groups Table Created.";
+		}
+		catch (PDOException $e) {
+			switch ($e->getCode())
+			{
+				case 'HY000':
+					$this->m_obj_Response->addMsg("Table Already Exists.");
+					return true;
+				default:
+					throw $e;
+					return false;
+			}
+
+			return false;
+		}
+		return true;
 	}
 
 	public static function getCommentString($obj_Resource)

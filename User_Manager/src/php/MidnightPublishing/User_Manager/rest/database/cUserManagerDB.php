@@ -1,15 +1,21 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\database;
 
-/**
- * Include User Validation Class
- */
-// require_once dirname(dirname( __DIR__)). "/cUser.php";
+use MidnightPublishing\User_Manager\resource\cTableResource;
+use MidnightPublishing\User_Manager\cPropelConnector;
+use MidnightPublishing\User_Manager\response\cTableResponse;
+use MidnightPublishing\User_Manager\cUser;
 
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cActionTable");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cApplicationTable");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cGroupTable");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cKeyboxTable");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cUser2GroupTable");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\cUserTable");
 
 /**
  * Include the MidnightPublishing Autoloader
- */
+*/
 require_once 'MP_Autoloader.php';
 /**
  * Basic Resource List
@@ -187,8 +193,9 @@ END;
 	{
 		$str_Statement = $this->getCreateStatement();
 
+		cPropelConnector::initPropel();
 		try {
-			$obj_Connection = Propel::getConnection('mysql');
+			$obj_Connection = \Propel::getConnection('mysql');
 			$obj_Statement = $obj_Connection->prepare($str_Statement);
 		}
 		catch (Exception $e) {
@@ -199,7 +206,7 @@ END;
 			$obj_Statement->execute();
 			$this->m_obj_Response->addMsg("Table Created.");
 		}
-		catch (PDOException $e) {
+		catch (\PDOException $e) {
 			switch ($e->getCode())
 			{
 				case 'HY000':
@@ -223,8 +230,9 @@ END;
 		{
 			$obj_TableResource = new cTableResource();
 
-			require_once $str_Table;
+			//	require_once $str_Table;
 			$str_Class = basename($str_Table,".php");
+			$str_Class = "MidnightPublishing\\User_Manager\\rest\\database\\user_manager\\".$str_Class;
 
 			$obj_TableResource->setURI($str_Class::C_STR_URI);
 			$obj_TableResource->setName($str_Class::C_STR_NAME);

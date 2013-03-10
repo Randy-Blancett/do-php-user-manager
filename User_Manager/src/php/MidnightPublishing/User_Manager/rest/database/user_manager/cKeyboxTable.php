@@ -1,6 +1,8 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\database\user_manager;
 
+use MidnightPublishing\User_Manager\dataObject\cKeybox;
+use MidnightPublishing\User_Manager\abs\absResourceTable;
 
 /**
  * Include the MidnightPublishing Autoloader
@@ -11,10 +13,9 @@ require_once 'MP_Autoloader.php';
  * @namespace User_Manager
  * @uri /database/user_manager/keybox
  */
-class cKeyboxTable extends abs_ResourceTable {
+class cKeyboxTable extends absResourceTable {
 	const C_STR_NAME = "Keybox";
 	const C_STR_URI = "rest/database/user_manager/keybox";
-
 
 	protected function createTable()
 	{
@@ -32,7 +33,7 @@ class cKeyboxTable extends abs_ResourceTable {
 			$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
 		}
 
-		return		false;
+		return false;
 	}
 }
 

@@ -1,5 +1,17 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BasePeer;
+use \Criteria;
+use \PDO;
+use \PDOStatement;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableGroups;
+use MidnightPublishing\User_Manager\database\cTableGroupsPeer;
+use MidnightPublishing\User_Manager\database\map\cTableGroupsTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'groups' table.
@@ -18,7 +30,7 @@ abstract class BasecTableGroupsPeer
     const TABLE_NAME = 'groups';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'cTableGroups';
+    const OM_CLASS = 'MidnightPublishing\\User_Manager\\database\\cTableGroups';
 
     /** the related TableMap class for this table */
     const TM_CLASS = 'cTableGroupsTableMap';

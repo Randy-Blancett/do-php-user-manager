@@ -3,8 +3,10 @@ namespace MidnightPublishing\User_Manager\conf;
 
 use MidnightPublishing\User_Manager\abs\absDBConfig;
 
-require_once dirname(__DIR__)."/abstract/abs_DBConfig.php";
-
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
 
 class cDBConfig extends absDBConfig
 {
@@ -14,8 +16,8 @@ class cDBConfig extends absDBConfig
 	const C_STR_DB_PORT = "";
 	const C_STR_DB_USER_NAME = "propel";
 	const C_STR_DB_PASSWORD = "propel";
-	
-	
+
+
 	function __construct()
 	{
 		$this->setDBName(self::C_STR_DB_NAME);

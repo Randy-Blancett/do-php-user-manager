@@ -1,6 +1,10 @@
 <?php
 namespace MidnightPublishing\User_Manager\abs;
 
+use MidnightPublishing\User_Manager\response\cTableResponse;
+
+use MidnightPublishing\User_Manager\cUser;
+
 /**
  * Include the MidnightPublishing Autoloader
  */
@@ -12,7 +16,6 @@ class absResourceTable extends \Tonic\Resource
 	const C_STR_ACTION_CREATE = "create";
 
 	private static $m_obj_UserValidator = null;
-
 
 	/**
 	 * Singleton of the User Validator object

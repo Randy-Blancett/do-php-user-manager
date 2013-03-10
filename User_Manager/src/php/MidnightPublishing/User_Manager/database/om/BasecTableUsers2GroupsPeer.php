@@ -1,5 +1,17 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BasePeer;
+use \Criteria;
+use \PDO;
+use \PDOStatement;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableUsers2Groups;
+use MidnightPublishing\User_Manager\database\cTableUsers2GroupsPeer;
+use MidnightPublishing\User_Manager\database\map\cTableUsers2GroupsTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'users2groups' table.
@@ -18,7 +30,7 @@ abstract class BasecTableUsers2GroupsPeer
     const TABLE_NAME = 'users2groups';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'cTableUsers2Groups';
+    const OM_CLASS = 'MidnightPublishing\\User_Manager\\database\\cTableUsers2Groups';
 
     /** the related TableMap class for this table */
     const TM_CLASS = 'cTableUsers2GroupsTableMap';

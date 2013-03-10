@@ -1,5 +1,9 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\map;
+
+use \RelationMap;
+use \TableMap;
 
 
 /**
@@ -34,7 +38,7 @@ class cTableUsers2GroupsTableMap extends TableMap
         // attributes
         $this->setName('users2groups');
         $this->setPhpName('cTableUsers2Groups');
-        $this->setClassname('cTableUsers2Groups');
+        $this->setClassname('MidnightPublishing\\User_Manager\\database\\cTableUsers2Groups');
         $this->setPackage('database');
         $this->setUseIdGenerator(false);
         // columns

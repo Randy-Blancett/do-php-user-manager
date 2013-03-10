@@ -1,5 +1,17 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BasePeer;
+use \Criteria;
+use \PDO;
+use \PDOStatement;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableApplications;
+use MidnightPublishing\User_Manager\database\cTableApplicationsPeer;
+use MidnightPublishing\User_Manager\database\map\cTableApplicationsTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'applications' table.
@@ -18,7 +30,7 @@ abstract class BasecTableApplicationsPeer
     const TABLE_NAME = 'applications';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'cTableApplications';
+    const OM_CLASS = 'MidnightPublishing\\User_Manager\\database\\cTableApplications';
 
     /** the related TableMap class for this table */
     const TM_CLASS = 'cTableApplicationsTableMap';

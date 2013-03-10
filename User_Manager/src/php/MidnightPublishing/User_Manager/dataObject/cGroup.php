@@ -1,10 +1,12 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableGroups.php';
+use MidnightPublishing\User_Manager\cPropelConnector;
 
-class cGroup extends \cTableGroups
+use MidnightPublishing\User_Manager\database\cTableGroupsQuery;
+use MidnightPublishing\User_Manager\database\cTableGroups;
+
+class cGroup extends cTableGroups
 {
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -19,10 +21,10 @@ class cGroup extends \cTableGroups
 		{
 			return trim(com_create_guid(), '{}');
 		}
-	
+
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
-	
+
 	protected static function getQuery()
 	{
 		if(!self::$m_obj_Query){
@@ -34,11 +36,11 @@ class cGroup extends \cTableGroups
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableGroupsQuery::create();
+			self::$m_obj_QueryObj = cTableGroupsQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
-	
+
 	/**
 	 * Get the information about the group from an ID
 	 * @param string $str_ID
@@ -47,7 +49,7 @@ class cGroup extends \cTableGroups
 	public static function getGroupById($str_ID)
 	{
 		$obj_Return = self::getQueryObj();
-	
+
 		return $obj_Return->findPk($str_ID);
 	}
 
@@ -77,7 +79,7 @@ class cGroup extends \cTableGroups
 			$obj_Group->save();
 		}
 	}
-	
+
 	public static function getCommentString($obj_Resource)
 	{
 		if (is_resource($obj_Resource)) {
@@ -115,15 +117,16 @@ class cGroup extends \cTableGroups
 
 	public static function createTable()
 	{
-		$str_Statement = file_get_contents(dirname(dirname(__DIR__))."/sql/groups_schema.sql");
+		cPropelConnector::initPropel();
 
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/groups_schema.sql");
 		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `groups`;","",$str_Statement);
 
 		try {
 			$obj_Connection = \Propel::getConnection(\Propel::getDefaultDB());
 			$obj_Statement = $obj_Connection->prepare($str_Statement);
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			return false;
 		}
 

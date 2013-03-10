@@ -1,5 +1,18 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \Criteria;
+use \Exception;
+use \ModelCriteria;
+use \PDO;
+use \Propel;
+use \PropelException;
+use \PropelObjectCollection;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableKeybox;
+use MidnightPublishing\User_Manager\database\cTableKeyboxPeer;
+use MidnightPublishing\User_Manager\database\cTableKeyboxQuery;
 
 /**
  * Base class that represents a query for the 'keybox' table.
@@ -47,7 +60,7 @@ abstract class BasecTableKeyboxQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'user_manager', $modelName = 'cTableKeybox', $modelAlias = null)
+    public function __construct($dbName = 'user_manager', $modelName = 'MidnightPublishing\\User_Manager\\database\\cTableKeybox', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }

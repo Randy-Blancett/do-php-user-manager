@@ -1,5 +1,17 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BasePeer;
+use \Criteria;
+use \PDO;
+use \PDOStatement;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableUsers;
+use MidnightPublishing\User_Manager\database\cTableUsersPeer;
+use MidnightPublishing\User_Manager\database\map\cTableUsersTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'users' table.
@@ -18,7 +30,7 @@ abstract class BasecTableUsersPeer
     const TABLE_NAME = 'users';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'cTableUsers';
+    const OM_CLASS = 'MidnightPublishing\\User_Manager\\database\\cTableUsers';
 
     /** the related TableMap class for this table */
     const TM_CLASS = 'cTableUsersTableMap';

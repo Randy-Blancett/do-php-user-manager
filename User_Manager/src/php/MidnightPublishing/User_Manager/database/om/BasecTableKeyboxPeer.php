@@ -1,5 +1,17 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BasePeer;
+use \Criteria;
+use \PDO;
+use \PDOStatement;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableKeybox;
+use MidnightPublishing\User_Manager\database\cTableKeyboxPeer;
+use MidnightPublishing\User_Manager\database\map\cTableKeyboxTableMap;
 
 /**
  * Base static class for performing query and update operations on the 'keybox' table.
@@ -18,7 +30,7 @@ abstract class BasecTableKeyboxPeer
     const TABLE_NAME = 'keybox';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'cTableKeybox';
+    const OM_CLASS = 'MidnightPublishing\\User_Manager\\database\\cTableKeybox';
 
     /** the related TableMap class for this table */
     const TM_CLASS = 'cTableKeyboxTableMap';

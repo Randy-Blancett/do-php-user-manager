@@ -1,11 +1,16 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableActions.php';
-require_once 'cApplication.php';
+use MidnightPublishing\User_Manager\cPropelConnector;
+use MidnightPublishing\User_Manager\database\cTableActions;
+use MidnightPublishing\User_Manager\database\cTableActionsQuery;
 
-class cAction extends \cTableActions
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
+
+class cAction extends cTableActions
 {
 	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
 	const C_STR_USER_MANAGER_ACTION_EDIT = "CFD2CA6C-52D7-4334-ACDF-5460835A6B0C";
@@ -34,8 +39,6 @@ class cAction extends \cTableActions
 
 	const C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT ="AC08ABE8-55E9-4A91-A97B-133E86C83595";
 	const C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW ="C39D4045-70C4-49B9-A82D-56541762385A";
-	// 	const C_STR_USER_MANAGER_USER_DELETE = "E3E84EB2-687B-44B3-AB87-1F073D83C2F0";
-	// 	const C_STR_USER_MANAGER_USER_VIEW = "D2338B4D-7642-4FCB-9A8D-8A12F179C2BA";
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -53,7 +56,7 @@ class cAction extends \cTableActions
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableActionsQuery::create();
+			self::$m_obj_QueryObj = cTableActionsQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
@@ -286,19 +289,18 @@ class cAction extends \cTableActions
 		self::addAction($obj_Action);
 	}
 
-
-
 	public static function createTable()
 	{
-		$str_Statement = file_get_contents(dirname(dirname(__DIR__))."/sql/actions_schema.sql");
+		cPropelConnector::initPropel();
 
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/actions_schema.sql");
 		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `actions`;","",$str_Statement);
 
 		try {
 			$obj_Connection = \Propel::getConnection(\Propel::getDefaultDB());
 			$obj_Statement = $obj_Connection->prepare($str_Statement);
 		}
-		catch (Exception $e) {
+		catch (\Exception $e) {
 			return false;
 		}
 
@@ -306,7 +308,7 @@ class cAction extends \cTableActions
 			$obj_Statement->execute();
 			return "Action Table Created.";
 		}
-		catch (PDOException $e) {
+		catch (\PDOException $e) {
 			switch ($e->getCode())
 			{
 				case 'HY000':

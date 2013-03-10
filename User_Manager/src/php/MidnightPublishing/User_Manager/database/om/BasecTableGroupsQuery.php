@@ -1,5 +1,18 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \Criteria;
+use \Exception;
+use \ModelCriteria;
+use \PDO;
+use \Propel;
+use \PropelException;
+use \PropelObjectCollection;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableGroups;
+use MidnightPublishing\User_Manager\database\cTableGroupsPeer;
+use MidnightPublishing\User_Manager\database\cTableGroupsQuery;
 
 /**
  * Base class that represents a query for the 'groups' table.
@@ -39,7 +52,7 @@ abstract class BasecTableGroupsQuery extends ModelCriteria
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'user_manager', $modelName = 'cTableGroups', $modelAlias = null)
+    public function __construct($dbName = 'user_manager', $modelName = 'MidnightPublishing\\User_Manager\\database\\cTableGroups', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }

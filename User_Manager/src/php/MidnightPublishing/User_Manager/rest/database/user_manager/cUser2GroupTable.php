@@ -2,6 +2,10 @@
 namespace MidnightPublishing\User_Manager\rest\database\user_manager;
 
 
+use MidnightPublishing\User_Manager\dataObject\cUser2Groups;
+
+use MidnightPublishing\User_Manager\abs\absResourceTable;
+
 /**
  * Include the MidnightPublishing Autoloader
  */
@@ -11,11 +15,25 @@ require_once 'MP_Autoloader.php';
  * @namespace User_Manager
  * @uri /database/user_manager/user2group
  */
-class cUser2GroupTable extends abs_ResourceTable {
+class cUser2GroupTable extends absResourceTable {
 	const C_STR_NAME = "User2Group";
 	const C_STR_URI = "rest/database/user_manager/user2group";
 	protected function createTable()
 	{
+		try{
+			$str_Return = cUser2Groups::createTable();
+			if($str_Return)
+			{
+				$this->m_obj_Response->addMsg($str_Return);
+				cUser2Groups::addDefault();
+				$this->m_obj_Response->addMsg("Added default data.");
+				return true;
+			}
+		}
+		catch (PDOException $e) {
+			$this->m_obj_Response->logError("SQL Error\n".$e->getCode()." - ".$e->getMessage());
+		}
+
 		$str_Statement = $this->getCreateStatement();
 
 		try {

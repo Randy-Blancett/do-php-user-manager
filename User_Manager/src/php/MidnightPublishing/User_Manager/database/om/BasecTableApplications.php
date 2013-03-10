@@ -1,5 +1,19 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BaseObject;
+use \BasePeer;
+use \Criteria;
+use \Exception;
+use \PDO;
+use \Persistent;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableApplications;
+use MidnightPublishing\User_Manager\database\cTableApplicationsPeer;
+use MidnightPublishing\User_Manager\database\cTableApplicationsQuery;
 
 /**
  * Base class that represents a row from the 'applications' table.
@@ -13,7 +27,7 @@ abstract class BasecTableApplications extends BaseObject implements Persistent
     /**
      * Peer class name
      */
-    const PEER = 'cTableApplicationsPeer';
+    const PEER = 'MidnightPublishing\\User_Manager\\database\\cTableApplicationsPeer';
 
     /**
      * The Peer class.

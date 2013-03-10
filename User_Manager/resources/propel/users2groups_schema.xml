@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="user_manager" defaultIdMethod="native"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	namespace="MidnightPublishing\User_Manager\database" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
 	<table name="users2groups" phpName="cTableUsers2Groups">
 		<column name="id" type="varchar" size="36" required="true"

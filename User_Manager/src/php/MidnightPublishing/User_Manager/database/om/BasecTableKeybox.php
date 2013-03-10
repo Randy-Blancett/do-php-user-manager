@@ -1,5 +1,19 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BaseObject;
+use \BasePeer;
+use \Criteria;
+use \Exception;
+use \PDO;
+use \Persistent;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableKeybox;
+use MidnightPublishing\User_Manager\database\cTableKeyboxPeer;
+use MidnightPublishing\User_Manager\database\cTableKeyboxQuery;
 
 /**
  * Base class that represents a row from the 'keybox' table.
@@ -13,7 +27,7 @@ abstract class BasecTableKeybox extends BaseObject implements Persistent
     /**
      * Peer class name
      */
-    const PEER = 'cTableKeyboxPeer';
+    const PEER = 'MidnightPublishing\\User_Manager\\database\\cTableKeyboxPeer';
 
     /**
      * The Peer class.

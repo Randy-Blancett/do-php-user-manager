@@ -16,9 +16,10 @@ class cPropelConnector
 		{
 			define("PROPEL_INIT",TRUE);
 			require_once 'propel/Propel.php';
-				
+
 			// Initialize Propel with the runtime configuration
-			Propel::init(self::getConfig());
+			\Propel::setConfiguration(self::getConfig());
+			\Propel::initialize();
 
 			// Add the generated 'classes' directory to the include path
 			set_include_path("classes" . PATH_SEPARATOR . get_include_path());
@@ -52,9 +53,9 @@ class cPropelConnector
 						),
 						'default' => 'user_manager',
 				),
-				'generator_version' => '1.6.6',
+				'generator_version' => '1.6.8',
 		);
-		$conf['classmap'] = include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classmap-user_manager-conf.php');
+		$conf['classmap'] = include(__DIR__ . DIRECTORY_SEPARATOR."conf". DIRECTORY_SEPARATOR . 'classmap-user_manager-conf.php');
 		return $conf;
 	}
 

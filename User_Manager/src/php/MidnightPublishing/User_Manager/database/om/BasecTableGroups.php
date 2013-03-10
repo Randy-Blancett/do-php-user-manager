@@ -1,5 +1,19 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BaseObject;
+use \BasePeer;
+use \Criteria;
+use \Exception;
+use \PDO;
+use \Persistent;
+use \Propel;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableGroups;
+use MidnightPublishing\User_Manager\database\cTableGroupsPeer;
+use MidnightPublishing\User_Manager\database\cTableGroupsQuery;
 
 /**
  * Base class that represents a row from the 'groups' table.
@@ -13,7 +27,7 @@ abstract class BasecTableGroups extends BaseObject implements Persistent
     /**
      * Peer class name
      */
-    const PEER = 'cTableGroupsPeer';
+    const PEER = 'MidnightPublishing\\User_Manager\\database\\cTableGroupsPeer';
 
     /**
      * The Peer class.

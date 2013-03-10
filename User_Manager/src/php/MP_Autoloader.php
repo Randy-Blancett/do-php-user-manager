@@ -52,7 +52,7 @@ if(!defined("MP_AUTOLOADER_SET")) {
 			// 			print("PSR0 AutoLoad '$str_ClassName'\n");
 			if (class_exists($str_ClassName) || interface_exists($str_ClassName))
 			{
-				return FALSE;
+				return true;
 			}
 
 			// convert the classname into a filename on disk
@@ -78,17 +78,13 @@ if(!defined("MP_AUTOLOADER_SET")) {
 				// var_dump($str_File2Load);
 				if (!file_exists($str_File2Load))
 				{
-
-					// 					print(" - File Not found in '$str_SearchPath'\n");
 					$arr_FailedFiles[] = $str_File2Load;
 					continue;
 				}
-
 				require($str_File2Load);
 				return TRUE;
 			}
-
-			print_r($arr_FailedFiles);
+			// 			print_r($arr_FailedFiles);
 
 			// if we get here, we could not find the requested file
 			// we do not die() or throw an exception, because there may
@@ -144,7 +140,11 @@ if(!defined("MP_AUTOLOADER_SET")) {
 	function mpAutoLoader($str_ClassName)
 	{
 		// 		print("In Autoloader for $str_ClassName\n");
-		PSR0Autoloader::autoload($str_ClassName);
+		if(!PSR0Autoloader::autoload($str_ClassName))
+		{
+			require_once("propel/Propel.php");
+			Propel::autoload($str_ClassName);
+		}
 	}
 
 	// 	print("Setting UP Autoload\n");

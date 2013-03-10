@@ -8,25 +8,10 @@ require_once 'MP_Autoloader.php';
 
 require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 
-
-// base resource
-// require_once cInfo::C_STR_USER_MANAGER_CODE_PATH."/classes/restEndPoint/cBaseResource.php";
-
-
-// $config = array(
-// 		'load' => array('../*.php',  cInfo::C_STR_USER_MANAGER_CODE_PATH.'/do/darkowl/User_Manager/classes/restEndPoint/*.php')
-// );
-
-// handle request
-
 PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\cBaseResource");
 
-
 $obj_App = new Tonic\Application();
-
-
 $obj_Request = new Tonic\Request();
-
 
 try {
 	$obj_Resource = $obj_App->getResource($obj_Request);

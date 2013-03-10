@@ -1,5 +1,9 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\map;
+
+use \RelationMap;
+use \TableMap;
 
 
 /**
@@ -34,7 +38,7 @@ class cTableKeyboxTableMap extends TableMap
         // attributes
         $this->setName('keybox');
         $this->setPhpName('cTableKeybox');
-        $this->setClassname('cTableKeybox');
+        $this->setClassname('MidnightPublishing\\User_Manager\\database\\cTableKeybox');
         $this->setPackage('database');
         $this->setUseIdGenerator(false);
         // columns

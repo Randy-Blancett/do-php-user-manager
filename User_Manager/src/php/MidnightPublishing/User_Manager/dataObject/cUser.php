@@ -1,13 +1,24 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableUsers.php';
+use MidnightPublishing\User_Manager\cPropelConnector;
+use MidnightPublishing\User_Manager\database\cTableUsersQuery;
+use MidnightPublishing\User_Manager\database\cTableUsers;
 
-class cUser extends \cTableUsers
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
+
+class cUser extends cTableUsers
 {
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
+
+	public static function addDefault()
+	{
+
+	}
 
 	protected static function getQuery()
 	{
@@ -20,7 +31,7 @@ class cUser extends \cTableUsers
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableUsersQuery::create();
+			self::$m_obj_QueryObj = cTableUsersQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
@@ -34,7 +45,43 @@ class cUser extends \cTableUsers
 
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
-	
+
+	public static function createTable()
+	{
+		cPropelConnector::initPropel();
+
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/users_schema.sql");
+		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `users`;","",$str_Statement);
+
+		try {
+			$obj_Connection = \Propel::getConnection(\Propel::getDefaultDB());
+			$obj_Statement = $obj_Connection->prepare($str_Statement);
+		}
+		catch (Exception $e) {
+			print("Threw Exceptiion\n");
+			return false;
+		}
+
+		try {
+			$obj_Statement->execute();
+			return "User Table Created.";
+		}
+		catch (PDOException $e) {
+			switch ($e->getCode())
+			{
+				case 'HY000':
+					$this->m_obj_Response->addMsg("Table Already Exists.");
+					return true;
+				default:
+					throw $e;
+					return false;
+			}
+
+			return false;
+		}
+		return true;
+	}
+
 	public static function getCommentString($obj_Resource)
 	{
 		if (is_resource($obj_Resource)) {

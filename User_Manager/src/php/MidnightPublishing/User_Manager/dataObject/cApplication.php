@@ -1,10 +1,13 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableApplications.php';
+use MidnightPublishing\User_Manager\database\cTableApplicationsQuery;
 
-class cApplication extends \cTableApplications
+use MidnightPublishing\User_Manager\cPropelConnector;
+
+use MidnightPublishing\User_Manager\database\cTableApplications;
+
+class cApplication extends cTableApplications
 {
 	const C_STR_ID_USER_MANAGER = "5D2B859D-4D61-11DF-BD82-8264710BE149";
 
@@ -38,7 +41,7 @@ class cApplication extends \cTableApplications
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableApplicationsQuery::create();
+			self::$m_obj_QueryObj = cTableApplicationsQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
@@ -53,7 +56,7 @@ class cApplication extends \cTableApplications
 
 	public static function getAllApplications($int_Start = 0, $int_PerPage = null)
 	{
-		$obj_Return = \cTableApplicationsQuery::create();
+		$obj_Return = self::getQueryObj();
 		if($int_PerPage)
 		{
 			$obj_Return = $obj_Return->limit($int_PerPage);
@@ -63,7 +66,7 @@ class cApplication extends \cTableApplications
 
 	public static function getTotalApplicationCount()
 	{
-		$obj_Return = \cTableApplicationsQuery::create();
+		$obj_Return = self::getQueryObj();
 		return $obj_Return->count();
 	}
 
@@ -74,7 +77,7 @@ class cApplication extends \cTableApplications
 	 */
 	public static function getApplicationById($str_ID)
 	{
-		$obj_Return = \cTableApplicationsQuery::create();
+		$obj_Return = self::getQueryObj();
 
 		return $obj_Return->findPk($str_ID);
 	}
@@ -118,8 +121,9 @@ class cApplication extends \cTableApplications
 
 	public static function createTable()
 	{
-		$str_Statement = file_get_contents(dirname(dirname(__DIR__))."/sql/applications_schema.sql");
+		cPropelConnector::initPropel();
 
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/applications_schema.sql");
 		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `applications`;","",$str_Statement);
 
 		try {

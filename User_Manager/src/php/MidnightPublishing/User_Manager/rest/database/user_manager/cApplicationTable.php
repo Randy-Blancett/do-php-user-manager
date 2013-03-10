@@ -1,6 +1,9 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\database\user_manager;
 
+use MidnightPublishing\User_Manager\dataObject\cApplication;
+use MidnightPublishing\User_Manager\abs\absResourceTable;
+
 /**
  * Include the MidnightPublishing Autoloader
  */
@@ -11,7 +14,7 @@ require_once 'MP_Autoloader.php';
  * @namespace User_Manager
  * @uri /database/user_manager/application
  */
-class cApplicationTable extends abs_ResourceTable {
+class cApplicationTable extends absResourceTable {
 
 	const C_STR_NAME = "Application";
 	const C_STR_URI = "rest/database/user_manager/application";

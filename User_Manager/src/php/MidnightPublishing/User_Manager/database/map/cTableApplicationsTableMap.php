@@ -1,5 +1,9 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\map;
+
+use \RelationMap;
+use \TableMap;
 
 
 /**
@@ -34,7 +38,7 @@ class cTableApplicationsTableMap extends TableMap
         // attributes
         $this->setName('applications');
         $this->setPhpName('cTableApplications');
-        $this->setClassname('cTableApplications');
+        $this->setClassname('MidnightPublishing\\User_Manager\\database\\cTableApplications');
         $this->setPackage('database');
         $this->setUseIdGenerator(false);
         // columns

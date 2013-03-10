@@ -1,5 +1,21 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database\om;
+
+use \BaseObject;
+use \BasePeer;
+use \Criteria;
+use \DateTime;
+use \Exception;
+use \PDO;
+use \Persistent;
+use \Propel;
+use \PropelDateTime;
+use \PropelException;
+use \PropelPDO;
+use MidnightPublishing\User_Manager\database\cTableUsers;
+use MidnightPublishing\User_Manager\database\cTableUsersPeer;
+use MidnightPublishing\User_Manager\database\cTableUsersQuery;
 
 /**
  * Base class that represents a row from the 'users' table.
@@ -13,7 +29,7 @@ abstract class BasecTableUsers extends BaseObject implements Persistent
     /**
      * Peer class name
      */
-    const PEER = 'cTableUsersPeer';
+    const PEER = 'MidnightPublishing\\User_Manager\\database\\cTableUsersPeer';
 
     /**
      * The Peer class.

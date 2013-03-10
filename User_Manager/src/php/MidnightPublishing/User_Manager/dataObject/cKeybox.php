@@ -1,13 +1,14 @@
 <?php
 namespace MidnightPublishing\User_Manager\dataObject;
 
-use \darkowl\user_manager\exception\cMissingParam;
+use MidnightPublishing\User_Manager\database\cTableKeyboxQuery;
 
-require_once dirname(dirname(__DIR__)).'/propelInclude.php';
-require_once dirname(__DIR__).'/database/cTableKeyboxQuery.php';
-require_once dirname(__DIR__).'/exception/cMissingParam.php';
+use MidnightPublishing\User_Manager\cPropelConnector;
 
-class cKeybox extends \cTableKeybox
+use MidnightPublishing\User_Manager\exception\cMissingParam;
+use MidnightPublishing\User_Manager\database\cTableKeybox;
+
+class cKeybox extends cTableKeybox
 {
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
@@ -76,7 +77,7 @@ class cKeybox extends \cTableKeybox
 		$obj_Query = self::getQueryObj();
 		$obj_Query->filterBylinkId($str_User)->filterBylinkType(self::C_INT_LINKTYPE_USER)->delete();
 	}
-	
+
 	/**
 	 * Delete all permissions for a given Group
 	 * @param String $str_Group GUID of the User
@@ -152,27 +153,27 @@ class cKeybox extends \cTableKeybox
 			self::deleteKey($obj_Data);
 		}
 	}
-	
+
 	public static function unlinkGroup2Permission($str_Group, $str_Permission)
 	{
 		if(!$str_Group)
 		{
 			throw new cMissingParam(__FUNCTION__,"str_Group","Missing User ID.");
 		}
-	
+
 		if(!$str_Permission)
 		{
 			throw new cMissingParam(__FUNCTION__,"str_Permission","Missing Permission ID.");
 		}
-	
+
 		$obj_Keys = self::getQueryObj();
-	
+
 		$obj_Keys->filterBylinkId($str_Group);
 		$obj_Keys->filterBylinkType(self::C_INT_LINKTYPE_GROUP);
 		$obj_Keys->filterByactionId($str_Permission);
-	
+
 		$obj_Keys = $obj_Keys->find();
-	
+
 		foreach($obj_Keys as $str_Key=>$obj_Data)
 		{
 			self::deleteKey($obj_Data);
@@ -218,7 +219,7 @@ class cKeybox extends \cTableKeybox
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
-			self::$m_obj_QueryObj = \cTableKeyboxQuery::create();
+			self::$m_obj_QueryObj = cTableKeyboxQuery::create();
 		}
 		return self::$m_obj_QueryObj;
 	}
@@ -506,8 +507,9 @@ class cKeybox extends \cTableKeybox
 
 	public static function createTable()
 	{
-		$str_Statement = file_get_contents(dirname(dirname(__DIR__))."/sql/keybox_schema.sql");
+		cPropelConnector::initPropel();
 
+		$str_Statement = file_get_contents(dirname(__DIR__)."/sql/tables/keybox_schema.sql");
 		$str_Statement = str_ireplace("DROP TABLE IF EXISTS `keybox`;","",$str_Statement);
 
 		try {
