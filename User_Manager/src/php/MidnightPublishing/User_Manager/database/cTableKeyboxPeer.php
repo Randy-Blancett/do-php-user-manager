@@ -1,5 +1,8 @@
 <?php
 
+namespace MidnightPublishing\User_Manager\database;
+
+use MidnightPublishing\User_Manager\database\om\BasecTableKeyboxPeer;
 
 
 /**

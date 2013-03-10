@@ -6,3 +6,5 @@ review
 vendor
 /.settings
 /bin
+/.classpath
+/.project
