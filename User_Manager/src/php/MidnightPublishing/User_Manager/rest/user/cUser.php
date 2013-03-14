@@ -1,32 +1,37 @@
 <?php
-use \darkowl\user_manager\resource\cUserResource;
-use \darkowl\user_manager\response\cUserResponse;
-use \darkowl\user_manager\resource\cGroupResource;
-use \darkowl\user_manager\response\cGroupResponse;
-use \darkowl\user_manager\resource\cFormResource;
-use \darkowl\user_manager\response\cFormResponse;
-use \darkowl\user_manager\resource\cActionResource;
-use \darkowl\user_manager\response\cActionResponse;
-use \darkowl\user_manager\exception\cMissingParam;
-use \darkowl\user_manager\dataObject;
-use \darkowl\user_manager\cUser;
+namespace MidnightPublishing\User_Manager\rest\user;
 
-require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
-require_once dirname(dirname(__DIR__))."/dataObject/cUser.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cUser2Groups.php";
-require_once dirname(dirname(__DIR__))."/response/cUserResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cUserResource.php";
-require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
-require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
-require_once dirname(dirname(__DIR__))."/response/cActionResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cActionResource.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cUser2Groups.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cKeybox.php";
 
+use MidnightPublishing\User_Manager\resource\cFormResource;
+
+use MidnightPublishing\User_Manager\dataObject\cGroup;
+
+use MidnightPublishing\User_Manager\resource\cActionResource;
+
+use MidnightPublishing\User_Manager\resource\cGroupResource;
+
+use MidnightPublishing\User_Manager\response\cActionResponse;
+
+use MidnightPublishing\User_Manager\response\cGroupResponse;
+
+use MidnightPublishing\User_Manager\dataObject\cKeybox;
+
+use MidnightPublishing\User_Manager\dataObject\cUser2Groups;
+
+use MidnightPublishing\User_Manager\resource\cUserResource;
+
+use MidnightPublishing\User_Manager\dataObject\cAction;
+
+use MidnightPublishing\User_Manager\response\cUserResponse;
+
+use MidnightPublishing\User_Manager\response\cFormResponse;
+use MidnightPublishing\User_Manager\dataObject;
+use MidnightPublishing\User_Manager;
+
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
 
 class cUserDataBase extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
@@ -68,7 +73,7 @@ class cUserDataBase extends \Tonic\Resource {
 	{
 		if(!self::$m_obj_UserValidator)
 		{
-			self::$m_obj_UserValidator = new \darkowl\user_manager\cUser(true,cUser::C_INT_LOGIN_TYPE_HTTP);
+			self::$m_obj_UserValidator = new User_Manager\cUser(true,User_Manager\cUser::C_INT_LOGIN_TYPE_HTTP);
 		}
 		return self::$m_obj_UserValidator;
 	}
@@ -82,8 +87,6 @@ class cUserDataBase extends \Tonic\Resource {
  */
 class cUserData extends cUserDataBase {
 	private $m_obj_Response = null;
-
-
 
 	/**
 	 * Get Users depending on what is passed in
@@ -114,7 +117,7 @@ class cUserData extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_VIEW))
+		if(!$obj_User->checkPermissions( cAction::C_STR_USER_MANAGER_USER_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -217,7 +220,7 @@ class cUserData extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cUserResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -288,7 +291,7 @@ class cUserData extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -468,7 +471,7 @@ class cUserData extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_ADD))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_ADD))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -509,7 +512,7 @@ class cUserData extends cUserDataBase {
 
 		if(!$bool_Fail)
 		{
-			$obj_CreationDate = new DateTime();
+			$obj_CreationDate = new \DateTime();
 
 			$obj_DOUser = new dataObject\cUser();
 			$str_ID = dataObject\cUser::create_GUID();
@@ -600,7 +603,7 @@ class cUserData extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_DELETE))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_DELETE))
 		{
 			$bool_Fail = true;
 			$this->m_obj_Response->setSuccess(false);
@@ -622,7 +625,7 @@ class cUserData extends cUserDataBase {
 		if(!$bool_Fail)
 		{
 			try {
-				dataObject\cUser2Groups::deleteUsersGroups($str_ID);
+				cUser2Groups::deleteUsersGroups($str_ID);
 			}
 			catch (Exception $e)
 			{
@@ -632,11 +635,11 @@ class cUserData extends cUserDataBase {
 				$this->m_obj_Response->logError("Failed to remove User's Groups: ".$e->getMessage());
 			}
 		}
-		
+
 		if(!$bool_Fail)
 		{
 			try {
-				dataObject\cKeybox::deleteUsersPermissions($str_ID);
+				cKeybox::deleteUsersPermissions($str_ID);
 			}
 			catch (Exception $e)
 			{
@@ -683,7 +686,7 @@ class cUserGroupAvail extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -778,7 +781,7 @@ class cUserGroupCurrent extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -854,7 +857,7 @@ class cUserGroupAdd extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -920,7 +923,7 @@ class cUserGroupAdd extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -982,7 +985,7 @@ class cUserPermissionAvail extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response =new cActionResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_ACTION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1039,7 +1042,7 @@ class cUserPermissionAvail extends cUserDataBase {
 								switch($str_Key)
 								{
 									case "comment":
-										$obj_Data = dataObject\cGroup::getCommentString($obj_Data);
+										$obj_Data = cGroup::getCommentString($obj_Data);
 										break;
 								}
 								$obj_Row->$str_Key = $obj_Data;
@@ -1077,7 +1080,7 @@ class cUserPermissionCurrent extends cUserDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cActionResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1097,7 +1100,7 @@ class cUserPermissionCurrent extends cUserDataBase {
 		$obj_DOPermissions = null;
 		if(!$bool_Fail){
 			try {
-				$obj_DOPermissions=dataObject\cKeybox::getUsersPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+				$obj_DOPermissions=cKeybox::getUsersPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 			} catch (cMissingParam $e) {
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
@@ -1113,13 +1116,13 @@ class cUserPermissionCurrent extends cUserDataBase {
 				{
 					if(isset($arr_Permissions["actionId"]))
 					{
-						$obj_DOPermission = dataObject\cAction::getActionById($arr_Permissions["actionId"]);
+						$obj_DOPermission = cAction::getActionById($arr_Permissions["actionId"]);
 
 						$obj_Row = new cActionResource();
 
 						$obj_Row->id = $obj_DOPermission->getId();
 						$obj_Row->name = $obj_DOPermission->getName();
-						$obj_Row->comment = dataObject\cAction::getCommentString( $obj_DOPermission->getComment());
+						$obj_Row->comment =  cAction::getCommentString( $obj_DOPermission->getComment());
 
 							
 						// 						$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_APPLICATION." was changed from ".$obj_OrigData->getApplication()." to ".$arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
@@ -1161,7 +1164,7 @@ class cUserPermissionAdd extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1227,7 +1230,7 @@ class cUserPermissionAdd extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);

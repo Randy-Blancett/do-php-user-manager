@@ -1,7 +1,23 @@
 <?php
-use MidnightPublishing\User_Manager\cUser;
+namespace MidnightPublishing\User_Manager\rest\group;
 
-use \darkowl\user_manager\dataObject;
+use MidnightPublishing\User_Manager\resource\cActionResource;
+
+use MidnightPublishing\User_Manager\response\cActionResponse;
+
+use MidnightPublishing\User_Manager\resource\cFormResource;
+
+use MidnightPublishing\User_Manager\dataObject\cKeybox;
+
+use MidnightPublishing\User_Manager\response\cFormResponse;
+
+use MidnightPublishing\User_Manager\dataObject\cAction;
+
+use MidnightPublishing\User_Manager\resource\cGroupResource;
+
+use MidnightPublishing\User_Manager\response\cGroupResponse;
+use MidnightPublishing\User_Manager\cUser;
+use MidnightPublishing\User_Manager\dataObject;
 
 
 /**
@@ -73,7 +89,7 @@ class cGroup extends cGroupDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -106,7 +122,7 @@ class cGroup extends cGroupDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -135,7 +151,7 @@ class cGroup extends cGroupDataBase {
 				$this->m_obj_Response->addResource($obj_Row);
 			}
 			$this->m_obj_Response->setSuccess(true);
-			$this->m_obj_Response->setTotal(dataObject\cAction::getTotalActionCount());
+			$this->m_obj_Response->setTotal(cAction::getTotalActionCount());
 		}
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
@@ -154,7 +170,7 @@ class cGroup extends cGroupDataBase {
 		$this->m_obj_Response = new cFormResponse();
 		$obj_DOGroup = new dataObject\cGroup();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_EDIT))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -203,7 +219,7 @@ class cGroup extends cGroupDataBase {
 		$this->m_obj_Response = new cFormResponse();
 		// 		$obj_DOGroup = new dataObject\cGroup();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_ADD))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_ADD))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -252,7 +268,7 @@ class cGroup extends cGroupDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_DELETE))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_DELETE))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -271,7 +287,7 @@ class cGroup extends cGroupDataBase {
 			{
 
 				try {
-					dataObject\cKeybox::deleteGroupsPermissions($str_ID);
+					cKeybox::deleteGroupsPermissions($str_ID);
 					$obj_OrigData->delete();
 
 					$this->m_obj_Response->addMsg("Deleted ".$str_ID);
@@ -311,7 +327,7 @@ class cGroupPermissionCurrent extends cGroupDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cActionResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -331,7 +347,7 @@ class cGroupPermissionCurrent extends cGroupDataBase {
 		$obj_DOPermissions = null;
 		if(!$bool_Fail){
 			try {
-				$obj_DOPermissions=dataObject\cKeybox::getGroupsPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+				$obj_DOPermissions=cKeybox::getGroupsPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
 			} catch (cMissingParam $e) {
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
@@ -347,13 +363,13 @@ class cGroupPermissionCurrent extends cGroupDataBase {
 				{
 					if(isset($arr_Permissions["actionId"]))
 					{
-						$obj_DOPermission = dataObject\cAction::getActionById($arr_Permissions["actionId"]);
+						$obj_DOPermission = cAction::getActionById($arr_Permissions["actionId"]);
 
 						$obj_Row = new cActionResource();
 
 						$obj_Row->id = $obj_DOPermission->getId();
 						$obj_Row->name = $obj_DOPermission->getName();
-						$obj_Row->comment = dataObject\cAction::getCommentString( $obj_DOPermission->getComment());
+						$obj_Row->comment = cAction::getCommentString( $obj_DOPermission->getComment());
 
 						$this->m_obj_Response->addResource($obj_Row);
 					}
@@ -386,7 +402,7 @@ class cGroupPermissionAvail extends cGroupDataBase {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response =new cActionResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
+		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -407,8 +423,8 @@ class cGroupPermissionAvail extends cGroupDataBase {
 		$obj_DOPermissionsCur = null;
 		if(!$bool_Fail){
 			try {
-				$obj_DOPermissionsAvail=dataObject\cAction::getAllActions();
-				$obj_DOPermissionsCur=$obj_DOPermissions=dataObject\cKeybox::getGroupsPermissions($str_ID);
+				$obj_DOPermissionsAvail= cAction::getAllActions();
+				$obj_DOPermissionsCur=$obj_DOPermissions= cKeybox::getGroupsPermissions($str_ID);
 			} catch (cMissingParam $e) {
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
@@ -482,7 +498,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
+		if(!$obj_User->checkPermissions( cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -499,7 +515,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 			$bool_Fail = true;
 		}
 
-		$obj_DOAction = dataObject\cAction::getActionById($str_PermissionID);
+		$obj_DOAction = cAction::getActionById($str_PermissionID);
 		if(!$bool_Fail&&!$obj_DOAction)
 		{
 			$this->m_obj_Response->setSuccess(false);
@@ -508,7 +524,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 			$bool_Fail = true;
 		}
 
-		$obj_DOKeybox = dataObject\cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
+		$obj_DOKeybox = cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
 
 		if(!$bool_Fail&& $obj_DOKeybox>0)
 		{
@@ -522,7 +538,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 
 		if(!$bool_Fail)
 		{
-			dataObject\cKeybox::linkGroup2Permission($str_GroupID,$str_PermissionID);
+			cKeybox::linkGroup2Permission($str_GroupID,$str_PermissionID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
@@ -548,7 +564,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
+		if(!$obj_User->checkPermissions( cAction::C_STR_USER_MANAGER_GROUP_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -565,7 +581,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 			$bool_Fail = true;
 		}
 
-		$obj_DOKeybox = dataObject\cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
+		$obj_DOKeybox = cKeybox::countGroup2Permission($str_GroupID,$str_PermissionID);
 
 		if(!$bool_Fail&& $obj_DOKeybox==0)
 		{
@@ -579,7 +595,7 @@ class cGroupPermissionAdd extends cGroupDataBase {
 
 		if(!$bool_Fail)
 		{
-			dataObject\cKeybox::unlinkGroup2Permission($str_GroupID,$str_PermissionID);
+			cKeybox::unlinkGroup2Permission($str_GroupID,$str_PermissionID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);

@@ -81,7 +81,7 @@ if(!defined("MP_AUTOLOADER_SET")) {
 					$arr_FailedFiles[] = $str_File2Load;
 					continue;
 				}
-				require($str_File2Load);
+				require_once ($str_File2Load);
 				return TRUE;
 			}
 			// 			print_r($arr_FailedFiles);

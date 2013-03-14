@@ -9,13 +9,14 @@ require_once 'MP_Autoloader.php';
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\action\\cAction");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\application\\cApplication");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\group\\cGroup");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\user\\cUser");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\cUserManagerDB");
 
 /**
  * Basic Resource List
  * @namespace User_Manager
  * @uri /
- */
+*/
 class cBaseResource extends \Tonic\Resource {
 
 	// 	function get($request) {
