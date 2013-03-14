@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0"
+	xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+	<name>User_Manager</name>
+	<channel>DarkOwls</channel>
+	<summary>Framework-agnostic command-line util for PHP development</summary>
+	<description>A handy command-line tool to provide structure to any commands / tasks you need to run on the command line.</description>
+	<lead>
+		<name>Randy Blancett</name>
+		<user>rblancett</user>
+		<email>Randy.Blancett@gmail.com</email>
+		<active>yes</active>
+	</lead>
+	<date>${build.date}</date>
+	<time>${build.time}</time>
+
+	<version>
+		<release>${project.version}</release>
+		<api>${project.majorVersion}.${project.minorVersion}</api>
+	</version>
+	<stability>
+		<release>${project.stability}</release>
+		<api>stable</api>
+	</stability>
+	<license uri="http://www.apache.org/licenses/">Apache</license>
+	<notes>
+No notes.
+ </notes>
+	<contents>
+		<dir baseinstalldir="MidnightPublishing/UserManager" name="/MidnightPublishing/UserManager">
+			${contents}
+		</dir>
+	</contents>
+	<dependencies>
+		<required>
+			<php>
+				<min>4.2</min>
+				<max>6.0.0</max>
+			</php>
+			<pearinstaller>
+				<min>1.4.0dev13</min>
+			</pearinstaller>
+		</required>
+	</dependencies>
+	<phprelease />
+	<changelog>
+		<release>
+			<version>
+				<release>2.0.1snapshot201302241803</release>
+				<api>2.0</api>
+			</version>
+			<stability>
+				<release>snapshot</release>
+				<api>stable</api>
+			</stability>
+			<date>2013-02-27</date>
+			<license uri="http://www.apache.org/licenses/">Apache</license>
+			<notes>
+No notes.
+   </notes>
+		</release>
+	</changelog>
+</package>

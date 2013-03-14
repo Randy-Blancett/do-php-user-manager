@@ -5,32 +5,20 @@
 	<artifactId>User_Manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>User_Manager</name>
+	<inceptionYear>2010</inceptionYear>
+	<packaging>pear</packaging>
 
 	<parent>
 		<groupId>org.phpmaven</groupId>
 		<artifactId>php-parent-pom</artifactId>
-		<version>2.0.1</version>
+		<version>2.0.2</version>
 	</parent>
 
 	<properties>
-		<phpmaven.release.number>2.0-SNAPSHOT</phpmaven.release.number>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<phpunit.version>3.6.10</phpunit.version>
 	</properties>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.1</version>
-			</plugin>
-		</plugins>
-		<outputDirectory>testOutput</outputDirectory>
-	</reporting>
 
-	<inceptionYear>2010</inceptionYear>
-	<packaging>php</packaging>
 
 	<build>
 		<plugins>
@@ -39,33 +27,21 @@
 				<artifactId>maven-php-plugin</artifactId>
 				<extensions>true</extensions>
 			</plugin>
-			<!-- The web assembyl -->
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2-beta-2</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.phpmaven</groupId>
-						<artifactId>maven-php-plugin</artifactId>
-						<version>1.0</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>bundle-project-sources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<descriptorRefs>
-								<descriptorRef>php-webapp</descriptorRef>
-							</descriptorRefs>
-						</configuration>
-					</execution>
-				</executions>
+				<groupId>org.phpmaven</groupId>
+				<artifactId>maven-php-pear</artifactId>
+				<configuration>
+					<installDir>${project.basedir}/target/pear-install</installDir>
+					<pearPackage>Test123</pearPackage>
+				</configuration>
 			</plugin>
-
+			<!-- The web assembyl -->
+			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <version>2.2-beta-2</version> 
+				<dependencies> <dependency> <groupId>org.phpmaven</groupId> <artifactId>maven-php-plugin</artifactId> 
+				<version>2.0.2</version> </dependency> </dependencies> <executions> <execution> 
+				<id>bundle-project-sources</id> <phase>package</phase> <goals> <goal>single</goal> 
+				</goals> <configuration> <descriptorRefs> <descriptorRef>php-webapp</descriptorRef> 
+				</descriptorRefs> </configuration> </execution> </executions> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -139,13 +115,15 @@
 		</pluginManagement>
 	</build>
 
-	<dependencies> 
+
+
+	<dependencies>
+		<!-- phpUnit for PHP 5 -->
 		<dependency>
-			<groupId>org.phpunit</groupId>
-			<artifactId>phpunit5</artifactId>
-			<version>3.3.9</version>
-			<scope>test</scope>
+			<groupId>de.phpunit</groupId>
+			<artifactId>PHPUnit</artifactId>
+			<version>3.6.10</version>
+			<type>phar</type>
 		</dependency>
 	</dependencies>
-
 </project>
