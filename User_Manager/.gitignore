@@ -3,3 +3,8 @@
 /bin
 /target
 /dist
+/.tmp
+/vendor
+/resources
+/.classpath
+/review
