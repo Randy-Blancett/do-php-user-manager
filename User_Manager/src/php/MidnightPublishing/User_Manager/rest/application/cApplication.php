@@ -1,6 +1,10 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\application;
 
+use MidnightPublishing\User_Manager\response\cFormResponse;
+
+use MidnightPublishing\User_Manager\resource\cApplicationResource;
+
 use MidnightPublishing\User_Manager\response\cApplicationResponse;
 
 use MidnightPublishing\User_Manager\resource\cFormResource;
@@ -11,6 +15,10 @@ use MidnightPublishing\User_Manager\dataObject\cAction;
 
 use MidnightPublishing\User_Manager\cUser;
 
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
 /**
  * Basic Resource List
  * @namespace User_Manager

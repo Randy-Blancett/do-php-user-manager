@@ -1,7 +1,24 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\action;
 
+use MidnightPublishing\User_Manager\dataObject\cApplication;
+
+use MidnightPublishing\User_Manager\resource\cActionResource;
+
+use MidnightPublishing\User_Manager\dataObject;
+
+use MidnightPublishing\User_Manager\response\cActionResponse;
+
+use MidnightPublishing\User_Manager\resource\cFormResource;
+
+use MidnightPublishing\User_Manager\response\cFormResponse;
+
 use MidnightPublishing\User_Manager\cUser;
+
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
 
 /**
  * Basic Resource List
@@ -68,7 +85,7 @@ class cAction extends \Tonic\Resource {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -102,7 +119,7 @@ class cAction extends \Tonic\Resource {
 		$obj_User =  self::getUserValidator();
 		$this->m_obj_Response = new cActionResponse();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_ACTION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -156,7 +173,7 @@ class cAction extends \Tonic\Resource {
 		$this->m_obj_Response = new cFormResponse();
 		$obj_DOAction = new dataObject\cAction();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_DELETE))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_ACTION_DELETE))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -196,7 +213,7 @@ class cAction extends \Tonic\Resource {
 		$this->m_obj_Response = new cFormResponse();
 		$obj_DOAction = new dataObject\cAction();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_EDIT))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_ACTION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -248,7 +265,7 @@ class cAction extends \Tonic\Resource {
 		$this->m_obj_Response = new cFormResponse();
 		$obj_DOAction = new dataObject\cAction();
 
-		if(!$obj_User->checkPermissions(\darkowl\user_manager\dataObject\cAction::C_STR_USER_MANAGER_ACTION_ADD))
+		if(!$obj_User->checkPermissions(dataObject\cAction::C_STR_USER_MANAGER_ACTION_ADD))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);

@@ -29,7 +29,7 @@ $conf = array (
 				),
 				'default' => 'user_manager',
 		),
-		'generator_version' => '1.6.6',
+		'generator_version' => '1.6.8',
 );
 $conf['classmap'] = include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'classmap-user_manager-conf.php');
 return $conf;

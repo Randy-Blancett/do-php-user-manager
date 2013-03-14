@@ -10,6 +10,8 @@ use MidnightPublishing\User_Manager\database\cTableActionsQuery;
  */
 require_once 'MP_Autoloader.php';
 
+cPropelConnector::initPropel();
+
 class cAction extends cTableActions
 {
 	const C_STR_USER_MANAGER_ACTION_VIEW = "75079AF6-14E1-42D4-8122-016248106E51";
@@ -42,6 +44,7 @@ class cAction extends cTableActions
 
 	private static $m_obj_Query;
 	private static $m_obj_QueryObj;
+
 
 	public static function create_GUID()
 	{

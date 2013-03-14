@@ -5,17 +5,10 @@ namespace MidnightPublishing\User_Manager\rest;
  */
 require_once 'MP_Autoloader.php';
 
-
-// require_once 'setup/cSetupResource.php';
-// require_once 'database/cUserManagerDB.php';
-// require_once 'user/cUser.php';
-// require_once 'application/cApplication.php';
-// require_once 'action/cAction.php';
-// require_once 'group/cGroup.php';
-
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\setup\\cSetupResource");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\action\\cAction");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\application\\cApplication");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\group\\cGroup");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\cUserManagerDB");
 
 /**

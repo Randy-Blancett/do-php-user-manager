@@ -189,7 +189,6 @@ Ext
 						}
 					},
 					openAppDelete : function(str_App) {
-						console.log("Delete - " + str_App);
 						var obj_Connection = Ext.create("Ext.data.Connection");
 
 						obj_Connection
@@ -214,9 +213,7 @@ Ext
 																Console
 																		.log("Failed to Delete Application");
 															});
-
 										}
-										console.log("Deleted Object");
 									},
 									failure : function() {
 										console.log("Failed to Delete Object");

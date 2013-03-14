@@ -1,23 +1,13 @@
 <?php
-use \darkowl\user_manager\dataObject;
-use \darkowl\user_manager\resource\cGroupResource;
-use \darkowl\user_manager\response\cGroupResponse;
-use \darkowl\user_manager\resource\cFormResource;
-use \darkowl\user_manager\response\cFormResponse;
-use \darkowl\user_manager\resource\cActionResource;
-use \darkowl\user_manager\response\cActionResponse;
-use \darkowl\user_manager\cUser;
+use MidnightPublishing\User_Manager\cUser;
 
-require_once dirname(dirname(dirname( __DIR__))).'/propelInclude.php';
-require_once dirname(dirname(__DIR__))."/dataObject/cGroup.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cKeybox.php";
-require_once dirname(dirname(__DIR__))."/dataObject/cAction.php";
-require_once dirname(dirname(__DIR__))."/response/cGroupResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cGroupResource.php";
-require_once dirname(dirname(__DIR__))."/response/cFormResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cFormResource.php";
-require_once dirname(dirname(__DIR__))."/response/cActionResponse.php";
-require_once dirname(dirname(__DIR__))."/resource/cActionResource.php";
+use \darkowl\user_manager\dataObject;
+
+
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
 
 class cGroupDataBase extends \Tonic\Resource {
 	const C_STR_PARAM_START = "start";
@@ -280,21 +270,21 @@ class cGroup extends cGroupDataBase {
 			else
 			{
 
-					try {
-						dataObject\cKeybox::deleteGroupsPermissions($str_ID);
-						$obj_OrigData->delete();
-							
-						$this->m_obj_Response->addMsg("Deleted ".$str_ID);
-						$this->m_obj_Response->setCode(\Tonic\Response::OK);
-						$this->m_obj_Response->setSuccess(true);
-					}
-					catch (Exception $e)
-					{
-						$bool_Fail = true;
-						$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
-						$this->m_obj_Response->setSuccess(false);
-						$this->m_obj_Response->logError("Failed to remove User's Permissions: ".$e->getMessage());
-					}
+				try {
+					dataObject\cKeybox::deleteGroupsPermissions($str_ID);
+					$obj_OrigData->delete();
+
+					$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+					$this->m_obj_Response->setCode(\Tonic\Response::OK);
+					$this->m_obj_Response->setSuccess(true);
+				}
+				catch (Exception $e)
+				{
+					$bool_Fail = true;
+					$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
+					$this->m_obj_Response->setSuccess(false);
+					$this->m_obj_Response->logError("Failed to remove User's Permissions: ".$e->getMessage());
+				}
 			}
 		}
 

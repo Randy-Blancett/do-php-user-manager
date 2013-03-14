@@ -7,6 +7,8 @@ use MidnightPublishing\User_Manager\cPropelConnector;
 
 use MidnightPublishing\User_Manager\database\cTableApplications;
 
+cPropelConnector::initPropel();
+
 class cApplication extends cTableApplications
 {
 	const C_STR_ID_USER_MANAGER = "5D2B859D-4D61-11DF-BD82-8264710BE149";
@@ -40,6 +42,7 @@ class cApplication extends cTableApplications
 
 	protected static function getQueryObj()
 	{
+		cPropelConnector::initPropel();
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableApplicationsQuery::create();
 		}
@@ -48,6 +51,7 @@ class cApplication extends cTableApplications
 
 	protected static function getQuery()
 	{
+		cPropelConnector::initPropel();
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableApplicationsQuery();
 		}
