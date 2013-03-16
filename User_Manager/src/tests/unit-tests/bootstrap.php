@@ -1,5 +1,4 @@
 <?php
-
 // =========================================================================
 //
 // tests/bootstrap.php
@@ -18,16 +17,21 @@ define('APP_TOPDIR', realpath(__DIR__ . '/../../php'));
 define('APP_LIBDIR', realpath(__DIR__ . '/../../../vendor/php'));
 define('APP_TESTDIR', realpath(__DIR__ . '/php'));
 
+// print( "APP_TOPDIR - ".realpath(__DIR__ . '/../../php')."\n");
+// print( "APP_LIBDIR - ".realpath(__DIR__ . '/../../../vendor/php')."\n");
+// print( "APP_TESTDIR - ".realpath(__DIR__ . '/php')."\n");
+
 // step 2: find the autoloader, and install it
-require_once('psr0.autoloader.php');
+require_once(APP_TOPDIR."/MP_Autoloader.php");
 
 // step 3: add the additional paths to the include path
-psr0_autoloader_searchFirst(APP_LIBDIR);
-psr0_autoloader_searchFirst(APP_TESTDIR);
-psr0_autoloader_searchFirst(APP_TOPDIR);
+PSR0Autoloader::searchFirst(APP_LIBDIR);
+PSR0Autoloader::searchFirst(APP_TESTDIR);
+PSR0Autoloader::searchFirst(APP_TOPDIR);
+
 
 // step 4: enable ContractLib if it is available
 if (class_exists('Phix_Project\ContractLib\Contract'))
 {
-        \Phix_Project\ContractLib\Contract::EnforceWrappedContracts();
+	\Phix_Project\ContractLib\Contract::EnforceWrappedContracts();
 }

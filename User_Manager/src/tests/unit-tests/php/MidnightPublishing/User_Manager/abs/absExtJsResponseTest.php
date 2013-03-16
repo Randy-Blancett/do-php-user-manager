@@ -1,7 +1,6 @@
 <?php
 namespace MidnightPublishing\User_Manager\unitTest;
 
-
 use MidnightPublishing\User_Manager\abs\absResource;
 
 /**
@@ -11,10 +10,6 @@ require_once 'MP_Autoloader.php';
 
 use MidnightPublishing\User_Manager\abs\absResourceTable;
 use MidnightPublishing\User_Manager\abs\absExtJsResponse;
-
-// require_once dirname(dirname(dirname(__DIR__)))."/main/php/Tonic/Autoloader.php";
-// require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_ExtJsResponse.php";
-// require_once dirname(dirname(dirname(__DIR__)))."/main/php/do/darkowl/User_Manager/abstract/abs_Resource.php";
 
 class cTestExtJsResponse extends absExtJsResponse
 {
@@ -70,8 +65,6 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 
 		$obj_JSON = \json_decode($obj_Response->output_JSON());
 
-// 		print_r($obj_JSON->resources[0]);
-
 		$this->assertTrue( $obj_JSON->success);
 		$this->assertEquals(100, $obj_JSON->total);
 		$this->assertEquals("Test Message.", $obj_JSON->msgs[0]);
@@ -80,6 +73,8 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("Test Log Message 2.", $obj_JSON->errors[1]);
 		$this->assertEquals("1", $obj_JSON->resources[0]->test);
 		$this->assertEquals("1", $obj_JSON->resources[1]->test);
+		
+		$obj_JSON = null;
 	}
 
 }

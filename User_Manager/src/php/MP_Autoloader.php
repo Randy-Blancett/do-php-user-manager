@@ -9,11 +9,24 @@
 //Only worry about Autoloader if it is not already Initalized
 if(!defined("MP_AUTOLOADER_SET")) {
 	define("MP_AUTOLOADER_SET", true);
-
+/**
+ * Class to autoload Midnight Publishing classes. This is based on the PSR0 autoloader
+ * @author Randy.Blancett
+ * @version 0.0.1
+ */
 	class PSR0Autoloader
 	{
+		/**
+		 * Array of loaded Name spaces
+		 * @var array
+		 */
 		private static $m_arr_LoadedNamespaces = array();
-		// autoloader support
+		
+		/**
+		 * Normalize the Class name into a file path
+		 * @param string $str_ClassName
+		 * @return string The file path the class was turned into
+		 */
 		public static function  normalisePath($str_ClassName)
 		{
 			// 			print("PSR0 Normalise Path '$str_ClassName'\n");

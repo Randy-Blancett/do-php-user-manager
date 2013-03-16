@@ -213,7 +213,7 @@
     <delete dir="${project.review.codecoveragedir}" />
     <mkdir dir="${project.review.codecoveragedir}" />
     <mkdir dir="${project.review.logsdir}" />
-    <exec command="phpunit" checkreturn="true" logoutput="true"/>
+    <exec command="phpunit -debug" checkreturn="true" logoutput="true"/>
     <echo/>
     <echo>The code coverage report is in file://${project.review.codecoveragedir}</echo>
     <echo/>
