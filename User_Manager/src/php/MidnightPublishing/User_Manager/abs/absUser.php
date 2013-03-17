@@ -106,9 +106,6 @@ class absUser
 		{
 			cSession::login($str_UserName);
 
-			// 			$obj_TABLE_Users = $this->get_UserTable();
-			// 			$obj_TABLE_Users->set_Login($str_UserName);
-
 			if ($bool_Redirect)
 			{
 				header('Location: ' . cSession::getLastUrl());

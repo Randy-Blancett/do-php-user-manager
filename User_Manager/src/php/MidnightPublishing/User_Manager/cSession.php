@@ -26,11 +26,14 @@ class cSession
 	const C_STR_SESSION_CUR_LASTURL = "LastURL";
 	const C_STR_SESSION_CUR_LOGINATTEMPT = "LoginAttempt";
 
+	/**
+	 * Init defailt session objects
+	 */
 	public static function init()
 	{
 		if (!isset($_SESSION[self::C_STR_SESSION_IS_LOGGED_IN]))
 		{
-			$_SESSION[self::C_STR_SESSION_IS_LOGGED_IN] = "";
+			$_SESSION[self::C_STR_SESSION_IS_LOGGED_IN] = false;
 		}
 		if (!isset($_SESSION[self::C_STR_SESSION_CUR_USERNAME]))
 		{
@@ -46,7 +49,7 @@ class cSession
 		}
 		if (!isset($_SESSION[self::C_STR_SESSION_CUR_LOGINATTEMPT]))
 		{
-			$_SESSION[self::C_STR_SESSION_CUR_LOGINATTEMPT] = "";
+			$_SESSION[self::C_STR_SESSION_CUR_LOGINATTEMPT] = 0;
 		}
 	}
 
@@ -106,6 +109,15 @@ class cSession
 		return $_SESSION[cSession::C_STR_SESSION_CUR_USERNAME] ;
 	}
 
+	/**
+	 * Get the number of Failed login attempts
+	 * @return integer Number of times a login has failed
+	 */
+	public static function getLoginAttemtps()
+	{
+		return $_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT];
+	}
+
 	public static function getLastUrl()
 	{
 		return $_SESSION[cSession::C_STR_SESSION_CUR_LASTURL];
@@ -132,7 +144,6 @@ class cSession
 
 	public static function isLoggedIn()
 	{
-
 		if (($_SESSION[self::C_STR_SESSION_IS_LOGGED_IN]) && ($_SESSION[self::C_STR_SESSION_CUR_USERID]))
 		{
 			return true;
