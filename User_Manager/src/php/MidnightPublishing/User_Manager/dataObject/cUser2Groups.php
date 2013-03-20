@@ -6,6 +6,12 @@ use MidnightPublishing\User_Manager\database\cTableUsers2Groups;
 use MidnightPublishing\User_Manager\cPropelConnector;
 
 
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
+
+cPropelConnector::initPropel();
 class cUser2Groups extends cTableUsers2Groups
 {
 	private static $m_obj_Query;

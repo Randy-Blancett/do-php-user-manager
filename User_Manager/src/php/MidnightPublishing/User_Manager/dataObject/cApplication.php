@@ -7,6 +7,12 @@ use MidnightPublishing\User_Manager\cPropelConnector;
 
 use MidnightPublishing\User_Manager\database\cTableApplications;
 
+
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
+
 cPropelConnector::initPropel();
 
 class cApplication extends cTableApplications

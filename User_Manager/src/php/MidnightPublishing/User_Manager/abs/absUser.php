@@ -1,6 +1,8 @@
 <?php
 namespace MidnightPublishing\User_Manager\abs;
 
+use MidnightPublishing\User_Manager\dataObject\cKeybox;
+
 use MidnightPublishing\User_Manager\dataObject\cUser;
 
 use MidnightPublishing\User_Manager\cSession;
@@ -63,18 +65,40 @@ class absUser
 		return self::$m_str_LogInUrl;
 	}
 
-
+	/**
+	 * Get the User Name of the currently logged in user
+	 */
 	public function getUserName()
 	{
 		return cSession::getUserName();
 	}
 
+	/**
+	 * Get the ID of the currently logged in user
+	 */
+	public function getUserID()
+	{
+		return cSession::getUserId();
+	}
+
+	/**
+	 * Check if the currently logged in user can perform the given permission
+	 * @param unknown $mix_Permission Permission to check
+	 * @return boolean Return true if the user has the permission false if it dose not
+	 */
 	public function checkPermissions($mix_Permission)
 	{
 		if($this->isGod())
 		{
 			return true;
 		}
+		//Check for user directly has permissions
+		if(cKeybox::countUser2Permission($this->getUserID(), $mix_Permission) > 0){
+			return true;
+		}
+
+		//If the specific user dose not have permission check Groups
+
 		return false;
 	}
 

@@ -8,6 +8,12 @@ use MidnightPublishing\User_Manager\cPropelConnector;
 use MidnightPublishing\User_Manager\exception\cMissingParam;
 use MidnightPublishing\User_Manager\database\cTableKeybox;
 
+/**
+ * Include the MidnightPublishing Autoloader
+ */
+require_once 'MP_Autoloader.php';
+
+cPropelConnector::initPropel();
 class cKeybox extends cTableKeybox
 {
 	private static $m_obj_Query;
@@ -24,6 +30,13 @@ class cKeybox extends cTableKeybox
 		return self::$m_obj_Query;
 	}
 
+	/**
+	 * Count the number of times the permission apears for the given User
+	 * @param string $str_User UserId to check
+	 * @param string $str_Permission The permission check
+	 * @throws cMissingParam
+	 * @return integer The number of times the permission appears for a given User ID
+	 */
 	public static function countUser2Permission($str_User,$str_Permission)
 	{
 		if(!$str_User)

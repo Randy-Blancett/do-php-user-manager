@@ -339,7 +339,7 @@ class cUserData extends cUserDataBase {
 
 		if(!$bool_Fail)
 		{
-			$obj_UpdateDate = new DateTime();
+			$obj_UpdateDate = new \DateTime();
 
 			$this->m_obj_Response->addMsg("Updateing Data for User '".$str_ID."'");
 

@@ -10,6 +10,7 @@ use MidnightPublishing\User_Manager\database\cTableUsers;
  */
 require_once 'MP_Autoloader.php';
 
+cPropelConnector::initPropel();
 class cUser extends cTableUsers
 {
 	private static $m_obj_Query;

@@ -1,5 +1,7 @@
 <?php 
 
+use MidnightPublishing\User_Manager\database\cTableKeyboxQuery;
+
 use MidnightPublishing\User_Manager\database\cTableUsersQuery;
 
 use MidnightPublishing\User_Manager\database\om\BasecTableUsers;
@@ -64,5 +66,25 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 		cTableUsersQuery::setIdReturn("TestID");
 
 		$this->assertTrue($obj_User->login("Test", "test",false));
+	}
+
+
+
+	function testCheckPermissions()
+	{
+		$_SESSION = Array();
+		cSession::init();
+
+		cPropelTestConnector::initPropel();
+		$obj_User = new cTestUser();
+
+		cTableUsersQuery::setPasswordReturn("test");
+		cTableUsersQuery::setIdReturn("TestID");
+
+		$this->assertTrue($obj_User->login("Test", "test",false));
+
+		cTableKeyboxQuery::setCountReturn(1);
+
+		$obj_User->checkPermissions("permission1");
 	}
 }
