@@ -97,7 +97,8 @@ class cUser extends cTableUsers
 	}
 
 	/**
-	 * @param unknown_type $str_UserName
+	 * Load User from UserName
+	 * @param string $str_UserName
 	 */
 	public static  function loadFromUserName($str_UserName)
 	{

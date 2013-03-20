@@ -14,7 +14,6 @@ class cSessionTest extends \PHPUnit_Framework_TestCase
 	function testInit()
 	{
 		$_SESSION = Array();
-
 		cSession::init();
 
 		$this->assertFalse(cSession::isLoggedIn());
