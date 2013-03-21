@@ -229,11 +229,16 @@ class cKeybox extends cTableKeybox
 		return  $obj_Return->count();
 	}
 
+	/**
+	 * Get a query object note the criteria is reset
+	 * @return \MidnightPublishing\User_Manager\database\cTableKeyboxQuery
+	 */
 	protected static function getQueryObj()
 	{
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableKeyboxQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 
@@ -326,7 +331,7 @@ class cKeybox extends cTableKeybox
 		$obj_Return->filterBylinkId($str_ID);
 		$obj_Return->filterBylinkType($int_LinkType);
 
-		return $obj_Return = $obj_Return->find();
+		return $obj_Return->find();
 	}
 
 	public static function addDefault()
