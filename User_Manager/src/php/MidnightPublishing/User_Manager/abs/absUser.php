@@ -1,6 +1,8 @@
 <?php
 namespace MidnightPublishing\User_Manager\abs;
 
+use MidnightPublishing\User_Manager\dataObject\cUser2Groups;
+
 use MidnightPublishing\User_Manager\dataObject\cKeybox;
 
 use MidnightPublishing\User_Manager\dataObject\cUser;
@@ -92,13 +94,21 @@ class absUser
 		{
 			return true;
 		}
+
 		//Check for user directly has permissions
 		if(cKeybox::countUser2Permission($this->getUserID(), $mix_Permission) > 0){
 			return true;
 		}
 
 		//If the specific user dose not have permission check Groups
-
+		foreach (cUser2Groups::getUsersGroups($this->getUserID())as $obj_Group)
+		{
+			if(cKeybox::countGroup2Permission($obj_Group->getgroupId(), $mix_Permission))
+			{
+				return true;
+			}
+		}
+		//At this point the permission is not attatched to the current user
 		return false;
 	}
 

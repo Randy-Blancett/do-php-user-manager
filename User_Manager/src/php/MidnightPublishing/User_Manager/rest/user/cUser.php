@@ -1008,8 +1008,6 @@ class cUserPermissionAvail extends cUserDataBase {
 			try {
 				$obj_DOPermissionsAvail=dataObject\cAction::getAllActions();
 				$obj_DOPermissionsCur=dataObject\cKeybox::getUsersPermissions($str_ID);
-
-				print_r($obj_DOPermissionsCur);
 			} catch (cMissingParam $e) {
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);

@@ -120,4 +120,14 @@ class cSessionTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertNotEquals($str_FirstID,cSession::regenerate());
 	}
+
+	protected function setUp()
+	{
+		\ob_start();
+	}
+
+	protected function tearDown()
+	{
+		\ob_get_flush();
+	}
 }

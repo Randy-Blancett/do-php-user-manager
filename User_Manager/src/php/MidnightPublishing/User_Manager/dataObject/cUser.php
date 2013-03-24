@@ -26,6 +26,7 @@ class cUser extends cTableUsers
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableUsersQuery();
 		}
+		self::$m_obj_Query->clear();
 		return self::$m_obj_Query;
 	}
 
@@ -34,6 +35,7 @@ class cUser extends cTableUsers
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableUsersQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 

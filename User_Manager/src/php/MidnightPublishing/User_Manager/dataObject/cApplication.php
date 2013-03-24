@@ -52,6 +52,7 @@ class cApplication extends cTableApplications
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableApplicationsQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 
@@ -61,6 +62,7 @@ class cApplication extends cTableApplications
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableApplicationsQuery();
 		}
+		self::$m_obj_Query->clear();
 		return self::$m_obj_Query;
 	}
 

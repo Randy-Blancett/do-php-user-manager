@@ -27,6 +27,7 @@ class cUser2Groups extends cTableUsers2Groups
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableUsers2GroupsQuery();
 		}
+		self::$m_obj_Query->clear();
 		return self::$m_obj_Query;
 	}
 
@@ -35,6 +36,7 @@ class cUser2Groups extends cTableUsers2Groups
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableUsers2GroupsQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 
@@ -116,6 +118,7 @@ class cUser2Groups extends cTableUsers2Groups
 	 * @param String $str_User The User ID
 	 * @param Integer $int_Start
 	 * @param Integer $int_PerPage
+	 * @return MidnightPublishing\User_Manager\database\cTableUsers2Groups returns an array of group objects
 	 */
 	public static function getUsersGroups($str_User,$int_Start = 0, $int_PerPage = null)
 	{

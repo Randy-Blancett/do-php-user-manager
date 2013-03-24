@@ -55,7 +55,13 @@ class cSession
 
 	public static function regenerate()
 	{
-		session_regenerate_id();
+		try {
+			@session_regenerate_id();
+		}
+		catch(Excepition $e)
+		{
+			print($e);
+		}
 	}
 
 	public static function setUserId($str_ID)

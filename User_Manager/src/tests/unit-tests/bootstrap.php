@@ -11,7 +11,7 @@
 //		Released under the New BSD license
 //
 // =========================================================================
-ob_start();
+
 
 // step 1: create the APP_TOPDIR constant that all components require
 define('APP_TOPDIR', realpath(__DIR__ . '/../../php'));

@@ -36,6 +36,7 @@ class cGroup extends cTableGroups
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableGroupsQuery();
 		}
+		self::$m_obj_Query->clear();
 		return self::$m_obj_Query;
 	}
 
@@ -44,6 +45,7 @@ class cGroup extends cTableGroups
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableGroupsQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 

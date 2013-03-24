@@ -27,6 +27,7 @@ class cKeybox extends cTableKeybox
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableKeyboxQuery();
 		}
+		self::$m_obj_Query ->clear();
 		return self::$m_obj_Query;
 	}
 

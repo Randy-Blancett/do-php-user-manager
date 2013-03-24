@@ -32,6 +32,12 @@ abstract class BasecTableUsersQuery
 		return new cTableUsersQuery();
 	}
 
+	public static function clear($modelAlias = null, $criteria = null)
+	{
+		// 		print("Mock ".__CLASS__." ".__METHOD__."\n");
+		// 		return new cTableUsersQuery();
+	}
+
 	public static function getPassword()
 	{
 		// 		print("Mock ".__CLASS__." ".__METHOD__." value : ".self::$m_str_Password."\n");

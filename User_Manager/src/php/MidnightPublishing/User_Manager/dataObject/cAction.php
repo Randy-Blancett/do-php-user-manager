@@ -61,6 +61,7 @@ class cAction extends cTableActions
 		if(!self::$m_obj_QueryObj){
 			self::$m_obj_QueryObj = cTableActionsQuery::create();
 		}
+		self::$m_obj_QueryObj->clear();
 		return self::$m_obj_QueryObj;
 	}
 
@@ -69,6 +70,7 @@ class cAction extends cTableActions
 		if(!self::$m_obj_Query){
 			self::$m_obj_Query = new cTableActionsQuery();
 		}
+		self::$m_obj_Query->clear();
 		return self::$m_obj_Query;
 	}
 

@@ -13,4 +13,14 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals("/User_Manager/pages/login.php", $obj_User->getLogInUrl());
 	}
+
+	protected function setUp()
+	{
+		\ob_start();
+	}
+
+	protected function tearDown()
+	{
+		\ob_get_flush();
+	}
 }
