@@ -286,8 +286,9 @@ class absUser
 
 				$str_LoginUrl .= self::getLogInUrl();
 
-				header('Location: ' . $str_LoginUrl);
-				die();
+				@header('Location: ' . $str_LoginUrl);
+				// 				die();
+				return;
 			case self::C_INT_LOGIN_TYPE_HTTP:
 				self::httpLogin();
 				break;
@@ -296,10 +297,10 @@ class absUser
 
 	protected  static function sendRequestLogin()
 	{
-		header('WWW-Authenticate: Basic realm="DarkOwl.User_Manager"');
-		header('HTTP/1.0 401 Unauthorized');
+		@header('WWW-Authenticate: Basic realm="DarkOwl.User_Manager"');
+		@header('HTTP/1.0 401 Unauthorized');
 		echo 'You are not authrized to view this page.';
-		exit;
+		return;
 	}
 
 	protected static function httpLogin()

@@ -1,4 +1,5 @@
 <?php 
+namespace MidnightPublishing\User_Manager\unitTest;
 
 use MidnightPublishing\User_Manager\database\cTableUsers2GroupsQuery;
 
@@ -13,7 +14,11 @@ use MidnightPublishing\User_Manager\database\cTableUsersQuery;
 use MidnightPublishing\User_Manager\database\om\BasecTableUsers;
 use MidnightPublishing\User_Manager\cSession;
 use MidnightPublishing\User_Manager\abs\absUser;
+/**
+ * Include the MidnightPublishing Autoloader
+ */
 
+// require_once dirname(dirname(dirname(__DIR__)))."/cPropelTestConnector.php";
 require_once dirname(dirname(dirname(__DIR__)))."/mock/loadDBMocks.php";
 
 class cTestUser extends absUser
@@ -28,7 +33,7 @@ class cTestUser extends absUser
 	}
 }
 
-class cUserTest extends \PHPUnit_Framework_TestCase
+class absUserTest extends \PHPUnit_Framework_TestCase
 {
 	public	function testInstance()
 	{
@@ -38,7 +43,7 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 
 	public function testGodLoginLogout()
 	{
-		cPropelTestConnector::initPropel();
+		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
 		$obj_User->login("DarkOwl", "Is#1",false);
@@ -80,7 +85,7 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 		$_SESSION = Array();
 		cSession::init();
 
-		cPropelTestConnector::initPropel();
+		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
 		cTableUsersQuery::setPasswordReturn("test");
@@ -94,7 +99,7 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 		$_SESSION = Array();
 		cSession::init();
 
-		cPropelTestConnector::initPropel();
+		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
 		cTableUsersQuery::setPasswordReturn("test");
@@ -145,7 +150,7 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 		$_SESSION = Array();
 		cSession::init();
 
-		cPropelTestConnector::initPropel();
+		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
 		cTableUsersQuery::setPasswordReturn("test");
@@ -163,9 +168,15 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 
 	function testRequireLogin(){
 		$_SESSION = Array();
+		//Set server data Test for when it is prot 80
+		$_SERVER = Array();
+		$_SERVER["SERVER_PORT"] = 80;
+		$_SERVER["SERVER_NAME"] = "localhost" ;
+		$_SERVER["REQUEST_URI"] = "test.php";
+
 		cSession::init();
 
-		cPropelTestConnector::initPropel();
+		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
 		cTableUsersQuery::setPasswordReturn("test");

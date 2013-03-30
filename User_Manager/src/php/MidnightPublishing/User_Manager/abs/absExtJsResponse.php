@@ -110,7 +110,7 @@ abstract class absExtJsResponse
 
 	/**
 	 * Add a resource to the return
-	 * @param absResource $obj_Resource 
+	 * @param absResource $obj_Resource
 	 */
 	public function addResource(absResource $obj_Resource){
 		$obj_Resources =& $this->getResources();
@@ -201,6 +201,15 @@ abstract class absExtJsResponse
 	{
 		$obj_Response =& $this->getOutput();
 		$obj_Response->success = $bool_Success;
+	}
+
+	/**
+	 * Set the output variable
+	 * @param \stdClass $obj_Output
+	 */
+	public function setOutput($obj_Output)
+	{
+		$this->m_obj_Output = $obj_Output;
 	}
 
 	/**

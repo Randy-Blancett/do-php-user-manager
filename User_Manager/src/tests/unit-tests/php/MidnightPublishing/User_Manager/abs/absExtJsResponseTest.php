@@ -73,7 +73,7 @@ class cExtJsResponseTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals("Test Log Message 2.", $obj_JSON->errors[1]);
 		$this->assertEquals("1", $obj_JSON->resources[0]->test);
 		$this->assertEquals("1", $obj_JSON->resources[1]->test);
-		
+
 		$obj_JSON = null;
 	}
 
