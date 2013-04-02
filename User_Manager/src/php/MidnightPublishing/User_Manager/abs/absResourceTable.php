@@ -33,7 +33,7 @@ class absResourceTable extends \Tonic\Resource
 	protected $m_obj_Response = null;
 	/**
 	 * @method POST
-	 * @param unknown_type $request
+	 * @param \Tonic\Response $request
 	 */
 	public 	function postJSON()
 	{
@@ -63,7 +63,7 @@ class absResourceTable extends \Tonic\Resource
 			}
 			if(!$arr_Data[self::C_STR_PARAM_ACTION])
 			{
-				$this->m_obj_Response->code = 406;
+				$this->m_obj_Response->setCode(406);
 				$this->m_obj_Response->logError("'".self::C_STR_PARAM_ACTION."' is a required parameter.");
 			}
 			else
@@ -73,25 +73,25 @@ class absResourceTable extends \Tonic\Resource
 					case self::C_STR_ACTION_CREATE :
 						if($this->createTable())
 						{
-							$this->m_obj_Response->code = 201;
+							$this->m_obj_Response->setCode(201);
 							$this->m_obj_Response->setSuccess(true);
 						}
 						else
 						{
-							$this->m_obj_Response->code = 500;
+							$this->m_obj_Response->setCode(500);
 							$this->m_obj_Response->logError("Failed to create Database.");
 							$this->m_obj_Response->setSuccess(false);
 						}
 						break;
 					default:
-						$this->m_obj_Response->code = 406;
+						$this->m_obj_Response->setCode(406);
 						$this->m_obj_Response->logError("'".$arr_Data[self::C_STR_PARAM_ACTION]."' is an unknown action.");
 				}
 			}
 		}else
 		{
-			$this->m_obj_Response->setCode(\Tonic\Response::UNAUTHORIZED);
 			$this->m_obj_Response->setSuccess(false);
+			$this->m_obj_Response->setCode(401);
 		}
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());

@@ -166,10 +166,7 @@ abstract class absExtJsResponse
 	public function output_JSON()
 	{
 		$obj_Output = $this->getOutput();
-		if(!$obj_Output)
-		{
-			return "";
-		}
+		
 		return @json_encode($obj_Output);
 	}
 
@@ -201,15 +198,6 @@ abstract class absExtJsResponse
 	{
 		$obj_Response =& $this->getOutput();
 		$obj_Response->success = $bool_Success;
-	}
-
-	/**
-	 * Set the output variable
-	 * @param \stdClass $obj_Output
-	 */
-	public function setOutput($obj_Output)
-	{
-		$this->m_obj_Output = $obj_Output;
 	}
 
 	/**

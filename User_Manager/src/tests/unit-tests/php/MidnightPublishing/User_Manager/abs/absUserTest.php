@@ -20,18 +20,10 @@ use MidnightPublishing\User_Manager\abs\absUser;
 
 // require_once dirname(dirname(dirname(__DIR__)))."/cPropelTestConnector.php";
 require_once dirname(dirname(dirname(__DIR__)))."/mock/loadDBMocks.php";
+require_once dirname(dirname(dirname(__DIR__)))."/mock/loadDBMocks.php";
 
-class cTestUser extends absUser
-{
-	function __construct() {
-		self::$m_bool_GodActive = true;
-	}
 
-	public function updateGod($bool_God = true)
-	{
-		self::$m_bool_GodActive = $bool_God;
-	}
-}
+
 
 class absUserTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +38,7 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 		\cPropelTestConnector::initPropel();
 		$obj_User = new cTestUser();
 
-		$obj_User->login("DarkOwl", "Is#1",false);
+		$this->assertTrue($obj_User->login("DarkOwl", "Is#1",false));
 
 		$this->assertTrue($obj_User->is_LoggedIn());
 		$this->assertTrue($obj_User->isGod());
@@ -164,6 +156,19 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 		$obj_User->setLogInUrl("TestLogin.php");
 		$this->assertEquals("TestLogin.php",$obj_User->getLogInUrl());
 
+		$_SERVER["HTTPS"]="on";
+		$_SERVER["SERVER_PORT"] = 80;
+		$_SERVER["SERVER_NAME"] = "Server";
+		$_SERVER["REQUEST_URI"] = "/Test.php";
+
+		$this->assertEquals("https://Server/Test.php",$obj_User->get_PageURL());
+
+		$_SERVER["SERVER_PORT"] = 8080;
+		$this->assertEquals("https://Server:8080/Test.php",$obj_User->get_PageURL());
+
+
+		$_SERVER["HTTPS"]="off";
+		$this->assertEquals("http://Server:8080/Test.php",$obj_User->get_PageURL());
 	}
 
 	function testRequireLogin(){
