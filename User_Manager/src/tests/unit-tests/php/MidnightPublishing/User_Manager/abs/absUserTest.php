@@ -8,7 +8,6 @@ use MidnightPublishing\User_Manager\dataObject\cUser2Groups;
 use MidnightPublishing\User_Manager\dataObject\cKeybox;
 
 use MidnightPublishing\User_Manager\database\cTableKeyboxQuery;
-
 use MidnightPublishing\User_Manager\database\cTableUsersQuery;
 
 use MidnightPublishing\User_Manager\database\om\BasecTableUsers;
@@ -20,9 +19,6 @@ use MidnightPublishing\User_Manager\abs\absUser;
 
 // require_once dirname(dirname(dirname(__DIR__)))."/cPropelTestConnector.php";
 require_once dirname(dirname(dirname(__DIR__)))."/mock/loadDBMocks.php";
-require_once dirname(dirname(dirname(__DIR__)))."/mock/loadDBMocks.php";
-
-
 
 
 class absUserTest extends \PHPUnit_Framework_TestCase
@@ -201,6 +197,6 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 
 	protected function tearDown()
 	{
-		ob_get_flush();
+		ob_end_flush();
 	}
 }

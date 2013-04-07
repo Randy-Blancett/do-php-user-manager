@@ -16,6 +16,7 @@
 // step 1: create the APP_TOPDIR constant that all components require
 define('APP_TOPDIR', realpath(__DIR__ . '/../../php'));
 define('APP_LIBDIR', realpath(__DIR__ . '/../../../vendor/php'));
+define('WEB_DIR', realpath(__DIR__ . '/../../www'));
 define('APP_TESTDIR', realpath(__DIR__ . '/php'));
 
 // print( "APP_TOPDIR - ".realpath(__DIR__ . '/../../php')."\n");
@@ -29,6 +30,7 @@ require_once(APP_TOPDIR."/MP_Autoloader.php");
 PSR0Autoloader::searchFirst(APP_LIBDIR);
 PSR0Autoloader::searchFirst(APP_TESTDIR);
 PSR0Autoloader::searchFirst(APP_TOPDIR);
+PSR0Autoloader::searchFirst(WEB_DIR);
 
 
 // step 4: enable ContractLib if it is available

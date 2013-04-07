@@ -11,6 +11,7 @@ require_once 'MP_Autoloader.php';
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\group\\cGroup");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\user\\cUser");
 \PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\database\\cUserManagerDB");
+\PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\cLogin");
 
 /**
  * Basic Resource List

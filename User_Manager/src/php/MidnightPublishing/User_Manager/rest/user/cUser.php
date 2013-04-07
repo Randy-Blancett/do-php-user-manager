@@ -3,30 +3,20 @@ namespace MidnightPublishing\User_Manager\rest\user;
 
 
 use MidnightPublishing\User_Manager\resource\cFormResource;
-
 use MidnightPublishing\User_Manager\dataObject\cGroup;
-
 use MidnightPublishing\User_Manager\resource\cActionResource;
-
 use MidnightPublishing\User_Manager\resource\cGroupResource;
-
 use MidnightPublishing\User_Manager\response\cActionResponse;
-
 use MidnightPublishing\User_Manager\response\cGroupResponse;
-
 use MidnightPublishing\User_Manager\dataObject\cKeybox;
-
 use MidnightPublishing\User_Manager\dataObject\cUser2Groups;
-
 use MidnightPublishing\User_Manager\resource\cUserResource;
-
 use MidnightPublishing\User_Manager\dataObject\cAction;
-
 use MidnightPublishing\User_Manager\response\cUserResponse;
-
 use MidnightPublishing\User_Manager\response\cFormResponse;
 use MidnightPublishing\User_Manager\dataObject;
 use MidnightPublishing\User_Manager;
+use MidnightPublishing\User_Manager\cUser;
 
 /**
  * Include the MidnightPublishing Autoloader
@@ -666,9 +656,8 @@ class cUserData extends cUserDataBase {
 
 }
 
-
 /**
- * Basic Resource List
+ * Return the groups available to a given ID
  * @namespace User_Manager
  * @uri /user/{id}/groups/available
  */

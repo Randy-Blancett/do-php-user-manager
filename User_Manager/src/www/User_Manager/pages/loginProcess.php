@@ -16,12 +16,16 @@ require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 
 $obj_User = new cUser();
 
+print(__LINE__."\n");
+
 if(cUser::login($_POST["UserName"], $_POST["Password"],false))
 {
+	print(__LINE__."/n");
 	output_Success();
 }
 else
 {
+	print(__LINE__."\n");
 	output_Error("Failed to login, Either Password Or User Name was incorrect");
 }
 

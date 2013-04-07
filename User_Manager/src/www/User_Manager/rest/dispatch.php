@@ -16,8 +16,8 @@ $obj_Request = new Tonic\Request();
 try {
 	$obj_Resource = $obj_App->getResource($obj_Request);
 
-	#echo $resource;
-	// 	 	print_r($obj_Resource);
+	// 	echo $resource;
+	//print_r($obj_Resource);
 
 	$obj_Response = $obj_Resource->exec();
 
@@ -33,7 +33,7 @@ try {
 } catch (Tonic\Exception $e) {
 
 	print("Error - ".$e);
-	die();
+	die("Dispatch line ".__LINE__);
 	$obj_Response = new Tonic\Response(500);
 }
 

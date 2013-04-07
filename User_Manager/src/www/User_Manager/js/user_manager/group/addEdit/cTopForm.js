@@ -21,8 +21,6 @@ Ext
 											formBind : true,
 											scope : this,
 											handler : function() {
-												console
-														.log("Submit Group Data");
 												var str_ID = obj_This.getForm()
 														.getValues().id;
 

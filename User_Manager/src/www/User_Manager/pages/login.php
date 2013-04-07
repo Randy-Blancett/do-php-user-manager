@@ -41,13 +41,5 @@ var G_STR_FORM_DATA_USERNAME = "<?php print($obj_User->getUserName()); ?>";
 </script>
 </head>
 <body>
-	<?php
-	// 	if (cUserValidation::get_LoginAttempt() > 0)
-	// 	{
-	// 		print("<h2>");
-	// 		print("Login Attempt Failed incorrect User Name or Password");
-	// 		print("</h2>");
-	// 	}
-	?>
 </body>
 </html>

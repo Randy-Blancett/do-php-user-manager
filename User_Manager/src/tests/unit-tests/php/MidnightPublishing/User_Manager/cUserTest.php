@@ -21,6 +21,6 @@ class cUserTest extends \PHPUnit_Framework_TestCase
 
 	protected function tearDown()
 	{
-		\ob_get_flush();
+		\ob_end_flush();
 	}
 }
