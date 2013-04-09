@@ -62,6 +62,25 @@ class absUser
 		self::$m_str_LogInUrl = $str_LogInUrl;
 	}
 
+	/**
+	 * Set the Last url
+	 * @param string $str_LastUrl the Url to use as the last Normaly the one returned to after Login
+	 * @static
+	 */
+	public static function setLastURL($str_LastUrl)
+	{
+		cSession::setLastUrl($str_LastUrl);
+	}
+	/**
+	 * Get the last url Used to redirect to the last page before the login
+	 * @return string URL of the last page
+	 * @static
+	 */
+	public static function getLastURL()
+	{
+		return cSession::getLastUrl();
+	}
+
 	public function getLogInUrl()
 	{
 		return self::$m_str_LogInUrl;

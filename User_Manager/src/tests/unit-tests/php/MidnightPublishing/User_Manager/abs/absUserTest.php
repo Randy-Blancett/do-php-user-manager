@@ -151,6 +151,10 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 
 		$obj_User->setLogInUrl("TestLogin.php");
 		$this->assertEquals("TestLogin.php",$obj_User->getLogInUrl());
+		
+		cTestUser::setLastURL("Last URL");
+		$this->assertEquals("Last URL",cTestUser::getLastURL());
+		
 
 		$_SERVER["HTTPS"]="on";
 		$_SERVER["SERVER_PORT"] = 80;

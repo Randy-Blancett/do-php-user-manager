@@ -59,38 +59,27 @@ Ext.define('darkowl.userManager.login.cLoginForm', {
 		var form = this.getForm();
 
 		if (form.isValid()) {
-			form.submit({
-				headers : {
-					Accept : "application/json"
-				},
-				scope : obj_This,
-				url : "../rest/login",
-				waitMsg : "Attempting to login",
-				method : "POST",
-				success : function(form, action) {
-					location.replace(action.result.url);
-				},
-				failure : function(form, action) {
-					Ext.Msg.alert('Failed', action.result.errors.msg);
-				}
-			});
+			form
+					.submit({
+						headers : {
+							Accept : "application/json"
+						},
+						scope : obj_This,
+						url : "../rest/login",
+						waitMsg : "Attempting to login",
+						method : "POST",
+						success : function(form, action) {
+							var obj_Response = Ext
+									.decode(action.response.responseText);
+							window.location = obj_Response.data.url;
+						},
+						failure : function(form, action) {
+							var obj_Response = Ext
+									.decode(action.response.responseText);
+							Ext.MessageBox.alert("Login Error",
+									obj_Response.errors[0]);
+						}
+					});
 		}
-		// var form = this.getForm();
-		// if (form.isValid())
-		// {
-		// form.submit(
-		// {
-		// url : "loginProcess.php",
-		// standardSubmit : true,
-		// success : function(form, action)
-		// {
-		// location.replace(action.result.url);
-		// },
-		// failure : function(form, action)
-		// {
-		// Ext.Msg.alert('Failed', action.result.errors.msg);
-		// }
-		// });
-		// }
 	}
 });

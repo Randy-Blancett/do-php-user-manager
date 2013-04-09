@@ -1,6 +1,8 @@
 <?php 
 namespace MidnightPublishing\User_Manager\rest;
 
+use MidnightPublishing\User_Manager\resource\cFormResource;
+
 use MidnightPublishing\User_Manager\response\cFormResponse;
 
 use MidnightPublishing\User_Manager\cUser;
@@ -68,8 +70,12 @@ class cLogin extends \Tonic\Resource  {
 
 			if(cUser::login($str_UserName, $str_Password,false))
 			{
+				$obj_Return = new cFormResource();
+
+				$obj_Return->url = cUser::getLastURL();
 				$this->m_obj_Response->setCode(\Tonic\Response::OK);
 				$this->m_obj_Response->setSuccess(true);
+				$this->m_obj_Response->addResource($obj_Return);
 			}
 			else
 			{
