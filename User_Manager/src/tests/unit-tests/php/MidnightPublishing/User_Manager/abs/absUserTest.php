@@ -151,10 +151,10 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 
 		$obj_User->setLogInUrl("TestLogin.php");
 		$this->assertEquals("TestLogin.php",$obj_User->getLogInUrl());
-		
+
 		cTestUser::setLastURL("Last URL");
 		$this->assertEquals("Last URL",cTestUser::getLastURL());
-		
+
 
 		$_SERVER["HTTPS"]="on";
 		$_SERVER["SERVER_PORT"] = 80;
@@ -192,6 +192,31 @@ class absUserTest extends \PHPUnit_Framework_TestCase
 
 		$obj_User->logout();
 		$obj_User->require_Login();
+	}
+
+	function testLoginType()
+	{
+		$_SESSION = Array();
+		//Set server data Test for when it is prot 80
+		$_SERVER = Array();
+		$_SERVER["SERVER_PORT"] = 80;
+		$_SERVER["SERVER_NAME"] = "localhost" ;
+		$_SERVER["REQUEST_URI"] = "test.php";
+		$_SERVER["HTTPS"]= "off";
+
+		cSession::init();
+		
+		$obj_User = new cTestUser();
+		$obj_User->setLoginType(cTestUser::C_INT_LOGIN_TYPE_CUSTOM);
+		$obj_User->redirect_ToLogin(true);
+		$obj_User->redirect_ToLogin(false);
+		
+
+// 		$obj_User->setLoginType(cTestUser::C_INT_LOGIN_TYPE_HTTP);
+		
+// 		$_SERVER['PHP_AUTH_USER'] = "DarkOwl";
+// 		$_SERVER['PHP_AUTH_PW'] = "pwd";
+// 		$obj_User->redirect_ToLogin(false);
 	}
 
 	protected function setUp()

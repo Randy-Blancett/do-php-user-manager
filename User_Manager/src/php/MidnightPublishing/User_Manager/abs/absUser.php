@@ -48,8 +48,8 @@ class absUser
 
 	protected static $m_int_LoginType;
 
-	const 	C_INT_LOGIN_TYPE_CUSTOM = 0,
-	C_INT_LOGIN_TYPE_HTTP = 1;
+	const 	C_INT_LOGIN_TYPE_CUSTOM = 0;
+	const C_INT_LOGIN_TYPE_HTTP = 1;
 
 	public function __construct($bool_ActiveGod = false,$int_LoginType = self::C_INT_LOGIN_TYPE_HTTP)
 	{
@@ -162,7 +162,7 @@ class absUser
 			if ($bool_Redirect)
 			{
 				header('Location: ' . cSession::getLastUrl());
-				die();
+// 				die();
 			}
 			return true;
 		}
@@ -174,7 +174,7 @@ class absUser
 
 			if ($bool_Redirect)
 			{
-				$this->redirect_ToLogin($_SERVER["HTTPS"] == "on");
+				self::redirect_ToLogin($_SERVER["HTTPS"] == "on");
 			}
 		}
 		return false;
@@ -286,12 +286,11 @@ class absUser
 	public static function redirect_ToLogin($bool_UseSecure = true)
 	{
 		cSession::setLastUrl(self::get_PageURL());
-		print("Go to Redirect - ".self::$m_int_LoginType);
 
 		switch (self::$m_int_LoginType)
 		{
 			case self::C_INT_LOGIN_TYPE_CUSTOM :
-				print("Use Custom");
+				
 				$str_LoginUrl = "http";
 				if ($bool_UseSecure)
 				{

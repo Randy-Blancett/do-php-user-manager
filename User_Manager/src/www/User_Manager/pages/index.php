@@ -30,12 +30,13 @@ if (!$obj_User->checkPermissions(cPermission::C_STR_USERMANAGER_VIEW))
 <title>User Manager</title>
 </head>
 <body>
-	<div id="loading-mask"></div>
-	<div id="loading">
-		<div class="title">User Manager</div>
-		<div class="body">
-			<div class="icon"></div>
-			<div class="msg" id="loading-msg">Loading styles and images...</div>
+	<div id="loading-mask" width="100%" height="100%">
+		<div id="loading" style="text-align:center;">
+			<div class="title">User Manager</div>
+			<div class="body">
+				<div class="icon"></div>
+				<div class="msg" id="loading-msg">Loading styles and images...</div>
+			</div>
 		</div>
 	</div>
 	<link rel="stylesheet" type="text/css" href="../css/main.php" />
@@ -58,7 +59,6 @@ if (!$obj_User->checkPermissions(cPermission::C_STR_USERMANAGER_VIEW))
 	<script type="text/javascript">
 	    	document.getElementById('loading-msg').innerHTML = 'Setting up User Manager ...';
 	    </script>
-
 
 	<script type="text/javascript" src='../js/user_manager/index.js'></script>
 </body>

@@ -13,4 +13,9 @@ class cTestUser extends absUser
 	{
 		self::$m_bool_GodActive = $bool_God;
 	}
+	
+	public function setLoginType($int_LoginType)
+	{
+		self::$m_int_LoginType = $int_LoginType;
+	}
 }
