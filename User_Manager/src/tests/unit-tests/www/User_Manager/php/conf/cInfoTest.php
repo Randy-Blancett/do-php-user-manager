@@ -8,6 +8,6 @@ class cInfoTest extends \PHPUnit_Framework_TestCase
 {
 	public	function testInitalize()
 	{
-		$this->assertTrue(cInfo::$m_bool_setup);
+		$testConfig = new cInfo();
 	}
 }

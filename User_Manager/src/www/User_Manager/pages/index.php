@@ -1,6 +1,5 @@
 <?php
 use darkowl\user_manager\webpage\cInfo;
-
 use MidnightPublishing\User_Manager\cPermission;
 use MidnightPublishing\User_Manager\cUser;
 
@@ -14,6 +13,8 @@ require_once 'MP_Autoloader.php';
 require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 
 $obj_User = new cUser(true,cUser::C_INT_LOGIN_TYPE_CUSTOM);
+$obj_Config = new cInfo();
+$obj_Ext4LibPath = $obj_Config->getParam(cInfo::C_STR_PARAM_EXT_4_LIB_PATH);
 
 // Check Login Status
 $obj_User->require_Login(true);
@@ -43,7 +44,7 @@ if (!$obj_User->checkPermissions(cPermission::C_STR_USERMANAGER_VIEW))
 	<link rel="stylesheet" type="text/css" href="../css/icons.php" />
 
 	<?php
-	print('<link rel="stylesheet" type="text/css" href="'. cInfo::C_STR_EXT4_LIB_PATH .'/resources/css/ext-all.css" />');
+	print('<link rel="stylesheet" type="text/css" href="'. $obj_Ext4LibPath.'/resources/css/ext-all.css" />');
 	?>
 
 	<script type="text/javascript">
@@ -51,7 +52,7 @@ if (!$obj_User->checkPermissions(cPermission::C_STR_USERMANAGER_VIEW))
 	 </script>
 
 	<?php
-	print('<script type="text/javascript" src="'. cInfo::C_STR_EXT4_LIB_PATH .'/ext.js"></script>'.PHP_EOL);
+	print('<script type="text/javascript" src="'. $obj_Ext4LibPath .'/ext.js"></script>'.PHP_EOL);
 	?>
 	<script type="text/javascript" src='../php/conf/cConfig_JS.php'></script>
 	<script type="text/javascript" src='../js/util/loaderFix.js'></script>

@@ -1,4 +1,6 @@
 <?php
+use darkowl\user_manager\webpage\cInfo;
+
 use MidnightPublishing\User_Manager\cSession;
 
 header("Content-type: application/x-javascript");
@@ -14,10 +16,12 @@ require_once 'MP_Autoloader.php';
  * Include Default Path Info
  */
 require_once (dirname(__DIR__)) . "/conf/cInfo.php";
+
+$obj_Config = new cInfo();
 ?>
 
 var g_obj_Config = new Object(); 
-g_obj_Config.m_str_ExtJs4Path = "<?php print(webpage\cInfo::C_STR_EXT4_LIB_PATH); ?>"; 
+g_obj_Config.m_str_ExtJs4Path = "<?php print($obj_Config->getParam(cInfo::C_STR_PARAM_EXT_4_LIB_PATH)); ?>";
 g_obj_Config.m_str_UserName = "<?php print(cSession::getUserName())?>"; 
 g_obj_Config.m_str_BaseURL ="/User_Manager";
 g_obj_Config.m_str_LogoutURL =g_obj_Config.m_str_BaseURL+"/pages/logoutProcess.php"; 

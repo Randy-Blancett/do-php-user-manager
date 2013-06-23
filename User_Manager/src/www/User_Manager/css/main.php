@@ -2,6 +2,9 @@
 	header("Content-type: text/css");
 	use \darkowl\user_manager\webpage\cInfo;
 	require_once dirname(__DIR__).'/php/conf/cInfo.php';
+	
+	$obj_Config = new cInfo();
+	$obj_IconPath = $obj_Config->getParam(cInfo::C_STR_PARAM_ICON_PATH);
 ?>
 @CHARSET "ISO-8859-1";
 
@@ -29,7 +32,7 @@
 
 #loading .icon
 {
-	background-image	: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_gear.gif") !important;
+	background-image	: url("<?php print($obj_IconPath) ?>/fam/group_gear.gif") !important;
 	background-position	: center;
 	background-repeat	: no-repeat;
 	display				: inline-block;
@@ -101,103 +104,103 @@
 
 .start-icon
 {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_gear.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group_gear.gif") !important;
 }
 
 .user-add {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_add.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/user_add.gif") !important;
 }
 
 .group-add {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_add.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group_add.gif") !important;
 }
 
 .action-Add-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key_add.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/key_add.gif") !important;
 }
 
 .app-Add {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_add.gif")
+	background-image: url("<?php print($obj_IconPath) ?>/fam/application_add.gif")
 		!important;
 }
 
 .user-delete {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_delete.gif")
+	background-image: url("<?php print($obj_IconPath) ?>/fam/user_delete.gif")
 		!important;
 }
 
 .app-Delete-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_delete.gif")
+	background-image: url("<?php print($obj_IconPath) ?>/fam/application_delete.gif")
 		!important;
 }
 
 .action-Window-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/key.gif") !important;
 }
 
 .app-Window-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application.gif") !important
+	background-image: url("<?php print($obj_IconPath) ?>/fam/application.gif") !important
 		;
 }
 
 .group-Window-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group.gif") !important;
 }
 
 .app-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application.gif") !important
+	background-image: url("<?php print($obj_IconPath) ?>/fam/application.gif") !important
 		;
 }
 
 .user-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/user.gif") !important;
 }
 
 .action-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/key.gif") !important;
 }
 
 .group-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group.gif") !important;
 }
 
 .app-Edit-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/application_edit.gif")
+	background-image: url("<?php print($obj_IconPath) ?>/fam/application_edit.gif")
 		!important;
 }
 
 .action-Edit-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key_go.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/key_go.gif") !important;
 }
 
 .user-Edit-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_edit.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/user_edit.gif") !important;
 }
 
 .group-Edit-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_edit.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group_edit.gif") !important;
 }
 
 .user-Delete-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/user_delete.gif") !important
+	background-image: url("<?php print($obj_IconPath) ?>/fam/user_delete.gif") !important
 		;
 }
 
 .action-Delete-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/key_delete.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/key_delete.gif") !important;
 }
 
 .group-Delete-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/group_delete.gif")
+	background-image: url("<?php print($obj_IconPath) ?>/fam/group_delete.gif")
 		!important;
 }
 
 .search-Window-Collapsed-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/zoom.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/zoom.gif") !important;
 }
 
 .search-Button-Icon {
-	background-image: url("<?php print(cInfo::C_STR_ICON_PATH) ?>/fam/zoom.gif") !important;
+	background-image: url("<?php print($obj_IconPath) ?>/fam/zoom.gif") !important;
 }
 
 .x-collapsed-header-text  {
