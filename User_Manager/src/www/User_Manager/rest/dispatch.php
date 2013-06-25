@@ -1,12 +1,9 @@
 <?php
-// use darkowl\user_manager\webpage\cInfo;
 
 /**
  * Include the MidnightPublishing Autoloader
  */
 require_once 'MP_Autoloader.php';
-
-// require_once (dirname(__DIR__)) . "/php/conf/cInfo.php";
 
 PSR0Autoloader::autoload("MidnightPublishing\\User_Manager\\rest\\cBaseResource");
 

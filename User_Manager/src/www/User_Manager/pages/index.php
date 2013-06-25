@@ -1,5 +1,5 @@
 <?php
-use darkowl\user_manager\webpage\cInfo;
+	use MidnightPublishing\User_Manager\www\config\cInfo;
 use MidnightPublishing\User_Manager\cPermission;
 use MidnightPublishing\User_Manager\cUser;
 

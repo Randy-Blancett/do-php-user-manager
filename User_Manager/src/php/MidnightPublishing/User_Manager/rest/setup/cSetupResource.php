@@ -11,11 +11,6 @@ use MidnightPublishing\User_Manager\resource\cDatabaseResource;
  * Include the MidnightPublishing Autoloader
  */
 require_once 'MP_Autoloader.php';
-// require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH."/conf/cDBConfig.php";
-// /**
-//  * Include User Validation Class
-//  */
-// require_once webpage\cInfo::C_STR_USER_MANAGER_CODE_PATH . "/classes/cUser.php";
 
 /**
  * Resource used to Handle setup of User Manager

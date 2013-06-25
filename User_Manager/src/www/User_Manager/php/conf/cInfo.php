@@ -1,5 +1,5 @@
 <?php
-namespace darkowl\user_manager\webpage;
+namespace MidnightPublishing\User_Manager\www\config;
 use MidnightPublishing\User_Manager\abs\absConfigClass;
 
 /**

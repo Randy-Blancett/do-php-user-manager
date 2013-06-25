@@ -1,6 +1,5 @@
 <?php
-use darkowl\user_manager\webpage\cInfo;
-
+	use MidnightPublishing\User_Manager\www\config\cInfo;
 use MidnightPublishing\User_Manager\cSession;
 
 header("Content-type: application/x-javascript");

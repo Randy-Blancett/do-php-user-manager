@@ -1,6 +1,6 @@
 <?php
 	header("Content-type: text/css");
-	use \darkowl\user_manager\webpage\cInfo;
+	use \MidnightPublishing\User_Manager\www\config\cInfo;
 	require_once dirname(__DIR__).'/php/conf/cInfo.php';
 	$obj_Config = new cInfo();
 	$obj_IconPath = $obj_Config->getParam(cInfo::C_STR_PARAM_ICON_PATH);
