@@ -29,6 +29,20 @@ Ext
 																'darkowl.userManager.setup.window.cWindow');
 											}
 										});
+
+						this.m_obj_SpecialStartMenu
+								.add(
+										'Configure',
+										{
+											iconCls : "menu-create-db-icon",
+											onClick : function() {
+												desktop.MsgBus
+														.fireEvent(
+																desktop.MsgBus.self.C_STR_EVENT_OPEN_WINDOW,
+																{},
+																'darkowl.userManager.setup.window.cWindow');
+											}
+										});
 					},
 
 					buildGeneralMenu : function() {

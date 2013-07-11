@@ -114,6 +114,10 @@ class absUser
 			return true;
 		}
 
+		if($this->getUserID()== null|| $this->getUserID() == ""){
+			return false;
+		}
+
 		//Check for user directly has permissions
 		if(cKeybox::countUser2Permission($this->getUserID(), $mix_Permission) > 0){
 			return true;
@@ -129,6 +133,17 @@ class absUser
 		}
 		//At this point the permission is not attatched to the current user
 		return false;
+	}
+
+	public function checkPermissionString($mix_Permission)
+	{
+		if($this->checkPermissions($mix_Permission))
+		{
+			return "true";
+		}else
+		{
+			return "false";
+		}
 	}
 
 	/**
@@ -162,7 +177,7 @@ class absUser
 			if ($bool_Redirect)
 			{
 				header('Location: ' . cSession::getLastUrl());
-// 				die();
+				// 				die();
 			}
 			return true;
 		}
@@ -290,7 +305,7 @@ class absUser
 		switch (self::$m_int_LoginType)
 		{
 			case self::C_INT_LOGIN_TYPE_CUSTOM :
-				
+
 				$str_LoginUrl = "http";
 				if ($bool_UseSecure)
 				{
