@@ -45,7 +45,11 @@
 
 .menu-logout-icon 
 {
-	background-image: url("<?php print($obj_IconPath) ?>/fam/door_in.gif") !important;
+	background-image: 	url("<?php print($obj_IconPath) ?>/fam/door_in.gif") !important;
+	left			:	0px;
+	top				:	0px;
+	width			: 	16px;
+	height			: 	16px;
 }
 
 .menu-group-icon 
