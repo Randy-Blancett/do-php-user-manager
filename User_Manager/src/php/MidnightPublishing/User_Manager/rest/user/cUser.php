@@ -1,7 +1,5 @@
 <?php
 namespace MidnightPublishing\User_Manager\rest\user;
-
-
 use MidnightPublishing\User_Manager\resource\cFormResource;
 use MidnightPublishing\User_Manager\dataObject\cGroup;
 use MidnightPublishing\User_Manager\resource\cActionResource;
@@ -22,36 +20,36 @@ use MidnightPublishing\User_Manager\cUser;
  * Include the MidnightPublishing Autoloader
  */
 require_once 'MP_Autoloader.php';
+class cUserDataBase extends \Tonic\Resource
+{
 
-class cUserDataBase extends \Tonic\Resource {
-	const C_STR_PARAM_START = "start";
-	const C_STR_PARAM_LIMIT = "limit";
-	const C_STR_PARAM_PAGE = "page";
-
-	const C_STR_PARAM_DATA_ID = "userID";
-	const C_STR_PARAM_DATA_AFFILIATION = "affiliation";
-	const C_STR_PARAM_DATA_ACCOUNT_CREATED = "accountCreated";
-	const C_STR_PARAM_DATA_USER_NAME = "userName";
-	const C_STR_PARAM_DATA_PASSWORD = "password";
-	const C_STR_PARAM_DATA_PASSWORD_CONFIRM = "passwordConfirm";
-	const C_STR_PARAM_DATA_PERSONAL_TITLE = "perTitle";
-	const C_STR_PARAM_DATA_PROFESONAL_TITLE = "profTitle";
-	const C_STR_PARAM_DATA_F_NAME = "fName";
-	const C_STR_PARAM_DATA_M_NAME = "mName";
-	const C_STR_PARAM_DATA_L_NAME = "lName";
-	const C_STR_PARAM_DATA_PHONE_1 = "phone1";
-	const C_STR_PARAM_DATA_PHONE_2 = "phone2";
-	const C_STR_PARAM_DATA_EMAIL_1 = "email1";
-	const C_STR_PARAM_DATA_EMAIL_2 = "email2";
-	const C_STR_PARAM_DATA_LOCATION = "location";
-	const C_STR_PARAM_DATA_SUITE = "suite";
-	const C_STR_PARAM_DATA_TYPE = "type";
-	const C_STR_PARAM_DATA_COMPANY = "company";
-	const C_STR_PARAM_DATA_ASSIGNED_ORG = "assignedOrg";
-	const C_STR_PARAM_DATA_ORG = "org";
-	const C_STR_PARAM_DATA_LAST_LOGIN = "lastLogin";
-	const C_STR_PARAM_DATA_LAST_UPDATE = "lastUpdate";
-	const C_STR_PARAM_DATA_COMMENT = "comment";
+	const C_STR_PARAM_START					 = "start";
+	const C_STR_PARAM_LIMIT					 = "limit";
+	const C_STR_PARAM_PAGE					 = "page";
+	const C_STR_PARAM_DATA_ID					 = "userID";
+	const C_STR_PARAM_DATA_AFFILIATION		 = "affiliation";
+	const C_STR_PARAM_DATA_ACCOUNT_CREATED	 = "accountCreated";
+	const C_STR_PARAM_DATA_USER_NAME			 = "userName";
+	const C_STR_PARAM_DATA_PASSWORD			 = "password";
+	const C_STR_PARAM_DATA_PASSWORD_CONFIRM	 = "passwordConfirm";
+	const C_STR_PARAM_DATA_PERSONAL_TITLE		 = "perTitle";
+	const C_STR_PARAM_DATA_PROFESONAL_TITLE	 = "profTitle";
+	const C_STR_PARAM_DATA_F_NAME				 = "fName";
+	const C_STR_PARAM_DATA_M_NAME				 = "mName";
+	const C_STR_PARAM_DATA_L_NAME				 = "lName";
+	const C_STR_PARAM_DATA_PHONE_1			 = "phone1";
+	const C_STR_PARAM_DATA_PHONE_2			 = "phone2";
+	const C_STR_PARAM_DATA_EMAIL_1			 = "email1";
+	const C_STR_PARAM_DATA_EMAIL_2			 = "email2";
+	const C_STR_PARAM_DATA_LOCATION			 = "location";
+	const C_STR_PARAM_DATA_SUITE				 = "suite";
+	const C_STR_PARAM_DATA_TYPE				 = "type";
+	const C_STR_PARAM_DATA_COMPANY			 = "company";
+	const C_STR_PARAM_DATA_ASSIGNED_ORG		 = "assignedOrg";
+	const C_STR_PARAM_DATA_ORG				 = "org";
+	const C_STR_PARAM_DATA_LAST_LOGIN			 = "lastLogin";
+	const C_STR_PARAM_DATA_LAST_UPDATE		 = "lastUpdate";
+	const C_STR_PARAM_DATA_COMMENT			 = "comment";
 
 	private static $m_obj_UserValidator = null;
 
@@ -61,12 +59,13 @@ class cUserDataBase extends \Tonic\Resource {
 	 */
 	protected static function getUserValidator()
 	{
-		if(!self::$m_obj_UserValidator)
+		if (!self::$m_obj_UserValidator)
 		{
-			self::$m_obj_UserValidator = new User_Manager\cUser(true,User_Manager\cUser::C_INT_LOGIN_TYPE_HTTP);
+			self::$m_obj_UserValidator = new User_Manager\cUser(true, User_Manager\cUser::C_INT_LOGIN_TYPE_HTTP);
 		}
 		return self::$m_obj_UserValidator;
 	}
+
 }
 
 /**
@@ -75,7 +74,9 @@ class cUserDataBase extends \Tonic\Resource {
  * @uri /user
  * @uri /user/{id}
  */
-class cUserData extends cUserDataBase {
+class cUserData extends cUserDataBase
+{
+
 	private $m_obj_Response = null;
 
 	/**
@@ -87,13 +88,13 @@ class cUserData extends cUserDataBase {
 	 */
 	public function getJson($str_ID = null)
 	{
-		$obj_User =  self::getUserValidator();
+		$obj_User = self::getUserValidator();
 		$obj_User->require_Login(true);
-		if($str_ID)
+		if ($str_ID)
 		{
 			return $this->getSingleJson($str_ID);
 		}
-		return $this->getAllJson($_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
+		return $this->getAllJson($_REQUEST[self::C_STR_PARAM_START], $_REQUEST[self::C_STR_PARAM_LIMIT]);
 	}
 
 	/**
@@ -104,14 +105,13 @@ class cUserData extends cUserDataBase {
 	 */
 	public function getSingleJson($str_ID)
 	{
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cFormResponse();
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cFormResponse();
 
-		if(!$obj_User->checkPermissions( cAction::C_STR_USER_MANAGER_USER_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
-
 		}
 		else
 		{
@@ -119,74 +119,74 @@ class cUserData extends cUserDataBase {
 
 			$obj_Row = new cFormResource();
 
-			$str_Key = self::C_STR_PARAM_DATA_ID;
-			$obj_Row->$str_Key = $obj_DOUser->getId();
+			$str_Key			 = self::C_STR_PARAM_DATA_ID;
+			$obj_Row->$str_Key	 = $obj_DOUser->getId();
 
-			$str_Key = self::C_STR_PARAM_DATA_AFFILIATION;
-			$obj_Row->$str_Key = $obj_DOUser->getAffiliation();
+			$str_Key			 = self::C_STR_PARAM_DATA_AFFILIATION;
+			$obj_Row->$str_Key	 = $obj_DOUser->getAffiliation();
 
-			$str_Key = self::C_STR_PARAM_DATA_USER_NAME;
-			$obj_Row->$str_Key = $obj_DOUser->getuserName();
+			$str_Key			 = self::C_STR_PARAM_DATA_USER_NAME;
+			$obj_Row->$str_Key	 = $obj_DOUser->getuserName();
 
-			$str_Key = self::C_STR_PARAM_DATA_USER_NAME;
-			$obj_Row->$str_Key = $obj_DOUser->getuserName();
+			$str_Key			 = self::C_STR_PARAM_DATA_USER_NAME;
+			$obj_Row->$str_Key	 = $obj_DOUser->getuserName();
 
-			$str_Key = self::C_STR_PARAM_DATA_PERSONAL_TITLE;
-			$obj_Row->$str_Key = $obj_DOUser->getpersonalTitle();
+			$str_Key			 = self::C_STR_PARAM_DATA_PERSONAL_TITLE;
+			$obj_Row->$str_Key	 = $obj_DOUser->getpersonalTitle();
 
-			$str_Key = self::C_STR_PARAM_DATA_PROFESONAL_TITLE;
-			$obj_Row->$str_Key = $obj_DOUser->getprofessionalTitle();
+			$str_Key			 = self::C_STR_PARAM_DATA_PROFESONAL_TITLE;
+			$obj_Row->$str_Key	 = $obj_DOUser->getprofessionalTitle();
 
-			$str_Key = self::C_STR_PARAM_DATA_F_NAME;
-			$obj_Row->$str_Key = $obj_DOUser->getfirstName();
+			$str_Key			 = self::C_STR_PARAM_DATA_F_NAME;
+			$obj_Row->$str_Key	 = $obj_DOUser->getfirstName();
 
-			$str_Key = self::C_STR_PARAM_DATA_M_NAME;
-			$obj_Row->$str_Key = $obj_DOUser->getmiddleName();
+			$str_Key			 = self::C_STR_PARAM_DATA_M_NAME;
+			$obj_Row->$str_Key	 = $obj_DOUser->getmiddleName();
 
-			$str_Key = self::C_STR_PARAM_DATA_L_NAME;
-			$obj_Row->$str_Key = $obj_DOUser->getlastName();
+			$str_Key			 = self::C_STR_PARAM_DATA_L_NAME;
+			$obj_Row->$str_Key	 = $obj_DOUser->getlastName();
 
-			$str_Key = self::C_STR_PARAM_DATA_PHONE_1;
-			$obj_Row->$str_Key = $obj_DOUser->getphoneNum1();
+			$str_Key			 = self::C_STR_PARAM_DATA_PHONE_1;
+			$obj_Row->$str_Key	 = $obj_DOUser->getphoneNum1();
 
-			$str_Key = self::C_STR_PARAM_DATA_PHONE_2;
-			$obj_Row->$str_Key = $obj_DOUser->getphoneNum2();
+			$str_Key			 = self::C_STR_PARAM_DATA_PHONE_2;
+			$obj_Row->$str_Key	 = $obj_DOUser->getphoneNum2();
 
-			$str_Key = self::C_STR_PARAM_DATA_EMAIL_1;
-			$obj_Row->$str_Key = $obj_DOUser->getEmail1();
+			$str_Key			 = self::C_STR_PARAM_DATA_EMAIL_1;
+			$obj_Row->$str_Key	 = $obj_DOUser->getEmail1();
 
-			$str_Key = self::C_STR_PARAM_DATA_EMAIL_2;
-			$obj_Row->$str_Key = $obj_DOUser->getEmail2();
+			$str_Key			 = self::C_STR_PARAM_DATA_EMAIL_2;
+			$obj_Row->$str_Key	 = $obj_DOUser->getEmail2();
 
-			$str_Key = self::C_STR_PARAM_DATA_LOCATION;
-			$obj_Row->$str_Key = $obj_DOUser->getLocation();
+			$str_Key			 = self::C_STR_PARAM_DATA_LOCATION;
+			$obj_Row->$str_Key	 = $obj_DOUser->getLocation();
 
-			$str_Key = self::C_STR_PARAM_DATA_SUITE;
-			$obj_Row->$str_Key = $obj_DOUser->getSuite();
+			$str_Key			 = self::C_STR_PARAM_DATA_SUITE;
+			$obj_Row->$str_Key	 = $obj_DOUser->getSuite();
 
-			$str_Key = self::C_STR_PARAM_DATA_TYPE;
-			$obj_Row->$str_Key = $obj_DOUser->getType();
+			$str_Key			 = self::C_STR_PARAM_DATA_TYPE;
+			$obj_Row->$str_Key	 = $obj_DOUser->getType();
 
-			$str_Key = self::C_STR_PARAM_DATA_COMPANY;
-			$obj_Row->$str_Key = $obj_DOUser->getCompany();
+			$str_Key			 = self::C_STR_PARAM_DATA_COMPANY;
+			$obj_Row->$str_Key	 = $obj_DOUser->getCompany();
 
-			$str_Key = self::C_STR_PARAM_DATA_ASSIGNED_ORG;
-			$obj_Row->$str_Key = $obj_DOUser->getassignedOrg();
+			$str_Key			 = self::C_STR_PARAM_DATA_ASSIGNED_ORG;
+			$obj_Row->$str_Key	 = $obj_DOUser->getassignedOrg();
 
-			$str_Key = self::C_STR_PARAM_DATA_ORG;
-			$obj_Row->$str_Key = $obj_DOUser->getOrg();
+			$str_Key			 = self::C_STR_PARAM_DATA_ORG;
+			$obj_Row->$str_Key	 = $obj_DOUser->getOrg();
 
-			$str_Key = self::C_STR_PARAM_DATA_LAST_LOGIN;
-			$obj_Row->$str_Key = $obj_DOUser->getlastLogin();
+			$str_Key			 = self::C_STR_PARAM_DATA_LAST_LOGIN;
+			$obj_Row->$str_Key	 = $obj_DOUser->getlastLogin();
 
-			$str_Key = self::C_STR_PARAM_DATA_LAST_UPDATE;
-			$obj_Row->$str_Key = $obj_DOUser->getlastUpdated();
+			$str_Key			 = self::C_STR_PARAM_DATA_LAST_UPDATE;
+			$obj_Row->$str_Key	 = $obj_DOUser->getlastUpdated();
 
-			$str_Key = self::C_STR_PARAM_DATA_ACCOUNT_CREATED;
-			$obj_Row->$str_Key = $obj_DOUser->getaccountCreation();
+			$str_Key			 = self::C_STR_PARAM_DATA_ACCOUNT_CREATED;
+			$obj_Row->$str_Key	 = $obj_DOUser->getaccountCreation();
 
-			$str_Key = self::C_STR_PARAM_DATA_COMMENT;
-			$obj_Row->$str_Key = dataObject\cUser::getCommentString($obj_DOUser->getComment());
+			$str_Key			 = self::C_STR_PARAM_DATA_COMMENT;
+			$obj_Row->$str_Key	 = dataObject\cUser::getCommentString($obj_DOUser->getComment());
 
 
 			// 	const C_STR_PARAM_DATA_COMMENT = "comment";
@@ -205,45 +205,47 @@ class cUserData extends cUserDataBase {
 	 * @param integer $int_Limit
 	 * @return \Tonic\Response
 	 */
-	public function getAllJson($int_Start=0,$int_Limit=20)
+	public function getAllJson($int_Start = 0, $int_Limit = 20)
 	{
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cUserResponse();
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cUserResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
 		}
 		else
 		{
-			$obj_DOUsers =dataObject\cUser::getAllUsers($int_Start,$int_Limit);
+			$obj_DOUsers = dataObject\cUser::getAllUsers($int_Start, $int_Limit);
 
 
-			foreach($obj_DOUsers->toArray()as $arr_User)
+			foreach ($obj_DOUsers->toArray()as $arr_User)
 			{
 				$obj_Row = new cUserResource();
-				foreach($arr_User as $str_Key => $obj_Data)
+				foreach ($arr_User as $str_Key => $obj_Data)
 				{
 					$str_Key = lcfirst($str_Key);
 
-					if($obj_Data){
-						switch($str_Key)
+					if ($obj_Data)
+					{
+						switch ($str_Key)
 						{
 							case "password":
-								if($obj_Data)
+								if ($obj_Data)
 								{
 									$obj_Row->$str_Key = "true";
-								}else
+								}
+								else
 								{
 									$obj_Row->$str_Key = "false";
 								}
 								break;
 							case "comment":
-								$obj_Data = dataObject\cUser::getCommentString($obj_Data);
+								$obj_Data			 = dataObject\cUser::getCommentString($obj_Data);
 								break;
 							default:
-								$obj_Row->$str_Key = $obj_Data;
+								$obj_Row->$str_Key	 = $obj_Data;
 								break;
 						}
 					}
@@ -269,48 +271,48 @@ class cUserData extends cUserDataBase {
 	{
 		$bool_Fail = false;
 
-		parse_str($this->request->data,$arr_Data);
+		parse_str($this->request->data, $arr_Data);
 
-		$str_UserName = $arr_Data[self::C_STR_PARAM_DATA_USER_NAME];
-		$str_Password = $arr_Data[self::C_STR_PARAM_DATA_PASSWORD];
-		$str_ID = $arr_Data[self::C_STR_PARAM_DATA_ID];
+		$str_UserName		 = $arr_Data[self::C_STR_PARAM_DATA_USER_NAME];
+		$str_Password		 = $arr_Data[self::C_STR_PARAM_DATA_PASSWORD];
+		$str_ID				 = $arr_Data[self::C_STR_PARAM_DATA_ID];
 		$str_PasswordConfirm = $arr_Data[self::C_STR_PARAM_DATA_PASSWORD_CONFIRM];
 
-		$obj_User =  self::getUserValidator();
+		$obj_User = self::getUserValidator();
 		$obj_User->require_Login(true);
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_EDIT))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail&&!$str_ID)
+		if (!$bool_Fail && !$str_ID)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID." must be set for an update.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID . " must be set for an update.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail&&!$str_UserName)
+		if (!$bool_Fail && !$str_UserName)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME." can not be empty.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME . " can not be empty.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail && ($str_Password ||$str_PasswordConfirm))
+		if (!$bool_Fail && ($str_Password || $str_PasswordConfirm))
 		{
-			if(!$bool_Fail && ($str_Password!==$str_PasswordConfirm))
+			if (!$bool_Fail && ($str_Password !== $str_PasswordConfirm))
 			{
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-				$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_PASSWORD." and ".self::C_STR_PARAM_DATA_PASSWORD_CONFIRM." must match.");
+				$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_PASSWORD . " and " . self::C_STR_PARAM_DATA_PASSWORD_CONFIRM . " must match.");
 				$bool_Fail = true;
 			}
 		}
@@ -319,118 +321,136 @@ class cUserData extends cUserDataBase {
 
 		$obj_OrigData = $obj_DOUser->getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_OrigData)
+		if (!$bool_Fail && !$obj_OrigData)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::$obj_OrigData." must be an existing record.");
+			$this->m_obj_Response->logError(self::$obj_OrigData . " must be an existing record.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
 			$obj_UpdateDate = new \DateTime();
 
-			$this->m_obj_Response->addMsg("Updateing Data for User '".$str_ID."'");
+			$this->m_obj_Response->addMsg("Updateing Data for User '" . $str_ID . "'");
 
-			if($obj_OrigData->getuserName() !== $str_UserName){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_USER_NAME." was changed from ".$obj_OrigData->getuserName() ." to ".$str_UserName);
+			if ($obj_OrigData->getuserName() !== $str_UserName)
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_USER_NAME . " was changed from " . $obj_OrigData->getuserName() . " to " . $str_UserName);
 				$obj_OrigData->setuserName($str_UserName);
 			}
 
-			if($str_Password)
+			if ($str_Password)
 			{
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD." changed.");
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD . " changed.");
 				$obj_OrigData->setPassword(sha1($arr_Data[self::C_STR_PARAM_DATA_PASSWORD]));
 			}
 
-			if($obj_OrigData->getfirstName() !== $arr_Data[self::C_STR_PARAM_DATA_F_NAME]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME." was changed from ".$obj_OrigData->getfirstName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
+			if ($obj_OrigData->getfirstName() !== $arr_Data[self::C_STR_PARAM_DATA_F_NAME])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME . " was changed from " . $obj_OrigData->getfirstName() . " to " . $arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
 				$obj_OrigData->setfirstName($arr_Data[self::C_STR_PARAM_DATA_F_NAME]);
 			}
 
-			if($obj_OrigData->getmiddleName() !== $arr_Data[self::C_STR_PARAM_DATA_M_NAME]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME." was changed from ".$obj_OrigData->getmiddleName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_M_NAME]);
+			if ($obj_OrigData->getmiddleName() !== $arr_Data[self::C_STR_PARAM_DATA_M_NAME])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME . " was changed from " . $obj_OrigData->getmiddleName() . " to " . $arr_Data[self::C_STR_PARAM_DATA_M_NAME]);
 				$obj_OrigData->setmiddleName($arr_Data[self::C_STR_PARAM_DATA_M_NAME]);
 			}
 
-			if($obj_OrigData->getlastName() !== $arr_Data[self::C_STR_PARAM_DATA_L_NAME]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME." was changed from ".$obj_OrigData->getlastName() ." to ".$arr_Data[self::C_STR_PARAM_DATA_L_NAME]);
+			if ($obj_OrigData->getlastName() !== $arr_Data[self::C_STR_PARAM_DATA_L_NAME])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME . " was changed from " . $obj_OrigData->getlastName() . " to " . $arr_Data[self::C_STR_PARAM_DATA_L_NAME]);
 				$obj_OrigData->setlastName($arr_Data[self::C_STR_PARAM_DATA_L_NAME]);
 			}
 
-			if($obj_OrigData->getpersonalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE." was changed from ".$obj_OrigData->getpersonalTitle() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
+			if ($obj_OrigData->getpersonalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE . " was changed from " . $obj_OrigData->getpersonalTitle() . " to " . $arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
 				$obj_OrigData->setpersonalTitle($arr_Data[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
 			}
 
-			if($obj_OrigData->getprofessionalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE." was changed from ".$obj_OrigData->getprofessionalTitle() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
+			if ($obj_OrigData->getprofessionalTitle() !== $arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE . " was changed from " . $obj_OrigData->getprofessionalTitle() . " to " . $arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
 				$obj_OrigData->setprofessionalTitle($arr_Data[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
 			}
 
-			if($obj_OrigData->getphoneNum1() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_1]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1." was changed from ".$obj_OrigData->getphoneNum1() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PHONE_1]);
+			if ($obj_OrigData->getphoneNum1() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_1])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1 . " was changed from " . $obj_OrigData->getphoneNum1() . " to " . $arr_Data[self::C_STR_PARAM_DATA_PHONE_1]);
 				$obj_OrigData->setphoneNum1($arr_Data[self::C_STR_PARAM_DATA_PHONE_1]);
 			}
 
-			if($obj_OrigData->getphoneNum2() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_2]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2." was changed from ".$obj_OrigData->getphoneNum2() ." to ".$arr_Data[self::C_STR_PARAM_DATA_PHONE_2]);
+			if ($obj_OrigData->getphoneNum2() !== $arr_Data[self::C_STR_PARAM_DATA_PHONE_2])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2 . " was changed from " . $obj_OrigData->getphoneNum2() . " to " . $arr_Data[self::C_STR_PARAM_DATA_PHONE_2]);
 				$obj_OrigData->setphoneNum2($arr_Data[self::C_STR_PARAM_DATA_PHONE_2]);
 			}
 
-			if($obj_OrigData->getEmail1() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1." was changed from ".$obj_OrigData->getEmail1() ." to ".$arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]);
+			if ($obj_OrigData->getEmail1() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_1])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1 . " was changed from " . $obj_OrigData->getEmail1() . " to " . $arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]);
 				$obj_OrigData->setEmail1($arr_Data[self::C_STR_PARAM_DATA_EMAIL_1]);
 			}
 
-			if($obj_OrigData->getEmail2() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2." was changed from ".$obj_OrigData->getEmail2() ." to ".$arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]);
+			if ($obj_OrigData->getEmail2() !== $arr_Data[self::C_STR_PARAM_DATA_EMAIL_2])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2 . " was changed from " . $obj_OrigData->getEmail2() . " to " . $arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]);
 				$obj_OrigData->setEmail2($arr_Data[self::C_STR_PARAM_DATA_EMAIL_2]);
 			}
 
-			if($obj_OrigData->getassignedOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG." was changed from ".$obj_OrigData->getassignedOrg() ." to ".$arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
+			if ($obj_OrigData->getassignedOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG . " was changed from " . $obj_OrigData->getassignedOrg() . " to " . $arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
 				$obj_OrigData->setassignedOrg($arr_Data[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
 			}
 
-			if($obj_OrigData->getOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ORG]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG." was changed from ".$obj_OrigData->getOrg() ." to ".$arr_Data[self::C_STR_PARAM_DATA_ORG]);
+			if ($obj_OrigData->getOrg() !== $arr_Data[self::C_STR_PARAM_DATA_ORG])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG . " was changed from " . $obj_OrigData->getOrg() . " to " . $arr_Data[self::C_STR_PARAM_DATA_ORG]);
 				$obj_OrigData->setOrg($arr_Data[self::C_STR_PARAM_DATA_ORG]);
 			}
 
-			if($obj_OrigData->getCompany() !== $arr_Data[self::C_STR_PARAM_DATA_COMPANY]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY." was changed from ".$obj_OrigData->getCompany() ." to ".$arr_Data[self::C_STR_PARAM_DATA_COMPANY]);
+			if ($obj_OrigData->getCompany() !== $arr_Data[self::C_STR_PARAM_DATA_COMPANY])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY . " was changed from " . $obj_OrigData->getCompany() . " to " . $arr_Data[self::C_STR_PARAM_DATA_COMPANY]);
 				$obj_OrigData->setCompany($arr_Data[self::C_STR_PARAM_DATA_COMPANY]);
 			}
 
-			if($obj_OrigData->getAffiliation() !== $arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION." was changed from ".$obj_OrigData->getAffiliation() ." to ".$arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]);
+			if ($obj_OrigData->getAffiliation() !== $arr_Data[self::C_STR_PARAM_DATA_AFFILIATION])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION . " was changed from " . $obj_OrigData->getAffiliation() . " to " . $arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]);
 				$obj_OrigData->setAffiliation($arr_Data[self::C_STR_PARAM_DATA_AFFILIATION]);
 			}
 
-			if($obj_OrigData->getType() !== $arr_Data[self::C_STR_PARAM_DATA_TYPE]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE." was changed from ".$obj_OrigData->getType() ." to ".$arr_Data[self::C_STR_PARAM_DATA_TYPE]);
+			if ($obj_OrigData->getType() !== $arr_Data[self::C_STR_PARAM_DATA_TYPE])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE . " was changed from " . $obj_OrigData->getType() . " to " . $arr_Data[self::C_STR_PARAM_DATA_TYPE]);
 				$obj_OrigData->setType($arr_Data[self::C_STR_PARAM_DATA_TYPE]);
 			}
 
-			if($obj_OrigData->getLocation() !== $arr_Data[self::C_STR_PARAM_DATA_LOCATION]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION." was changed from ".$obj_OrigData->getLocation() ." to ".$arr_Data[self::C_STR_PARAM_DATA_LOCATION]);
+			if ($obj_OrigData->getLocation() !== $arr_Data[self::C_STR_PARAM_DATA_LOCATION])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION . " was changed from " . $obj_OrigData->getLocation() . " to " . $arr_Data[self::C_STR_PARAM_DATA_LOCATION]);
 				$obj_OrigData->setLocation($arr_Data[self::C_STR_PARAM_DATA_LOCATION]);
 			}
 
-			if($obj_OrigData->getSuite() !== $arr_Data[self::C_STR_PARAM_DATA_SUITE]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE." was changed from ".$obj_OrigData->getSuite() ." to ".$arr_Data[self::C_STR_PARAM_DATA_SUITE]);
+			if ($obj_OrigData->getSuite() !== $arr_Data[self::C_STR_PARAM_DATA_SUITE])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE . " was changed from " . $obj_OrigData->getSuite() . " to " . $arr_Data[self::C_STR_PARAM_DATA_SUITE]);
 				$obj_OrigData->setSuite($arr_Data[self::C_STR_PARAM_DATA_SUITE]);
 			}
 
-			if($obj_OrigData->getComment() !== $arr_Data[self::C_STR_PARAM_DATA_COMMENT]){
-				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." was changed from ".$obj_Data = dataObject\cUser::getCommentString($obj_OrigData->getComment()) ." to ".$arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
+			if ($obj_OrigData->getComment() !== $arr_Data[self::C_STR_PARAM_DATA_COMMENT])
+			{
+				$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT . " was changed from " . $obj_Data = dataObject\cUser::getCommentString($obj_OrigData->getComment()) . " to " . $arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
 				$obj_OrigData->setComment($arr_Data[self::C_STR_PARAM_DATA_COMMENT]);
 			}
 
 			$obj_OrigData->setlastUpdated($obj_UpdateDate);
-			$this->m_obj_Response->addMsg("Update Date set to ".$obj_UpdateDate->format('Y-m-d H:i:s'));
+			$this->m_obj_Response->addMsg("Update Date set to " . $obj_UpdateDate->format('Y-m-d H:i:s'));
 
 			$obj_OrigData->save();
 
@@ -447,13 +467,14 @@ class cUserData extends cUserDataBase {
 	 * @provides application/json
 	 * @return \Tonic\Response
 	 */
-	public function postJson() {
-		$bool_Fail = false;
-		$str_UserName = $_POST[self::C_STR_PARAM_DATA_USER_NAME];
-		$str_Password = $_POST[self::C_STR_PARAM_DATA_PASSWORD];
+	public function postJson()
+	{
+		$bool_Fail			 = false;
+		$str_UserName		 = $_POST[self::C_STR_PARAM_DATA_USER_NAME];
+		$str_Password		 = $_POST[self::C_STR_PARAM_DATA_PASSWORD];
 		$str_PasswordConfirm = $_POST[self::C_STR_PARAM_DATA_PASSWORD_CONFIRM];
 
-		$obj_User =  self::getUserValidator();
+		$obj_User = self::getUserValidator();
 		$obj_User->require_Login(true);
 
 
@@ -461,120 +482,119 @@ class cUserData extends cUserDataBase {
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_ADD))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_ADD))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail&&$_POST[self::C_STR_PARAM_DATA_ID])
+		if (!$bool_Fail && $_POST[self::C_STR_PARAM_DATA_ID])
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID." can not be set with a post.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_ID . " can not be set with a post.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail&&!$str_UserName)
+		if (!$bool_Fail && !$str_UserName)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME." can not be empty.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_USER_NAME . " can not be empty.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail && $str_Password!==$str_PasswordConfirm)
+		if (!$bool_Fail && $str_Password !== $str_PasswordConfirm)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_PASSWORD." and ".self::C_STR_PARAM_DATA_PASSWORD_CONFIRM." must match.");
+			$this->m_obj_Response->logError(self::C_STR_PARAM_DATA_PASSWORD . " and " . self::C_STR_PARAM_DATA_PASSWORD_CONFIRM . " must match.");
 			$bool_Fail = true;
 		}
 
-		if($obj_DOUser->loadFromUserName($str_UserName))
+		if ($obj_DOUser->loadFromUserName($str_UserName))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError("User Name '".$str_UserName."' already exists.");
+			$this->m_obj_Response->logError("User Name '" . $str_UserName . "' already exists.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
 			$obj_CreationDate = new \DateTime();
 
-			$obj_DOUser = new dataObject\cUser();
-			$str_ID = dataObject\cUser::create_GUID();
+			$obj_DOUser	 = new dataObject\cUser();
+			$str_ID		 = dataObject\cUser::create_GUID();
 
 			$obj_DOUser->setId($str_ID);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ID." set to ".$obj_DOUser->getId());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ID . " set to " . $obj_DOUser->getId());
 
 			$obj_DOUser->setuserName($str_UserName);
-			$this->m_obj_Response->addMsg($str_UserName." set to ".$obj_DOUser->getuserName());
+			$this->m_obj_Response->addMsg($str_UserName . " set to " . $obj_DOUser->getuserName());
 
 			$obj_DOUser->setPwd($_POST[self::C_STR_PARAM_DATA_PASSWORD]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD." set.");
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PASSWORD . " set.");
 
 			$obj_DOUser->setfirstName($_POST[self::C_STR_PARAM_DATA_F_NAME]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME." set to ".$obj_DOUser->getfirstName());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_F_NAME . " set to " . $obj_DOUser->getfirstName());
 
 			$obj_DOUser->setmiddleName($_POST[self::C_STR_PARAM_DATA_M_NAME]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME." set to ".$obj_DOUser->getmiddleName());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_M_NAME . " set to " . $obj_DOUser->getmiddleName());
 
 			$obj_DOUser->setlastName($_POST[self::C_STR_PARAM_DATA_L_NAME]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME." set to ".$obj_DOUser->getlastName());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_L_NAME . " set to " . $obj_DOUser->getlastName());
 
 			$obj_DOUser->setpersonalTitle($_POST[self::C_STR_PARAM_DATA_PERSONAL_TITLE]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE." set to ".$obj_DOUser->getpersonalTitle());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PERSONAL_TITLE . " set to " . $obj_DOUser->getpersonalTitle());
 
 			$obj_DOUser->setprofessionalTitle($_POST[self::C_STR_PARAM_DATA_PROFESONAL_TITLE]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE." set to ".$obj_DOUser->getprofessionalTitle());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PROFESONAL_TITLE . " set to " . $obj_DOUser->getprofessionalTitle());
 
 			$obj_DOUser->setphoneNum1($_POST[self::C_STR_PARAM_DATA_PHONE_1]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1." set to ".$obj_DOUser->getphoneNum1());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_1 . " set to " . $obj_DOUser->getphoneNum1());
 
 			$obj_DOUser->setphoneNum2($_POST[self::C_STR_PARAM_DATA_PHONE_2]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2." set to ".$obj_DOUser->getphoneNum2());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_PHONE_2 . " set to " . $obj_DOUser->getphoneNum2());
 
 			$obj_DOUser->setEmail1($_POST[self::C_STR_PARAM_DATA_EMAIL_1]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1." set to ".$obj_DOUser->getEmail1());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_1 . " set to " . $obj_DOUser->getEmail1());
 
 			$obj_DOUser->setEmail2($_POST[self::C_STR_PARAM_DATA_EMAIL_2]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2." set to ".$obj_DOUser->getEmail2());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_EMAIL_2 . " set to " . $obj_DOUser->getEmail2());
 
 			$obj_DOUser->setassignedOrg($_POST[self::C_STR_PARAM_DATA_ASSIGNED_ORG]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG." set to ".$obj_DOUser->getassignedOrg());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ASSIGNED_ORG . " set to " . $obj_DOUser->getassignedOrg());
 
 			$obj_DOUser->setOrg($_POST[self::C_STR_PARAM_DATA_ORG]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG." set to ".$obj_DOUser->getOrg());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_ORG . " set to " . $obj_DOUser->getOrg());
 
 			$obj_DOUser->setCompany($_POST[self::C_STR_PARAM_DATA_COMPANY]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY." set to ".$obj_DOUser->getCompany());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMPANY . " set to " . $obj_DOUser->getCompany());
 
 			$obj_DOUser->setAffiliation($_POST[self::C_STR_PARAM_DATA_AFFILIATION]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION." set to ".$obj_DOUser->getAffiliation());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_AFFILIATION . " set to " . $obj_DOUser->getAffiliation());
 
 			$obj_DOUser->setType($_POST[self::C_STR_PARAM_DATA_TYPE]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE." set to ".$obj_DOUser->getType());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_TYPE . " set to " . $obj_DOUser->getType());
 
 			$obj_DOUser->setLocation($_POST[self::C_STR_PARAM_DATA_LOCATION]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION." set to ".$obj_DOUser->getLocation());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_LOCATION . " set to " . $obj_DOUser->getLocation());
 
 			$obj_DOUser->setSuite($_POST[self::C_STR_PARAM_DATA_SUITE]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE." set to ".$obj_DOUser->getSuite());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_SUITE . " set to " . $obj_DOUser->getSuite());
 
 			$obj_DOUser->setComment($_POST[self::C_STR_PARAM_DATA_COMMENT]);
-			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT." set to ".$obj_DOUser->getComment());
+			$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_COMMENT . " set to " . $obj_DOUser->getComment());
 
 			$obj_DOUser->setaccountCreation($obj_CreationDate);
-			$this->m_obj_Response->addMsg("Creation Date set to ".$obj_CreationDate->format('Y-m-d H:i:s'));
+			$this->m_obj_Response->addMsg("Creation Date set to " . $obj_CreationDate->format('Y-m-d H:i:s'));
 
 			$obj_DOUser->save();
 
 			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
 			$this->m_obj_Response->setSuccess(true);
-
 		}
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
@@ -587,13 +607,13 @@ class cUserData extends cUserDataBase {
 	 */
 	public function deleteJson($str_ID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
+		$bool_Fail	 = false;
+		$obj_User	 = self::getUserValidator();
 		$obj_User->require_Login(true);
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_DELETE))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_DELETE))
 		{
 			$bool_Fail = true;
 			$this->m_obj_Response->setSuccess(false);
@@ -604,17 +624,18 @@ class cUserData extends cUserDataBase {
 
 		$obj_OrigData = $obj_DOUser->getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_OrigData)
+		if (!$bool_Fail && !$obj_OrigData)
 		{
 			$this->m_obj_Response->setCode(\Tonic\Response::NOTFOUND);
 			$this->m_obj_Response->setSuccess(false);
 
-			$this->m_obj_Response->logError($str_ID." dose not exist therefore it could not be deleted.");
+			$this->m_obj_Response->logError($str_ID . " dose not exist therefore it could not be deleted.");
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			try {
+			try
+			{
 				cUser2Groups::deleteUsersGroups($str_ID);
 			}
 			catch (Exception $e)
@@ -622,13 +643,14 @@ class cUserData extends cUserDataBase {
 				$bool_Fail = true;
 				$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
 				$this->m_obj_Response->setSuccess(false);
-				$this->m_obj_Response->logError("Failed to remove User's Groups: ".$e->getMessage());
+				$this->m_obj_Response->logError("Failed to remove User's Groups: " . $e->getMessage());
 			}
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			try {
+			try
+			{
 				cKeybox::deleteUsersPermissions($str_ID);
 			}
 			catch (Exception $e)
@@ -636,16 +658,16 @@ class cUserData extends cUserDataBase {
 				$bool_Fail = true;
 				$this->m_obj_Response->setCode(\Tonic\Response::INTERNALSERVERERROR);
 				$this->m_obj_Response->setSuccess(false);
-				$this->m_obj_Response->logError("Failed to remove User's Permissions: ".$e->getMessage());
+				$this->m_obj_Response->logError("Failed to remove User's Permissions: " . $e->getMessage());
 			}
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
 
 			$obj_OrigData->delete();
 
-			$this->m_obj_Response->addMsg("Deleted ".$str_ID);
+			$this->m_obj_Response->addMsg("Deleted " . $str_ID);
 			$this->m_obj_Response->addMsg("Need to Clean out Keybox");
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
 			$this->m_obj_Response->setSuccess(true);
@@ -661,7 +683,8 @@ class cUserData extends cUserDataBase {
  * @namespace User_Manager
  * @uri /user/{id}/groups/available
  */
-class cUserGroupAvail extends cUserDataBase {
+class cUserGroupAvail extends cUserDataBase
+{
 	/**
 	 * Get available groups for the given user
 	 * @method GET
@@ -671,11 +694,11 @@ class cUserGroupAvail extends cUserDataBase {
 	 */
 	public function getAvailGroupsJson($str_ID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cGroupResponse();
+		$bool_Fail				 = false;
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -684,37 +707,42 @@ class cUserGroupAvail extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$this->m_obj_Response->logError($str_ID . " is invalid.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOGroupsAvail = null;
-		$obj_DOGroupsCur = null;
-		if(!$bool_Fail){
-			try {
-				$obj_DOGroupsAvail=dataObject\cGroup::getAllGroups();
-				$obj_DOGroupsCur=dataObject\cUser2Groups::getUsersGroups($str_ID);
-			} catch (cMissingParam $e) {
+		$obj_DOGroupsAvail	 = null;
+		$obj_DOGroupsCur	 = null;
+		if (!$bool_Fail)
+		{
+			try
+			{
+				$obj_DOGroupsAvail	 = dataObject\cGroup::getAllGroups();
+				$obj_DOGroupsCur	 = dataObject\cUser2Groups::getUsersGroups($str_ID);
+			}
+			catch (cMissingParam $e)
+			{
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-				$this->m_obj_Response->logError( $e->getMessage());
+				$this->m_obj_Response->logError($e->getMessage());
 				$bool_Fail = true;
 			}
 		}
 
-		if(!$bool_Fail){
-			if($obj_DOGroupsAvail)
+		if (!$bool_Fail)
+		{
+			if ($obj_DOGroupsAvail)
 			{
-				foreach($obj_DOGroupsAvail->toArray() as $arr_Object)
+				foreach ($obj_DOGroupsAvail->toArray() as $arr_Object)
 				{
 					$bool_Found = false;
-					foreach($obj_DOGroupsCur as $str_I=> $obj_GroupsCur)
+					foreach ($obj_DOGroupsCur as $str_I => $obj_GroupsCur)
 					{
-						if($obj_GroupsCur->getgroupId() == $arr_Object["Id"])
+						if ($obj_GroupsCur->getgroupId() == $arr_Object["Id"])
 						{
 							unset($obj_DOGroupsCur[$str_I]);
 							$bool_Found = true;
@@ -722,14 +750,15 @@ class cUserGroupAvail extends cUserDataBase {
 						}
 					}
 
-					if(!$bool_Found)
+					if (!$bool_Found)
 					{
 						$obj_Row = new cGroupResource();
-						foreach($arr_Object as $str_Key => $obj_Data)
+						foreach ($arr_Object as $str_Key => $obj_Data)
 						{
 							$str_Key = lcfirst($str_Key);
-							if($obj_Data){
-								switch($str_Key)
+							if ($obj_Data)
+							{
+								switch ($str_Key)
 								{
 									case "comment":
 										$obj_Data = dataObject\cGroup::getCommentString($obj_Data);
@@ -748,15 +777,16 @@ class cUserGroupAvail extends cUserDataBase {
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
-}
 
+}
 
 /**
  * Basic Resource List
  * @namespace User_Manager
  * @uri /user/{id}/groups/current
  */
-class cUserGroupCurrent extends cUserDataBase {
+class cUserGroupCurrent extends cUserDataBase
+{
 	/**
 	 * Get available groups for the given user
 	 * @method GET
@@ -766,11 +796,11 @@ class cUserGroupCurrent extends cUserDataBase {
 	 */
 	public function getCurGroupsJson($str_ID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cGroupResponse();
+		$bool_Fail				 = false;
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cGroupResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -779,39 +809,44 @@ class cUserGroupCurrent extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$this->m_obj_Response->logError($str_ID . " is invalid.");
 			$bool_Fail = true;
 		}
 
 		$obj_DOGroups = null;
-		if(!$bool_Fail){
-			try {
-				$obj_DOGroups=dataObject\cUser2Groups::getUsersGroups($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
-			} catch (cMissingParam $e) {
+		if (!$bool_Fail)
+		{
+			try
+			{
+				$obj_DOGroups = dataObject\cUser2Groups::getUsersGroups($str_ID, $_REQUEST[self::C_STR_PARAM_START], $_REQUEST[self::C_STR_PARAM_LIMIT]);
+			}
+			catch (cMissingParam $e)
+			{
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-				$this->m_obj_Response->logError( $e->getMessage());
+				$this->m_obj_Response->logError($e->getMessage());
 				$bool_Fail = true;
 			}
 		}
 
-		if(!$bool_Fail){
-			if($obj_DOGroups)
+		if (!$bool_Fail)
+		{
+			if ($obj_DOGroups)
 			{
-				foreach($obj_DOGroups->toArray() as $arr_Groups)
+				foreach ($obj_DOGroups->toArray() as $arr_Groups)
 				{
-					if(isset($arr_Groups["groupId"]))
+					if (isset($arr_Groups["groupId"]))
 					{
 						$obj_DOGroup = dataObject\cGroup::getGroupById($arr_Groups["groupId"]);
-						$obj_Row = new cGroupResource();
+						$obj_Row	 = new cGroupResource();
 
-						$obj_Row->id = $obj_DOGroup->getId();
-						$obj_Row->comment = dataObject\cGroup::getCommentString($obj_DOGroup->getComment());
-						$obj_Row->name = $obj_DOGroup->getName();
+						$obj_Row->id		 = $obj_DOGroup->getId();
+						$obj_Row->comment	 = dataObject\cGroup::getCommentString($obj_DOGroup->getComment());
+						$obj_Row->name		 = $obj_DOGroup->getName();
 
 						$this->m_obj_Response->addResource($obj_Row);
 					}
@@ -823,6 +858,7 @@ class cUserGroupCurrent extends cUserDataBase {
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
+
 }
 
 /**
@@ -830,7 +866,8 @@ class cUserGroupCurrent extends cUserDataBase {
  * @namespace User_Manager
  * @uri /user/{id}/groups/{groupID}
  */
-class cUserGroupAdd extends cUserDataBase {
+class cUserGroupAdd extends cUserDataBase
+{
 	/**
 	 * Add a group id to a user
 	 * @method PUT
@@ -839,14 +876,14 @@ class cUserGroupAdd extends cUserDataBase {
 	 * @param String $str_GroupID
 	 * @return \Tonic\Response
 	 */
-	public function putGroup($str_UserID = null,$str_GroupID=null)
+	public function putGroup($str_UserID = null, $str_GroupID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
+		$bool_Fail	 = false;
+		$obj_User	 = self::getUserValidator();
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -855,44 +892,44 @@ class cUserGroupAdd extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$this->m_obj_Response->logError($str_UserID . " is invalid.");
 			$bool_Fail = true;
 		}
 
 		$obj_DOGroup = dataObject\cGroup::getGroupById($str_GroupID);
-		if(!$bool_Fail&&!$obj_DOGroup)
+		if (!$bool_Fail && !$obj_DOGroup)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_GroupID." is not a valid Group.");
+			$this->m_obj_Response->logError($str_GroupID . " is not a valid Group.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID,$str_GroupID);
+		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID, $str_GroupID);
 
-		if(!$bool_Fail&& $obj_DOUser2Groups>0)
+		if (!$bool_Fail && $obj_DOUser2Groups > 0)
 		{
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
-			$this->m_obj_Response->addMsg( "Link already Exists, no action taken.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Group: " . $str_GroupID);
+			$this->m_obj_Response->addMsg("Link already Exists, no action taken.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			dataObject\cUser2Groups::linkUser2Group($str_UserID,$str_GroupID);
+			dataObject\cUser2Groups::linkUser2Group($str_UserID, $str_GroupID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
-			$this->m_obj_Response->addMsg( "Link created.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Group: " . $str_GroupID);
+			$this->m_obj_Response->addMsg("Link created.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
@@ -905,14 +942,14 @@ class cUserGroupAdd extends cUserDataBase {
 	 * @param String $str_GroupID
 	 * @return \Tonic\Response
 	 */
-	public function deleteGroup($str_UserID = null,$str_GroupID=null)
+	public function deleteGroup($str_UserID = null, $str_GroupID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
+		$bool_Fail	 = false;
+		$obj_User	 = self::getUserValidator();
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_GROUP_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -921,38 +958,39 @@ class cUserGroupAdd extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$this->m_obj_Response->logError($str_UserID . " is invalid.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID,$str_GroupID);
+		$obj_DOUser2Groups = dataObject\cUser2Groups::countUser2Group($str_UserID, $str_GroupID);
 
-		if(!$bool_Fail&& $obj_DOUser2Groups==0)
+		if (!$bool_Fail && $obj_DOUser2Groups == 0)
 		{
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
-			$this->m_obj_Response->addMsg( "Dose Not have the group assigned to the user.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Group: " . $str_GroupID);
+			$this->m_obj_Response->addMsg("Dose Not have the group assigned to the user.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			dataObject\cUser2Groups::unlinkUser2Group($str_UserID,$str_GroupID);
+			dataObject\cUser2Groups::unlinkUser2Group($str_UserID, $str_GroupID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Group: ".$str_GroupID);
-			$this->m_obj_Response->addMsg( "Link Removed.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Group: " . $str_GroupID);
+			$this->m_obj_Response->addMsg("Link Removed.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
+
 }
 
 /**
@@ -960,7 +998,8 @@ class cUserGroupAdd extends cUserDataBase {
  * @namespace User_Manager
  * @uri /user/{id}/permissions/available
  */
-class cUserPermissionAvail extends cUserDataBase {
+class cUserPermissionAvail extends cUserDataBase
+{
 	/**
 	 * Get available permissions for the given user
 	 * @method GET
@@ -970,11 +1009,11 @@ class cUserPermissionAvail extends cUserDataBase {
 	 */
 	public function getAvailPermissionsJson($str_ID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response =new cActionResponse();
+		$bool_Fail				 = false;
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cActionResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_ACTION_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_ACTION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -983,37 +1022,42 @@ class cUserPermissionAvail extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$this->m_obj_Response->logError($str_ID . " is invalid.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOPermissionsAvail = null;
-		$obj_DOPermissionsCur = null;
-		if(!$bool_Fail){
-			try {
-				$obj_DOPermissionsAvail=dataObject\cAction::getAllActions();
-				$obj_DOPermissionsCur=dataObject\cKeybox::getUsersPermissions($str_ID);
-			} catch (cMissingParam $e) {
+		$obj_DOPermissionsAvail	 = null;
+		$obj_DOPermissionsCur	 = null;
+		if (!$bool_Fail)
+		{
+			try
+			{
+				$obj_DOPermissionsAvail	 = dataObject\cAction::getAllActions();
+				$obj_DOPermissionsCur	 = dataObject\cKeybox::getUsersPermissions($str_ID);
+			}
+			catch (cMissingParam $e)
+			{
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-				$this->m_obj_Response->logError( $e->getMessage());
+				$this->m_obj_Response->logError($e->getMessage());
 				$bool_Fail = true;
 			}
 		}
 
-		if(!$bool_Fail){
-			if($obj_DOPermissionsAvail)
+		if (!$bool_Fail)
+		{
+			if ($obj_DOPermissionsAvail)
 			{
-				foreach($obj_DOPermissionsAvail->toArray() as $arr_Object)
+				foreach ($obj_DOPermissionsAvail->toArray() as $arr_Object)
 				{
 					$bool_Found = false;
-					foreach($obj_DOPermissionsCur as $str_I=> $obj_PermissionsCur)
+					foreach ($obj_DOPermissionsCur as $str_I => $obj_PermissionsCur)
 					{
-						if($obj_PermissionsCur->getactionId() == $arr_Object["Id"])
+						if ($obj_PermissionsCur->getactionId() == $arr_Object["Id"])
 						{
 							unset($obj_DOPermissionsCur[$str_I]);
 							$bool_Found = true;
@@ -1021,14 +1065,15 @@ class cUserPermissionAvail extends cUserDataBase {
 						}
 					}
 
-					if(!$bool_Found)
+					if (!$bool_Found)
 					{
 						$obj_Row = new cActionResource();
-						foreach($arr_Object as $str_Key => $obj_Data)
+						foreach ($arr_Object as $str_Key => $obj_Data)
 						{
 							$str_Key = lcfirst($str_Key);
-							if($obj_Data){
-								switch($str_Key)
+							if ($obj_Data)
+							{
+								switch ($str_Key)
 								{
 									case "comment":
 										$obj_Data = cGroup::getCommentString($obj_Data);
@@ -1047,15 +1092,16 @@ class cUserPermissionAvail extends cUserDataBase {
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
-}
 
+}
 
 /**
  * Basic Resource List
  * @namespace User_Manager
  * @uri /user/{id}/permissions/current
  */
-class cUserPermissionCurrent extends cUserDataBase {
+class cUserPermissionCurrent extends cUserDataBase
+{
 	/**
 	 * Get available groups for the given user
 	 * @method GET
@@ -1065,11 +1111,11 @@ class cUserPermissionCurrent extends cUserDataBase {
 	 */
 	public function getCurPermissionsJson($str_ID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
-		$this->m_obj_Response = new cActionResponse();
+		$bool_Fail				 = false;
+		$obj_User				 = self::getUserValidator();
+		$this->m_obj_Response	 = new cActionResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_VIEW))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_VIEW))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1078,42 +1124,47 @@ class cUserPermissionCurrent extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_ID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_ID." is invalid.");
+			$this->m_obj_Response->logError($str_ID . " is invalid.");
 			$bool_Fail = true;
 		}
 
 		$obj_DOPermissions = null;
-		if(!$bool_Fail){
-			try {
-				$obj_DOPermissions=cKeybox::getUsersPermissions($str_ID,$_REQUEST[self::C_STR_PARAM_START],$_REQUEST[self::C_STR_PARAM_LIMIT]);
-			} catch (cMissingParam $e) {
+		if (!$bool_Fail)
+		{
+			try
+			{
+				$obj_DOPermissions = cKeybox::getUsersPermissions($str_ID, $_REQUEST[self::C_STR_PARAM_START], $_REQUEST[self::C_STR_PARAM_LIMIT]);
+			}
+			catch (cMissingParam $e)
+			{
 				$this->m_obj_Response->setSuccess(false);
 				$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-				$this->m_obj_Response->logError( $e->getMessage());
+				$this->m_obj_Response->logError($e->getMessage());
 				$bool_Fail = true;
 			}
 		}
 
-		if(!$bool_Fail){
-			if($obj_DOPermissions)
+		if (!$bool_Fail)
+		{
+			if ($obj_DOPermissions)
 			{
-				foreach($obj_DOPermissions->toArray() as $arr_Permissions)
+				foreach ($obj_DOPermissions->toArray() as $arr_Permissions)
 				{
-					if(isset($arr_Permissions["actionId"]))
+					if (isset($arr_Permissions["actionId"]))
 					{
 						$obj_DOPermission = cAction::getActionById($arr_Permissions["actionId"]);
 
 						$obj_Row = new cActionResource();
 
-						$obj_Row->id = $obj_DOPermission->getId();
-						$obj_Row->name = $obj_DOPermission->getName();
-						$obj_Row->comment =  cAction::getCommentString( $obj_DOPermission->getComment());
+						$obj_Row->id		 = $obj_DOPermission->getId();
+						$obj_Row->name		 = $obj_DOPermission->getName();
+						$obj_Row->comment	 = cAction::getCommentString($obj_DOPermission->getComment());
 
-							
+
 						// 						$this->m_obj_Response->addMsg(self::C_STR_PARAM_DATA_APPLICATION." was changed from ".$obj_OrigData->getApplication()." to ".$arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
 						// 						$obj_OrigData->setApplication($arr_Data[self::C_STR_PARAM_DATA_APPLICATION]);
 						// 									case "application":
@@ -1130,6 +1181,7 @@ class cUserPermissionCurrent extends cUserDataBase {
 
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
+
 }
 
 /**
@@ -1137,7 +1189,8 @@ class cUserPermissionCurrent extends cUserDataBase {
  * @namespace User_Manager
  * @uri /user/{id}/permissions/{permissionID}
  */
-class cUserPermissionAdd extends cUserDataBase {
+class cUserPermissionAdd extends cUserDataBase
+{
 	/**
 	 * Add a Permission id to a user
 	 * @method PUT
@@ -1146,14 +1199,14 @@ class cUserPermissionAdd extends cUserDataBase {
 	 * @param String $str_PermissionID
 	 * @return \Tonic\Response
 	 */
-	public function putPermission($str_UserID = null,$str_PermissionID=null)
+	public function putPermission($str_UserID = null, $str_PermissionID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
+		$bool_Fail	 = false;
+		$obj_User	 = self::getUserValidator();
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1162,44 +1215,44 @@ class cUserPermissionAdd extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$this->m_obj_Response->logError($str_UserID . " is invalid.");
 			$bool_Fail = true;
 		}
 
 		$obj_DOAction = dataObject\cAction::getActionById($str_PermissionID);
-		if(!$bool_Fail&&!$obj_DOAction)
+		if (!$bool_Fail && !$obj_DOAction)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_PermissionID." is not a valid Action.");
+			$this->m_obj_Response->logError($str_PermissionID . " is not a valid Action.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID,$str_PermissionID);
+		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID, $str_PermissionID);
 
-		if(!$bool_Fail&& $obj_DOKeybox>0)
+		if (!$bool_Fail && $obj_DOKeybox > 0)
 		{
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
-			$this->m_obj_Response->addMsg( "Link already Exists, no action taken.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Permission: " . $str_PermissionID);
+			$this->m_obj_Response->addMsg("Link already Exists, no action taken.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			dataObject\cKeybox::linkUser2Permission($str_UserID,$str_PermissionID);
+			dataObject\cKeybox::linkUser2Permission($str_UserID, $str_PermissionID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::CREATED);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
-			$this->m_obj_Response->addMsg( "Link created.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Permission: " . $str_PermissionID);
+			$this->m_obj_Response->addMsg("Link created.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
@@ -1212,14 +1265,14 @@ class cUserPermissionAdd extends cUserDataBase {
 	 * @param String $str_PermissionID
 	 * @return \Tonic\Response
 	 */
-	public function deleteGroup($str_UserID = null,$str_PermissionID=null)
+	public function deleteGroup($str_UserID = null, $str_PermissionID = null)
 	{
-		$bool_Fail = false;
-		$obj_User =  self::getUserValidator();
+		$bool_Fail	 = false;
+		$obj_User	 = self::getUserValidator();
 
 		$this->m_obj_Response = new cFormResponse();
 
-		if(!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
+		if (!$obj_User->checkPermissions(cAction::C_STR_USER_MANAGER_USER_PERMISSION_EDIT))
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::FORBIDDEN);
@@ -1228,36 +1281,37 @@ class cUserPermissionAdd extends cUserDataBase {
 
 		$obj_DOUser = dataObject\cUser::getUserById($str_UserID);
 
-		if(!$bool_Fail&&!$obj_DOUser)
+		if (!$bool_Fail && !$obj_DOUser)
 		{
 			$this->m_obj_Response->setSuccess(false);
 			$this->m_obj_Response->setCode(\Tonic\Response::BADREQUEST);
-			$this->m_obj_Response->logError( $str_UserID." is invalid.");
+			$this->m_obj_Response->logError($str_UserID . " is invalid.");
 			$bool_Fail = true;
 		}
 
-		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID,$str_PermissionID);
+		$obj_DOKeybox = dataObject\cKeybox::countUser2Permission($str_UserID, $str_PermissionID);
 
-		if(!$bool_Fail&& $obj_DOKeybox==0)
+		if (!$bool_Fail && $obj_DOKeybox == 0)
 		{
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
-			$this->m_obj_Response->addMsg( "Dose Not have the Permission assigned to the user.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Permission: " . $str_PermissionID);
+			$this->m_obj_Response->addMsg("Dose Not have the Permission assigned to the user.");
 			$bool_Fail = true;
 		}
 
-		if(!$bool_Fail)
+		if (!$bool_Fail)
 		{
-			dataObject\cKeybox::unlinkUser2Permission($str_UserID,$str_PermissionID);
+			dataObject\cKeybox::unlinkUser2Permission($str_UserID, $str_PermissionID);
 
 			$this->m_obj_Response->setSuccess(true);
 			$this->m_obj_Response->setCode(\Tonic\Response::OK);
-			$this->m_obj_Response->addMsg( "User: ".$str_UserID);
-			$this->m_obj_Response->addMsg( "Permission: ".$str_PermissionID);
-			$this->m_obj_Response->addMsg( "Link Removed.");
+			$this->m_obj_Response->addMsg("User: " . $str_UserID);
+			$this->m_obj_Response->addMsg("Permission: " . $str_PermissionID);
+			$this->m_obj_Response->addMsg("Link Removed.");
 		}
 		return new \Tonic\Response($this->m_obj_Response->getCode(), $this->m_obj_Response->output_JSON());
 	}
+
 }

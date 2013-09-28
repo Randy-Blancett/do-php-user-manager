@@ -14,17 +14,17 @@ try
 }
 catch (Exception $e)
 {
+	
 }
 cSession::init();
-
-
 class cSession
 {
-	const C_STR_SESSION_IS_LOGGED_IN ="LogIN";
-	const C_STR_SESSION_CUR_USERNAME = "Username";
-	const C_STR_SESSION_CUR_USERID = "UserID";
-	const C_STR_SESSION_CUR_LASTURL = "LastURL";
-	const C_STR_SESSION_CUR_LOGINATTEMPT = "LoginAttempt";
+
+	const C_STR_SESSION_IS_LOGGED_IN		 = "LogIN";
+	const C_STR_SESSION_CUR_USERNAME		 = "Username";
+	const C_STR_SESSION_CUR_USERID		 = "UserID";
+	const C_STR_SESSION_CUR_LASTURL		 = "LastURL";
+	const C_STR_SESSION_CUR_LOGINATTEMPT	 = "LoginAttempt";
 
 	/**
 	 * Init defailt session objects
@@ -55,10 +55,11 @@ class cSession
 
 	public static function regenerate()
 	{
-		try {
+		try
+		{
 			@session_regenerate_id();
 		}
-		catch(Excepition $e)
+		catch (Excepition $e)
 		{
 			print($e);
 		}
@@ -92,12 +93,12 @@ class cSession
 
 	public static function increaseLoginAttempt()
 	{
-		$_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT] ++;
+		$_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT]++;
 	}
 
 	public static function resetLoginAttempt()
 	{
-		$_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT] =0;
+		$_SESSION[cSession::C_STR_SESSION_CUR_LOGINATTEMPT] = 0;
 	}
 
 	public static function setLogin($bool_Login)
@@ -112,7 +113,7 @@ class cSession
 
 	public static function getUserName()
 	{
-		return $_SESSION[cSession::C_STR_SESSION_CUR_USERNAME] ;
+		return $_SESSION[cSession::C_STR_SESSION_CUR_USERNAME];
 	}
 
 	/**
@@ -131,7 +132,7 @@ class cSession
 
 	public static function setLastUrl($str_LastUrl)
 	{
-		$_SESSION[cSession::C_STR_SESSION_CUR_LASTURL]=$str_LastUrl;
+		$_SESSION[cSession::C_STR_SESSION_CUR_LASTURL] = $str_LastUrl;
 	}
 
 	public static function login($str_UserName = "")
@@ -156,4 +157,5 @@ class cSession
 		}
 		return false;
 	}
+
 }
