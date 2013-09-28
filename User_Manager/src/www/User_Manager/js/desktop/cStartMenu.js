@@ -160,21 +160,19 @@ Ext.define('darkowl.desktop.cStartMenu', {
 		});
 
 		this.m_arr_MenuItems = [];
-
-		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add('->'));
 		
+		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add('-'));
 		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add({
 			text : 'Configure',
-			iconCls : 'menu-logout-icon',
+			iconCls : 'menu-config-icon',
 			handler : function() {
 				desktop.MsgBus
 						.fireEvent(desktop.MsgBus.self.C_STR_EVENT_CONFIGURE);
 			},
 			scope : obj_This
-		}));		
-		
+		}));	
+		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add('->'));	
 		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add('-'));
-
 		this.m_arr_MenuItems.push(this.m_obj_Toolbar.add({
 			text : 'Logout',
 			iconCls : 'menu-logout-icon',
