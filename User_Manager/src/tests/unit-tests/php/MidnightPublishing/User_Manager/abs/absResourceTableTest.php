@@ -18,6 +18,12 @@ class cTestResourceTable extends absResourceTable
 
 class absResourceTableTest extends \PHPUnit_Framework_TestCase
 {
+	protected function setUp()
+	{
+		$_SESSION = Array();
+		cSession::init();
+	}
+	
 	public	function testInstance()
 	{
 		$obj_Application = new \Tonic\Application();
